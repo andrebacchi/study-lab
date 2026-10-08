@@ -36,7 +36,8 @@ LAB("medidas","Resultados","Medidas de efeito",`
     <div class="tiles" id="meHT"></div>
    </div>
   </div>
-  <div class="insight" id="meHI"></div></div>
+  <div class="insight" id="meHI"></div>
+  <div class="row" style="margin-top:12px"><a class="btn small" href="https://andrebacchi.github.io/stat-lab/#testes-km" target="_blank" rel="noopener">Montar curvas de Kaplan-Meier no STAT LAB ›</a><span class="note" style="margin:0">Com seus tempos, o log-rank e o HR de Cox.</span></div></div>
 </div>`,()=>{
   const sync=()=>{$("meC").value=ME.rc;$("meI").value=ME.ri;};
   chips($("meP"),ME_PRE.map(p=>p[0]),i=>{ME.rc=ME_PRE[i][1];ME.ri=ME_PRE[i][2];sync();renderME();},0);

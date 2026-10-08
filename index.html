@@ -1722,7 +1722,8 @@ LAB("medidas","Resultados","Medidas de efeito",`
     <div class="tiles" id="meHT"></div>
    </div>
   </div>
-  <div class="insight" id="meHI"></div></div>
+  <div class="insight" id="meHI"></div>
+  <div class="row" style="margin-top:12px"><a class="btn small" href="https://andrebacchi.github.io/stat-lab/#testes-km" target="_blank" rel="noopener">Montar curvas de Kaplan-Meier no STAT LAB ›</a><span class="note" style="margin:0">Com seus tempos, o log-rank e o HR de Cox.</span></div></div>
 </div>`,()=>{
   const sync=()=>{$("meC").value=ME.rc;$("meI").value=ME.ri;};
   chips($("meP"),ME_PRE.map(p=>p[0]),i=>{ME.rc=ME_PRE[i][1];ME.ri=ME_PRE[i][2];sync();renderME();},0);
@@ -1822,6 +1823,7 @@ LAB("sub","Resultados","Subgrupos",`
  <div class="cols2" style="margin-top:12px"><div><div class="tiles" id="sbT"></div></div>
   <div><div class="sub">Sem efeito algum: probabilidade de pelo menos um subgrupo “significativo”</div><svg class="ch" id="sbC" role="img" aria-label="Probabilidade de ao menos um falso positivo conforme o número de comparações"></svg></div></div>
  <div class="insight" id="sbI"></div>
+ <div class="row" style="margin-top:12px"><a class="btn small" href="https://andrebacchi.github.io/stat-lab/#mult" target="_blank" rel="noopener">Corrigir valores de p no STAT LAB ›</a><span class="note" style="margin:0">Bonferroni, Holm e Benjamini-Hochberg, em Múltiplas comparações.</span></div>
 </div></div>`,()=>{
   chips($("sbG"),SB_G.map(g=>`${g[0]} <small style="color:var(--muted)">${g[1].length}</small>`),i=>{SB.g=i;sbRun();sbRep();renderSB();},SB.g);
   chips($("sbE"),["Reduz o risco em 20% (RR 0,80)","Nenhum (RR 1,00)"],i=>{SB.ef=i?0:1;sbRun();sbRep();renderSB();},0);
