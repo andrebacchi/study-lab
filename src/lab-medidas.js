@@ -47,9 +47,9 @@ function renderME(){const rc=ME.rc/100,ri=ME.ri/100,rr=div(ri,rc),rrr=1-rr,rar=r
   $("meCo").textContent=fmt(ME.rc,1)+"%";$("meIo").textContent=fmt(ME.ri,1)+"%";
   $("meT").innerHTML=tile("RR",rat(rr),"risco na intervenção ÷ no controle")+tile(harm?"Aumento relativo":"RRR",pct(Math.abs(rrr),0),harm?"RR − 1":"1 − RR")+tile(harm?"Aumento absoluto":"RAR",fmt(Math.abs(rar)*100,1)+" p.p.",harm?"intervenção − controle":"controle − intervenção")+tile(harm?"NNH":"NNT",nn==null?"—":fmt(nn,0),nn==null?"sem diferença de risco":harm?"tratados para causar 1 desfecho":"tratados para evitar 1 desfecho",harm?"bad":"acc");
   $("meF").innerHTML=nn==null?"Sem diferença entre os grupos, não há NNT.":`${harm?"NNH":"NNT"} = 1 ÷ ${harm?"aumento absoluto":"RAR"} = 1 ÷ ${fmt(Math.abs(rar),3)} = <b>${fmt(nn,0)}</b>`;
-  const kc=Math.round(rc*200),ki=Math.round(ri*200),av=Math.max(0,kc-ki),C=[],I=[];for(let j=0;j<200;j++){C.push({e:0,d:j<kc?1:0});I.push(j<ki?{e:1,d:1}:j<ki+av?{e:1,d:null}:{e:1,d:0});}
+  const kc=Math.round(rc*200),ki=Math.round(ri*200),av=Math.max(0,kc-ki),C=[],I=[];for(let j=0;j<200;j++){C.push({e:0,d:j<kc?1:0});I.push(j<ki?{e:1,d:1}:j<ki+av?{e:1,d:0,cl:"av"}:{e:1,d:0});}
   $("meG").innerHTML=grp("Controle",`${n1(kc,"evento","eventos")} em 200 pessoas`,dotSVG(C,20,{pitch:11,r:3.8,scale:1}))+grp("Intervenção",`${n1(ki,"evento","eventos")} em 200 pessoas${av?` · ${n1(av,"evitado","evitados")}`:""}`,dotSVG(I,20,{pitch:11,r:3.8,scale:1}));
-  $("meK").innerHTML=keyDot({e:0,d:1},"evento no controle")+keyDot({e:1,d:1},"evento na intervenção")+keyDot({e:1,d:null},"evento evitado");
+  $("meK").innerHTML=keyDot({e:0,d:1},"evento no controle")+keyDot({e:1,d:1},"evento na intervenção")+keyDot({e:1,d:0,cl:"av"},"evento evitado");
   const row=nn==null||harm?-1:nn<25?0:nn<=50?1:nn<=100?2:-1;
   $("meImp").innerHTML=`<tr><th></th><th>Óbito</th><th>Eventos não fatais</th></tr>`+ME_IMP.map((r,i)=>`<tr class="${i===row?"now":""}"><td style="text-align:left">${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td></tr>`).join("");
   const el=$("meS"),H=190,W=box(el,H),L=40,Rm=12,T=10,ih=H-T-32,iw=W-L-Rm,X=v=>L+v/60*iw,Y=v=>T+ih-Math.log10(clamp(v,1,1000))/3*ih;let s=yGrid(Y,[1,10,100,1000],L,W-Rm,v=>fmt(v,0))+xAxis(X,[0,10,20,30,40,50,60],T+ih,v=>v+"%",L,W-Rm);

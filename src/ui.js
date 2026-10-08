@@ -48,7 +48,7 @@ function dotSVG(people,cols,o={}){const p=o.pitch||13,r=o.r||4.4,n=people.length
   return `<svg class="ppl" viewBox="0 0 ${W} ${H}" width="${Math.round(W*(o.scale||1.15))}" style="max-width:100%" aria-hidden="true">${s}</svg>`;}
 const grp=(label,sub,svg)=>`<div class="grp"><div class="grp-h"><b>${label}</b><span>${sub||""}</span></div>${svg}</div>`;
 /* item de legenda com o mesmo desenho das pessoas */
-const keyDot=(q,t)=>`<span><svg viewBox="0 0 13 13">${q.sq?`<rect class="p e${q.e==null?"u":q.e} d${q.d==null?"u":q.d}${q.mis?" mis":""}${q.nad?" nad":""}" x="1.5" y="1.5" width="10" height="10" rx="1.2"/>`:`<circle class="p e${q.e==null?"u":q.e} d${q.d==null?"u":q.d}${q.lost?" lost":""}${q.mis?" mis":""}${q.nad?" nad":""}" cx="6.5" cy="6.5" r="5"/>`}</svg>${t}</span>`;
+const keyDot=(q,t)=>`<span><svg viewBox="0 0 13 13">${q.sq?`<rect class="p e${q.e==null?"u":q.e} d${q.d==null?"u":q.d}${q.mis?" mis":""}${q.nad?" nad":""}${q.cl?" "+q.cl:""}" x="1.5" y="1.5" width="10" height="10" rx="1.2"/>`:`<circle class="p e${q.e==null?"u":q.e} d${q.d==null?"u":q.d}${q.lost?" lost":""}${q.mis?" mis":""}${q.nad?" nad":""}${q.cl?" "+q.cl:""}" cx="6.5" cy="6.5" r="5"/>`}</svg>${t}</span>`;
 function table22(v,o={}){const L=Object.assign({r1:"Expostos",r0:"Não expostos",c1:"Com desfecho",c0:"Sem desfecho"},o),fx=o.fixCols?" fix":"";
   return `<div class="tw"><table class="t22"><tr><th></th><th>${L.c1}</th><th>${L.c0}</th><th>Total</th></tr>
   <tr><th class="rh">${L.r1}</th><td><small>a</small>${fmt(v.a,0)}</td><td><small>b</small>${fmt(v.b,0)}</td><td class="tot">${fmt(v.a+v.b,0)}</td></tr>
