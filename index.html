@@ -1,0 +1,1420 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>STUDY LAB</title>
+<meta name="description" content="Laboratório visual e interativo sobre tipos de estudos epidemiológicos. Criado por André D. Bacchi.">
+<meta name="author" content="André Demambre Bacchi">
+<meta name="theme-color" content="#56671b">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="STUDY LAB">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<style>
+:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0;font-size:14px}
+img{max-width:100%}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;1,6..72,500&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: laboratório com bancadas — seletor de experimentos fixo no topo, cada experimento em cartões (controles + visual), uma coluna no celular */
+:root{
+  --bg:#f6f6f3; --surface:#ffffff; --sunk:#eff0ee; --fg:#161a22; --muted:#5d6370; --line:#dde0e4; --tick:#8d93a0;
+  --accent:#56671b; --accent-soft:#eef1dc; --on-accent:#ffffff;
+  --alt:#c25a1c; --alt-soft:#fbeee3;
+  --bad:#b0362b; --bad-soft:#f9e6e3; --good:#2f6b3a; --good-soft:#e1efe2; --warn:#8a6410; --warn-soft:#f6edd6;
+  --ink:#161a22; --on-ink:#ffffff; --dot:#cfd3da; --scrim:rgba(15,18,25,.45);
+  --f-display:"Newsreader", Georgia, "Times New Roman", serif;
+  --f-body:"Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono:"IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f1117; --surface:#161a23; --sunk:#1d222d; --fg:#e6e8ee; --muted:#9ba2b1; --line:#2b3140; --tick:#727a8b;
+  --accent:#c3d36a; --accent-soft:#2a3016; --on-accent:#0f1117;
+  --alt:#f0a067; --alt-soft:#3a2819;
+  --bad:#f08a7e; --bad-soft:#3a2220; --good:#8fd19b; --good-soft:#1d3322; --warn:#e8c06a; --warn-soft:#352c17;
+  --ink:#e6e8ee; --on-ink:#0f1117; --dot:#3a4152; --scrim:rgba(0,0,0,.6); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1117; --surface:#161a23; --sunk:#1d222d; --fg:#e6e8ee; --muted:#9ba2b1; --line:#2b3140; --tick:#727a8b;
+  --accent:#c3d36a; --accent-soft:#2a3016; --on-accent:#0f1117;
+  --alt:#f0a067; --alt-soft:#3a2819;
+  --bad:#f08a7e; --bad-soft:#3a2220; --good:#8fd19b; --good-soft:#1d3322; --warn:#e8c06a; --warn-soft:#352c17;
+  --ink:#e6e8ee; --on-ink:#0f1117; --dot:#3a4152; --scrim:rgba(0,0,0,.6); color-scheme:dark}
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.5;padding-inline:16px;padding-block:0 56px;-webkit-text-size-adjust:100%}
+.wrap{max-width:1240px;margin:0 auto}
+button{font:inherit;color:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.num{font-variant-numeric:tabular-nums}
+
+header.top{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-block:18px 10px;flex-wrap:wrap}
+.hub{display:inline-flex;align-items:center;min-height:28px;margin:-6px 0 4px;font:600 11.5px/1 var(--f-body);letter-spacing:.16em;text-transform:uppercase;color:var(--muted);text-decoration:none}
+.hub:hover{color:var(--accent)}
+.brand h1{font-family:var(--f-display);font-weight:600;font-size:34px;line-height:1;margin:0;letter-spacing:-.01em}
+.brand h1 em{font-style:normal;color:var(--accent)}
+.brand p{margin:5px 0 0;color:var(--muted);font-size:12px}
+.btn{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:8px 14px;font-size:14px;white-space:nowrap;min-height:40px}
+.btn:hover{border-color:var(--muted)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.btn.small{min-height:34px;padding:5px 12px;font-size:13px}
+.btn svg{width:16px;height:16px;flex:none}
+.btn:disabled{opacity:.45;cursor:default}
+
+/* navegação em dois níveis */
+.labnav{padding-block:6px 14px;border-bottom:1px solid var(--line)}
+.blocks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.blk{border:1.5px solid var(--line);border-radius:12px;background:var(--surface);padding:10px 14px;text-align:left;display:grid;gap:2px;min-width:0}
+.blk b{font-family:var(--f-display);font-size:19px;font-weight:600;line-height:1.15}
+.blk span{font-size:12px;color:var(--muted);line-height:1.35}
+.blk.on{border-color:var(--accent);background:var(--accent-soft)}
+.blk.on b{color:var(--accent)}
+@media (max-width:520px){.blk{padding:9px 11px}.blk b{font-size:16px}.blk span{font-size:11.5px}}
+.subs{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:6px;margin-top:10px}
+@media (max-width:420px){.subs{grid-template-columns:1fr 1fr}}
+.sb{border:1px solid var(--line);border-radius:10px;background:var(--surface);padding:8px 10px;font-size:13.5px;text-align:left;display:flex;gap:8px;align-items:center;min-height:42px;line-height:1.25}
+.sb i{font-style:normal;font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums;flex:none;width:16px}
+.sb:hover{border-color:var(--muted)}
+.sb.on{background:var(--ink);border-color:var(--ink);color:var(--on-ink)}
+.sb.on i{color:var(--on-ink);opacity:.7}
+.labfoot{display:flex;justify-content:space-between;gap:10px;margin-top:22px;padding-top:14px;border-top:1px solid var(--line)}
+.labfoot button{border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:10px 14px;text-align:left;display:grid;gap:2px;max-width:48%;min-height:44px}
+.labfoot button span{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.labfoot button b{font-weight:600;font-size:14px}
+.labfoot .nx{text-align:right;margin-left:auto}
+.lnk{color:var(--accent);font-weight:600}
+.intro{padding-block:18px 12px}
+.intro .eyebrow{color:var(--accent)}
+.intro h2{font-family:var(--f-display);font-weight:500;font-size:26px;margin:2px 0 0;max-width:40ch;text-wrap:balance;line-height:1.2}
+.intro p{margin:6px 0 0;color:var(--muted);max-width:68ch;font-size:14px}
+.grid{display:grid;gap:16px;grid-template-columns:minmax(0,1fr)}
+@media (min-width:900px){.grid.two{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.grid .wide{grid-column:1/-1}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px 20px;min-width:0}
+@media (max-width:520px){.card{padding:14px;border-radius:12px}}
+.card-h{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:10px}
+h3{font-family:var(--f-display);font-weight:600;font-size:19px;margin:0;line-height:1.25;text-wrap:balance}
+.eyebrow{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.lede{color:var(--muted);font-size:13.5px;margin:0 0 12px;max-width:66ch}
+.more-btn{flex:none;display:inline-flex;align-items:center;gap:6px;border:1px solid var(--accent);color:var(--accent);background:transparent;border-radius:999px;padding:5px 12px;font-size:13px;font-weight:500;min-height:34px}
+.more-btn:hover{background:var(--accent-soft)}
+.more-btn svg{width:15px;height:15px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 12px;font-size:13px;white-space:nowrap;min-height:34px}
+.chip.on{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:3px;gap:2px;background:var(--surface);flex-wrap:wrap}
+.seg button{border:0;background:transparent;border-radius:999px;padding:5px 12px;font-size:13px;color:var(--muted);min-height:32px}
+.seg button.on{background:var(--ink);color:var(--on-ink)}
+
+/* entradas */
+.fields{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(120px,1fr))}
+.inp{display:grid;grid-template-rows:1fr auto;gap:4px;min-width:0}
+.inp label{font-size:12.5px;font-weight:600;line-height:1.25}
+.inp label small{display:block;font-weight:400;color:var(--muted);font-size:11.5px}
+.box{display:flex;align-items:center;border:1.5px solid var(--line);border-radius:10px;background:var(--surface);padding-inline:10px;min-height:44px}
+.box:focus-within{border-color:var(--accent)}
+.box input,.box select{width:100%;min-width:0;border:0;background:transparent;color:var(--fg);font:600 17px var(--f-body);font-variant-numeric:tabular-nums;padding:8px 0;outline:none}
+.box span{color:var(--muted);font-size:14px;margin-left:2px;flex:none}
+textarea.data{width:100%;min-height:64px;border:1.5px solid var(--line);border-radius:10px;background:var(--surface);color:var(--fg);font:15px var(--f-mono);padding:8px 10px;resize:vertical}
+textarea.data:focus{border-color:var(--accent);outline:none}
+.range{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 10px;align-items:center}
+.range label{font-size:13px;font-weight:600}
+.range output{font-variant-numeric:tabular-nums;font-weight:600;font-size:14px;text-align:right}
+.range input{grid-column:1/-1;width:100%;accent-color:var(--accent);height:28px}
+.toggle{display:flex;gap:10px;align-items:center;font-size:14px;font-weight:500;cursor:pointer;min-height:34px}
+.toggle input{accent-color:var(--accent);width:18px;height:18px}
+
+/* números */
+.tiles{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(118px,1fr))}
+.tile{background:var(--sunk);border-radius:10px;padding:9px 12px;min-width:0}
+.tile span{display:block;font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.tile b{display:block;font-size:21px;font-variant-numeric:tabular-nums;line-height:1.2;margin-top:2px}
+.tile small{display:block;font-size:11.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+.tile .gk{text-transform:none;font-style:normal;letter-spacing:0}
+.tile.acc b{color:var(--accent)} .tile.alt b{color:var(--alt)} .tile.bad b{color:var(--bad)} .tile.good b{color:var(--good)}
+.insight{border-left:3px solid var(--accent);padding:4px 0 4px 12px;margin-top:12px;font-size:14px;max-width:70ch}
+.insight.warn{border-left-color:var(--alt)}
+.f{font-family:var(--f-mono);font-size:13px;background:var(--sunk);border-radius:8px;padding:8px 12px;overflow-x:auto;white-space:nowrap;line-height:1.8;margin:8px 0}
+.note{font-size:12.5px;color:var(--muted);margin:8px 0 0}
+.tw{overflow-x:auto}
+table.t{border-collapse:collapse;width:100%;font-size:13.5px;font-variant-numeric:tabular-nums}
+table.t th{font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);font-weight:600;text-align:right;padding:6px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+table.t td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+table.t th:first-child,table.t td:first-child{text-align:left}
+table.t tr.sum td{font-weight:600;border-top:2px solid var(--line)}
+.ok{color:var(--good);font-weight:600}.no{color:var(--bad);font-weight:600}
+
+/* gráficos */
+svg.ch{width:100%;height:auto;display:block;overflow:visible;user-select:none;-webkit-user-select:none}
+svg.ch text{font-family:var(--f-body);fill:var(--muted);font-size:12px}
+svg.ch .lbl{fill:var(--fg);font-weight:600}
+svg.ch .ax{stroke:var(--tick);stroke-width:1}
+svg.ch .gr{stroke:var(--line);stroke-width:1}
+svg.ch .bar{fill:var(--accent);opacity:.8}
+svg.ch .bar2{fill:var(--dot)}
+svg.ch .curve{fill:none;stroke:var(--alt);stroke-width:2.2}
+svg.ch .curveA{fill:none;stroke:var(--accent);stroke-width:2.2}
+svg.ch .mean{stroke:var(--accent);stroke-width:2.5}
+svg.ch .med{stroke:var(--alt);stroke-width:2.5;stroke-dasharray:6 4}
+svg.ch .dotp{fill:var(--accent)}
+svg.ch .dotq{fill:var(--dot)}
+svg.ch .out{fill:var(--bad)}
+svg.ch .box{fill:var(--accent-soft);stroke:var(--accent);stroke-width:1.8}
+svg.ch .wh{stroke:var(--fg);stroke-width:1.6}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12.5px;margin-top:8px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:14px;height:3px;display:inline-block;border-radius:2px}
+.legend i.dash{background:repeating-linear-gradient(90deg,var(--alt) 0 5px,transparent 5px 8px)!important}
+
+/* quiz */
+.q{font-family:var(--f-display);font-size:21px;font-weight:600;margin:6px 0 12px;line-height:1.25}
+.opts{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.opt{border:1.5px solid var(--line);background:var(--surface);border-radius:10px;padding:10px 12px;text-align:left;font-size:14px;min-height:48px}
+.opt:hover{border-color:var(--accent)}
+.opt.right{border-color:var(--good);background:var(--good-soft)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.fb{margin-top:10px;font-size:14px;border-radius:10px;padding:10px 12px;background:var(--sunk)}
+.flow{display:grid;gap:10px}
+.flow .st{display:grid;gap:6px}
+.flow .res{background:var(--accent-soft);border-radius:12px;padding:12px 14px}
+.flow .res b{display:block;font-size:17px;font-family:var(--f-display)}
+
+/* sheet */
+.scrim{position:fixed;inset:0;background:var(--scrim);z-index:20;display:flex;align-items:flex-end;justify-content:center}
+@media (min-width:700px){.scrim{align-items:center;padding:24px}}
+.sheet{background:var(--surface);color:var(--fg);width:100%;max-width:680px;max-height:88vh;overflow:auto;border-radius:18px 18px 0 0;padding:0 20px calc(24px + env(safe-area-inset-bottom,0px))}
+@media (min-width:700px){.sheet{border-radius:16px;padding-bottom:24px}}
+.sheet-h{position:sticky;top:0;background:var(--surface);display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 0 10px;border-bottom:1px solid var(--line);z-index:1}
+.sheet-h h3{font-size:21px}
+.x{border:0;background:var(--sunk);border-radius:999px;width:36px;height:36px;font-size:20px;line-height:1;color:var(--fg);flex:none}
+.learn{font-size:15px;line-height:1.6}
+.learn h4{font-family:var(--f-display);font-size:17px;font-weight:600;margin:18px 0 4px}
+.learn p{margin:0 0 10px}
+.learn ul,.learn ol{margin:0 0 10px;padding-left:20px}
+.learn li{margin-bottom:4px}
+.learn .trap{background:var(--alt-soft);border-radius:10px;padding:12px 14px;margin-top:12px}
+.learn .trap h4{margin-top:0}
+.learn .src{font-size:12.5px;color:var(--muted);margin-top:16px}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--on-ink);padding:10px 16px;border-radius:999px;font-size:13.5px;z-index:30}
+@media (prefers-reduced-motion:no-preference){.lab{animation:fi .2s ease}@keyframes fi{from{opacity:.4}to{opacity:1}}}
+/* ---- v2: cores de grupos e componentes da bancada ---- */
+:root{--g1:#2f4b9a;--g2:#c25a1c;--g3:#1f7a6d;--g4:#8a3f86;--g5:#6b7a1e}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--g1:#8ea6f0;--g2:#f0a067;--g3:#6fd0bf;--g4:#d99ad4;--g5:#c3d36a}}
+:root[data-theme="dark"]{--g1:#8ea6f0;--g2:#f0a067;--g3:#6fd0bf;--g4:#d99ad4;--g5:#c3d36a}
+.tools{display:flex;flex-wrap:wrap;gap:6px}
+.tool{border:1px solid var(--line);background:var(--sunk);border-radius:8px;padding:6px 10px;font-size:13px;min-height:34px}
+.tool:hover{border-color:var(--muted)}
+.tool.on{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+.sub{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600;margin:14px 0 6px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.sub:first-child{margin-top:0}
+.stack{display:grid;gap:12px}
+.tile.big b{font-size:26px}
+.tgrp{display:grid;gap:4px}
+.tgrp>.eyebrow{margin-top:4px}
+details.fold{border-top:1px solid var(--line);margin-top:14px;padding-top:10px}
+details.fold>summary{cursor:pointer;font-weight:600;font-size:14px;list-style:none;display:flex;align-items:center;gap:8px;min-height:32px}
+details.fold>summary::-webkit-details-marker{display:none}
+details.fold>summary::before{content:"";width:8px;height:8px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(-45deg);transition:transform .15s}
+details.fold[open]>summary::before{transform:rotate(45deg)}
+.grpin{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+.gname{display:flex;align-items:center;gap:6px;margin-bottom:4px}
+.gname i{width:10px;height:10px;border-radius:50%;flex:none}
+.gname input{border:0;border-bottom:1px dashed var(--line);background:transparent;color:var(--fg);font:600 13px var(--f-body);width:100%;padding:2px 0}
+.gname input:focus{outline:none;border-bottom-color:var(--accent)}
+.gname small{color:var(--muted);font-size:11.5px;white-space:nowrap}
+textarea.data.sm{min-height:54px;font-size:13.5px}
+.tpick{display:grid;gap:14px}
+.tpick .fam{display:grid;gap:6px}
+.tpick .fam>span{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.tpick .row .chip small{color:var(--muted);font-size:11px;margin-left:4px}
+.tpick .chip.on small{color:var(--accent)}
+.bench-h{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.bench-h h3{font-size:24px}
+.twin{display:inline-flex;gap:6px;align-items:center;font-size:13px;color:var(--muted)}
+.relato{font-size:14.5px;line-height:1.6;background:var(--sunk);border-radius:10px;padding:12px 14px;margin-top:12px}
+.relato .row{margin-top:8px}
+.warnbox{background:var(--warn-soft);color:var(--fg);border-radius:10px;padding:10px 12px;font-size:13.5px;margin-top:10px}
+.warnbox b{color:var(--warn)}
+.progress{height:6px;border-radius:3px;background:var(--sunk);overflow:hidden;margin-top:8px}
+.progress i{display:block;height:100%;background:var(--accent);width:0}
+.powbar{display:grid;grid-template-columns:minmax(90px,auto) 1fr auto;gap:6px 10px;align-items:center;font-size:13.5px;margin-top:8px}
+.powbar .bar{height:14px;border-radius:4px;background:var(--sunk);overflow:hidden}
+.powbar .bar i{display:block;height:100%}
+.powbar b{font-variant-numeric:tabular-nums}
+.tbl-in{border-collapse:separate;border-spacing:6px;margin:-6px}
+.tbl-in th{font-size:12px;font-weight:600;color:var(--muted);text-align:center;padding:0 2px}
+.tbl-in th.rh{text-align:left}
+.tbl-in th input{border:0;border-bottom:1px dashed var(--line);background:transparent;color:var(--fg);font:600 12.5px var(--f-body);width:100%;min-width:60px;text-align:inherit}
+.tbl-in td input{width:74px;border:1.5px solid var(--line);border-radius:8px;background:var(--surface);color:var(--fg);font:600 16px var(--f-body);padding:8px;text-align:center;font-variant-numeric:tabular-nums}
+.tbl-in td input:focus{border-color:var(--accent);outline:none}
+.tbl-in td.tot{font-size:13px;color:var(--muted);text-align:center;font-variant-numeric:tabular-nums}
+.mini{font-size:12.5px;color:var(--muted)}
+.icons{display:grid;grid-template-columns:repeat(20,1fr);gap:2px;max-width:520px}
+.icons i{aspect-ratio:1;border-radius:50%;display:block}
+.coins{display:flex;flex-wrap:wrap;gap:3px;min-height:22px}
+.coins i{width:16px;height:16px;border-radius:50%;font-style:normal;font-size:9px;display:grid;place-items:center;color:var(--on-accent);font-weight:600}
+.cols2{display:grid;gap:16px;grid-template-columns:minmax(0,1fr)}
+@media (min-width:900px){.cols2{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
+.guess .fields{margin-top:8px}
+.score{font-size:13px;color:var(--muted)}
+.f{white-space:normal}
+.chipbar{display:flex;gap:6px;flex-wrap:wrap}
+/* tabela de dados editável */
+.gridwrap{overflow:auto;max-height:420px;border:1px solid var(--line);border-radius:10px}
+.grid-in{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}
+.grid-in thead th{position:sticky;top:0;background:var(--sunk);z-index:1;padding:6px 4px;border-bottom:1px solid var(--line);font-size:12px;font-weight:600;color:var(--muted);text-align:center}
+.grid-in thead th input{width:100%;min-width:90px;border:0;border-bottom:1px dashed var(--tick);background:transparent;color:var(--fg);font:600 13px var(--f-body);text-align:center;padding:4px 2px}
+.grid-in thead th input:focus{outline:none;border-bottom-color:var(--accent)}
+.grid-in td{border-bottom:1px solid var(--line);padding:0}
+.grid-in td input{width:100%;min-width:80px;border:0;background:transparent;color:var(--fg);font:500 15px var(--f-body);font-variant-numeric:tabular-nums;text-align:center;padding:9px 6px}
+.grid-in td input:focus{outline:2px solid var(--accent);outline-offset:-2px;background:var(--accent-soft)}
+.grid-in td+td{border-left:1px solid var(--line)}
+.grid-in .rn{width:34px;text-align:center;color:var(--muted);font-size:12px;background:var(--sunk)}
+.grid-in td.ro{text-align:center;color:var(--muted);font-size:14px;background:var(--sunk);min-width:80px;padding:0 6px}
+.grid-in .rowdel{border:0;background:transparent;color:var(--muted);font-size:18px;width:34px;height:36px}
+.grid-in .rowdel:hover{color:var(--bad)}
+/* modo essencial e lista recolhida */
+#lab-testes.ess .adv{display:none!important}
+#lab-testes:not(.ess) .ess-only{display:none!important}
+.ess-only{background:var(--accent-soft);border-radius:12px;color:var(--fg)}
+.picked{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.picked b{display:block;font-family:var(--f-display);font-size:20px;font-weight:600}
+/* glossário */
+.gsearch{width:100%;border:1.5px solid var(--line);border-radius:10px;background:var(--surface);color:var(--fg);font:16px var(--f-body);padding:10px 12px;margin:12px 0 4px}
+.gsearch:focus{outline:none;border-color:var(--accent)}
+.gl{display:grid;grid-template-columns:72px minmax(0,1fr);gap:4px 14px;padding:10px 0;border-bottom:1px solid var(--line)}
+.gl .sy{font-family:var(--f-display);font-size:20px;font-weight:600;color:var(--accent);line-height:1.2}
+.gl b{display:block;font-size:14.5px}
+.gl p{margin:2px 0 0;font-size:14px;color:var(--muted)}
+.gcat{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-top:16px}
+
+.sitefoot{margin-top:28px;padding-top:14px;border-top:1px solid var(--line);font-size:12px;color:var(--muted);display:grid;gap:2px}
+.sitefoot p{margin:0}
+.welcome{margin-top:14px;background:var(--accent-soft);border:1px solid var(--accent);border-radius:14px;padding:16px 18px;display:grid;gap:12px}
+.welcome h2{font-family:var(--f-display);font-weight:600;font-size:24px;margin:2px 0 6px}
+.welcome ul{margin:0;padding-left:18px;font-size:14.5px;display:grid;gap:4px;max-width:70ch}
+.welcome .eyebrow{color:var(--accent)}
+.resetbox{background:var(--sunk);border-radius:10px;padding:12px 14px;margin-top:14px}
+
+.steps-l{padding-left:20px;display:grid;gap:6px}
+.fora{background:var(--accent-soft);border-radius:10px;padding:10px 12px;font-size:14px}
+kbd{font-family:var(--f-mono);font-size:12px;background:var(--sunk);border:1px solid var(--line);border-radius:5px;padding:1px 5px}
+@media (max-width:420px){header.top .row .btn{padding:7px 11px;font-size:13px}}
+
+/* QR code do app (padrão do BACCHI LAB): grande e sobre branco, para ler de longe quando projetado */
+.qr-wrap{display:grid;gap:12px;justify-items:center;text-align:center;padding-top:14px}
+.qr-wrap p{margin:0}
+.qr-box{width:min(100%,56vh);padding:10px;border-radius:10px;background:#fff;border:1px solid var(--line)}
+.qr-box svg{display:block;width:100%;height:auto}
+.qr-url{font:600 clamp(15px,4vw,20px)/1.3 "IBM Plex Mono",ui-monospace,monospace;overflow-wrap:anywhere;-webkit-user-select:all;user-select:all}
+.qr-acts{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
+.qr-nota{font-size:12.5px;opacity:.7}
+/* ---- STUDY LAB: linguagem das pessoas (cor = exposição, bolinha cheia = desfecho) ---- */
+:root{--exp:#c25a1c;--nex:#2f5f9a;--hi:#8a3f86}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--exp:#f0a067;--nex:#8eb4f0;--hi:#d99ad4}}
+:root[data-theme="dark"]{--exp:#f0a067;--nex:#8eb4f0;--hi:#d99ad4}
+
+@media (max-width:560px){.blk span{display:none}.blk{padding:10px 8px;text-align:center}.blk b{font-size:14.5px}}
+
+svg.ppl{display:block;height:auto}
+.p{stroke-width:1.8;fill:var(--surface)}
+.p.eu{stroke:var(--tick)}.p.e1{stroke:var(--exp)}.p.e0{stroke:var(--nex)}
+.p.d1.eu{fill:var(--muted);stroke:var(--muted)}.p.d1.e1{fill:var(--exp)}.p.d1.e0{fill:var(--nex)}
+.p.du.eu{fill:var(--dot);stroke:var(--dot)}
+.p.du.e1{fill:var(--exp);fill-opacity:.3}.p.du.e0{fill:var(--nex);fill-opacity:.3}
+.p.off{opacity:.22}
+.p.lost{stroke-dasharray:2 2;opacity:.5}
+.p.mis{stroke:var(--exp);stroke-dasharray:2.6 1.8;stroke-width:2.2}
+.p.nad{stroke-dasharray:2.6 1.8}
+.xm{stroke:var(--muted);stroke-width:1.3;fill:none}
+.grps{display:flex;flex-wrap:wrap;gap:14px 24px;align-items:flex-start}
+.grp{min-width:0}
+.grp-h{margin-bottom:6px;line-height:1.25}
+.grp-h b{display:block;font-size:13.5px}
+.grp-h span{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.key{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12.5px;color:var(--muted);margin-top:10px}
+.key span{display:inline-flex;align-items:center;gap:6px}
+.key svg{width:13px;height:13px;flex:none;overflow:visible}
+
+/* palco animado da linha do tempo */
+.stage{position:relative;margin-top:14px;transition:height .5s ease}
+.stage i{position:absolute;left:0;top:0;box-sizing:border-box;border-radius:50%;border:2px solid var(--dot);background:var(--dot);transition:transform .7s cubic-bezier(.4,0,.2,1),background-color .5s,border-color .5s,opacity .5s}
+.stage i.eu.d0{border-color:var(--tick);background:var(--surface)}
+.stage i.eu.d1{border-color:var(--muted);background:var(--muted)}
+.stage i.e1{border-color:var(--exp)}.stage i.e0{border-color:var(--nex)}
+.stage i.e1.d1{background:var(--exp)}.stage i.e0.d1{background:var(--nex)}
+.stage i.e1.d0,.stage i.e0.d0{background:var(--surface)}
+.stage i.e1.du{background:color-mix(in srgb,var(--exp) 32%,var(--surface))}
+.stage i.e0.du{background:color-mix(in srgb,var(--nex) 32%,var(--surface))}
+.stage i.off{opacity:.2}
+.stage .cap{position:absolute;left:0;top:0;line-height:1.25;font-size:13px;animation:capin .5s ease both}
+.stage .cap b{display:block}
+.stage .cap span{display:block;color:var(--muted);font-size:12px;font-variant-numeric:tabular-nums}
+@keyframes capin{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){.stage,.stage i{transition:none}.stage .cap{animation:none}}
+.stepbar{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.stp{flex:1 1 0;min-width:0;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:7px 9px;text-align:left;font-size:12.5px;line-height:1.25;min-height:44px;display:grid;gap:1px;align-content:center}
+.stp i{font-style:normal;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.stp.on{border-color:var(--accent);background:var(--accent-soft)}
+.stp.on i{color:var(--accent)}
+.stp.done{background:var(--sunk)}
+@media (max-width:560px){.stp b{display:none}.stp{text-align:center;min-height:38px}}
+.steptxt{margin-top:12px;font-size:15px;max-width:68ch}
+.steptxt b.t{display:block;font-family:var(--f-display);font-size:20px;font-weight:600;line-height:1.2;margin-bottom:2px}
+.stepnav{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.result{margin-top:14px;border-top:1px solid var(--line);padding-top:14px}
+a.btn{text-decoration:none;color:inherit}
+a.btn.primary{color:var(--on-accent)}
+
+/* três perguntas */
+.qs{display:grid;gap:14px}
+.qq>b{display:block;font-size:14.5px;margin-bottom:6px}
+.qq>b i{font-style:normal;font-family:var(--f-display);font-size:19px;color:var(--accent);margin-right:8px}
+.qq .opts{grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}
+.opt.on{border-color:var(--accent);background:var(--accent-soft)}
+.dzs{display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:8px}
+.dz{border:1.5px solid var(--line);border-radius:10px;padding:9px 11px;font-size:13.5px;font-weight:600;line-height:1.25;min-height:54px;display:grid;align-content:center;gap:2px;background:var(--surface);transition:opacity .3s,border-color .3s,background-color .3s}
+.dz small{font-weight:400;color:var(--muted);font-size:11.5px}
+.dz.out{opacity:.32;text-decoration:line-through;text-decoration-thickness:1px}
+.dz.win{border-color:var(--accent);background:var(--accent-soft);color:var(--accent)}
+.dz.win small{color:var(--fg)}
+.verdict{background:var(--accent-soft);border-radius:12px;padding:14px 16px;margin-top:14px}
+.verdict h4{font-family:var(--f-display);font-size:21px;font-weight:600;margin:0 0 4px}
+.verdict p{margin:0 0 8px;max-width:66ch}
+.verdict dl{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px;margin:0 0 10px;font-size:13.5px}
+.verdict dt{color:var(--muted)}
+.verdict dd{margin:0}
+
+/* tabela 2×2 */
+table.t22{border-collapse:separate;border-spacing:4px;font-variant-numeric:tabular-nums;font-size:13px;margin:-4px}
+table.t22 th{font-size:11.5px;font-weight:600;color:var(--muted);padding:4px 6px;text-align:center;line-height:1.2}
+table.t22 th.rh{text-align:left}
+table.t22 td{background:var(--sunk);border-radius:8px;padding:8px 10px;text-align:center;font-weight:600;font-size:17px;min-width:62px}
+table.t22 td small{display:block;font-size:10.5px;font-weight:500;color:var(--muted);letter-spacing:.04em}
+table.t22 td.tot{background:transparent;font-size:13px;font-weight:500;color:var(--muted)}
+table.t22 td.fix{outline:2px solid var(--accent);outline-offset:-2px}
+
+/* quiz */
+.vig{font-size:16px;line-height:1.5;background:var(--sunk);border-radius:12px;padding:14px 16px;max-width:70ch}
+.quizopts{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));margin-top:12px}
+.why{display:grid;grid-template-columns:auto minmax(0,1fr);gap:3px 12px;margin:8px 0 0;font-size:13.5px}
+.why dt{color:var(--muted)}
+.why dd{margin:0}
+
+/* escada da certeza */
+.gcols{display:grid;gap:16px;grid-template-columns:minmax(0,1fr)}
+@media (min-width:760px){.gcols{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
+.gset{border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.gset h4{margin:0 0 2px;font-size:14.5px;display:flex;align-items:center;gap:8px}
+.gset h4 i{width:12px;height:12px;border-radius:50%;flex:none}
+.gset .mini{margin:0 0 6px}
+.gset .toggle{font-size:13.5px;font-weight:400;align-items:flex-start;min-height:0;padding:4px 0}
+.gset .toggle input{margin-top:2px;flex:none}
+.gset .toggle small{display:block;color:var(--muted);font-size:12px}
+.gset .sub{margin-top:10px}
+
+/* bits diversos */
+.cmp{display:grid;gap:8px;margin-top:12px}
+.cmp .rowb{display:grid;grid-template-columns:minmax(96px,150px) minmax(0,1fr) auto;gap:10px;align-items:center;font-size:13.5px}
+.cmp .bar{height:16px;border-radius:4px;background:var(--sunk);overflow:hidden}
+.cmp .bar i{display:block;height:100%;border-radius:4px;transition:width .3s}
+.cmp b{font-variant-numeric:tabular-nums}
+.strike{text-decoration:line-through;color:var(--muted)}
+.tile.muted b{color:var(--muted)}
+.playrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.playrow .range{flex:1 1 220px}
+.fields.tight{grid-template-columns:repeat(auto-fit,minmax(104px,1fr))}
+.metarow{cursor:pointer}
+.ed{background:var(--sunk);border-radius:12px;padding:12px 14px;margin-top:12px;display:grid;gap:10px}
+.ed h4{margin:0;font-size:14.5px}
+.pillnote{display:inline-block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;font-weight:600;border-radius:999px;padding:2px 8px;background:var(--warn-soft);color:var(--warn)}
+/* iceberg */
+.ice{position:relative;display:grid;grid-template-columns:140px minmax(0,1fr);gap:0 10px;max-width:440px}
+.ice .water{position:absolute;left:0;right:0;top:116px;bottom:0;background:color-mix(in srgb,var(--nex) 10%,transparent);border-top:1.5px solid var(--nex);border-radius:0 0 10px 10px}
+.ice svg{position:relative;display:block}
+.ice-t{position:relative;min-width:0;font-size:13px;line-height:1.3}
+.ice-t .above{height:116px;display:flex;flex-direction:column;justify-content:flex-start;padding-top:22px;gap:2px}
+.ice-t .above b{font-size:15px;color:var(--accent);line-height:1.15}
+.ice-t small{font-size:11px;color:var(--muted);font-style:italic;margin-bottom:4px}
+.ice-t .below{padding-top:10px;display:flex;flex-direction:column;gap:5px;color:var(--muted)}
+.p.nad{opacity:.5}
+button.lnk{font:inherit;cursor:pointer;text-decoration:underline}
+.stack{grid-template-columns:minmax(0,1fr)}
+.stack>*,.cols2>*{min-width:0}
+.chips{flex-wrap:wrap;overflow:visible}
+.tpw{display:grid;grid-template-columns:minmax(0,1fr);grid-template-areas:"txt" "stage" "nav" "res"}
+#tpTxt{grid-area:txt}.tps{grid-area:stage;min-width:0}#tpNav{grid-area:nav;align-self:start}#tpRes{grid-area:res;min-width:0}
+@media (min-width:1000px){.tpw{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);grid-template-areas:"stage txt" "stage nav" "stage res";grid-template-rows:auto auto 1fr;column-gap:36px}}
+.seg{border-radius:20px}
+</style>
+<div class="wrap">
+<header class="top">
+  <div class="brand"><a class="hub" href="https://andrebacchi.github.io/bacchilab/">‹ BACCHI LAB</a><h1>STUDY <em>LAB</em></h1><p>Criado por André D. Bacchi</p></div>
+  <div class="row"><button class="btn" id="qrBtn" aria-label="Mostrar o QR code deste app"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><rect x="2" y="2" width="4.5" height="4.5" rx=".8"/><rect x="9.5" y="2" width="4.5" height="4.5" rx=".8"/><rect x="2" y="9.5" width="4.5" height="4.5" rx=".8"/><path d="M9.5 9.5h2v2h-2zM12.5 12.5H14V14h-1.5z" fill="currentColor" stroke="none"/></svg>QR code</button><button class="btn" id="instBtn" aria-label="Instalar o app no celular ou computador"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v8M4.5 6.5 8 10l3.5-3.5M3 13h10"/></svg>Instalar</button><button class="btn primary" id="howBtn"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M8 4c-1.5-1-3.5-1.3-6-1v10c2.5-.3 4.5 0 6 1 1.5-1 3.5-1.3 6-1V3c-2.5-.3-4.5 0-6 1zM8 4v10"/></svg>Como usar</button></div>
+</header>
+<nav class="labnav" aria-label="Seções">
+  <div class="blocks" id="blocks">
+    <button class="blk" data-grp="Reconhecer"><b>Reconhecer</b><span>Qual desenho é este e o que ele consegue responder</span></button>
+    <button class="blk" data-grp="Observacionais"><b>Observacionais</b><span>Transversal, ecológico, coorte e caso-controle</span></button>
+    <button class="blk" data-grp="Experimentais"><b>Experimentais</b><span>Ensaios clínicos, quase-experimentos e revisões</span></button>
+  </div>
+  <div class="subs" id="subs"></div>
+</nav>
+<section class="welcome" id="welcome" hidden aria-label="Boas-vindas">
+  <div><span class="eyebrow">Primeira visita</span><h2>Bem-vindo ao STUDY LAB</h2>
+  <ul><li><b>Uma população, vários olhares:</b> cada desenho de estudo enxerga as mesmas pessoas de um jeito diferente.</li><li><b>Leia as bolinhas:</b> a cor mostra a exposição; a bolinha cheia, quem teve o desfecho.</li><li><b>Mexa em tudo:</b> avance os passos, arraste os controles e veja o resultado mudar.</li><li><b>Quer o porquê?</b> Cada painel tem um <b>Saiba mais</b>.</li></ul></div>
+  <div class="row"><button class="btn primary" id="wStart">Começar pelas três perguntas</button><button class="btn" id="wClose">Fechar</button></div>
+</section>
+<main id="labs"></main>
+<div class="labfoot" id="labFoot"></div>
+<footer class="sitefoot"><p><b>STUDY LAB</b> · protótipo 0.1 · outubro de 2026</p><p>Ferramenta didática. As populações são simuladas e os exemplos são fictícios.</p><p>© André Demambre Bacchi</p></footer>
+</div>
+<div id="sheetRoot"></div>
+<script>
+/* ===================== utilidades de interface (padrão da série LAB) ===================== */
+const $=id=>document.getElementById(id);
+const clamp=(x,a,b)=>Math.min(b,Math.max(a,x));
+const has=v=>v!=null&&isFinite(v);
+const fmt=(x,d=1)=>!isFinite(x)?(x>0?"∞":"—"):(Math.abs(x)<0.5*10**-d?0:x).toLocaleString("pt-BR",{minimumFractionDigits:d,maximumFractionDigits:d}).replace("-","−");
+const pct=(x,d=1)=>fmt(x*100,d)+"%";
+const parse=s=>{s=String(s).trim().replace(/\s/g,"").replace(/[−–]/g,"-");if(s==="")return null;if(s.includes(","))s=s.replace(/\./g,"").replace(",",".");else if(/^\d{1,3}(\.\d{3})+$/.test(s))s=s.replace(/\./g,"");const v=parseFloat(s);return isFinite(v)?v:null;};
+const esc=t=>String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;");
+function toast(m){const t=document.createElement("div");t.className="toast";t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),1600);}
+
+/* ---------- SVG ---------- */
+function box(el,h){const W=Math.max(280,Math.round(el.clientWidth||el.parentElement.clientWidth||600));el.setAttribute("viewBox",`0 0 ${W} ${h}`);return W;}
+function xAxis(X,ticks,y,f,x0,x1){const a=x0??X(ticks[0]),b=x1??X(ticks[ticks.length-1]);return `<line class="ax" x1="${a}" x2="${b}" y1="${y}" y2="${y}"/>`+ticks.map(t=>`<line class="ax" x1="${X(t)}" x2="${X(t)}" y1="${y}" y2="${y+4}"/><text x="${X(t)}" y="${y+17}" text-anchor="middle">${f(t)}</text>`).join("");}
+function yGrid(Y,ticks,x0,x1,f){return ticks.map(t=>`<line class="gr" x1="${x0}" x2="${x1}" y1="${Y(t)}" y2="${Y(t)}"/><text x="${x0-6}" y="${Y(t)+4}" text-anchor="end">${f(t)}</text>`).join("");}
+const svgPt=(el,e)=>{const p=el.createSVGPoint();p.x=e.clientX;p.y=e.clientY;return p.matrixTransform(el.getScreenCTM().inverse());};
+const numTxt=v=>String(+(+v).toFixed(6)).replace("-","−").replace(".",",");
+
+/* ---------- sheet, chips, tiles ---------- */
+function openSheet(t,h){const r=$("sheetRoot"),last=document.activeElement;r.innerHTML=`<div class="scrim" id="scrim"><div class="sheet" role="dialog" aria-modal="true" aria-label="${esc(t)}"><div class="sheet-h"><h3>${t}</h3><button class="x" id="sx" aria-label="Fechar">×</button></div><div class="learn">${h}</div></div></div>`;document.body.style.overflow="hidden";
+  const close=()=>{r.innerHTML="";document.body.style.overflow="";document.removeEventListener("keydown",k);last&&last.focus&&last.focus();},k=e=>{if(e.key==="Escape")close();};document.addEventListener("keydown",k);$("sx").onclick=close;$("scrim").addEventListener("click",e=>{if(e.target.id==="scrim")close();});$("sx").focus();}
+function chips(el,items,onPick,active){el.innerHTML=items.map((it,i)=>`<button class="chip ${i===active?"on":""}" data-i="${i}">${it}</button>`).join("");el.onclick=e=>{const b=e.target.closest(".chip");if(!b)return;el.querySelectorAll(".chip").forEach(c=>c.classList.toggle("on",c===b));onPick(+b.dataset.i);};}
+const chipOn=(el,i)=>el.querySelectorAll(".chip").forEach((c,j)=>c.classList.toggle("on",j===i));
+function segBind(el,val,on){el.querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.dataset.v===val));el.onclick=e=>{const b=e.target.closest("button");if(!b)return;el.querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b));on(b.dataset.v);};}
+const tile=(l,v,sub,c="")=>`<div class="tile ${c}"><span>${l}</span><b>${v}</b>${sub?`<small>${sub}</small>`:""}</div>`;
+
+/* ---------- registro dos laboratórios ---------- */
+const R={};let cur="tres";
+const LABS=[];
+function LAB(id,grp,name,html,init,render){const s=document.createElement("section");s.className="lab";s.id="lab-"+id;s.hidden=true;s.innerHTML=html;$("labs").appendChild(s);LABS.push({id,grp,name,init,render,ready:false});R[id]=()=>{const L=LABS.find(l=>l.id===id);if(!L.ready){L.ready=true;init&&init();}render&&render();};}
+
+/* ===================== simulação e pessoas ===================== */
+function rng(seed){let a=seed>>>0;return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+function shuffle(a,r){for(let i=a.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function gauss(r){let u=0,v=0;while(u===0)u=r();while(v===0)v=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);}
+const div=(a,b)=>b?a/b:NaN;
+/* medidas da tabela 2×2: a = exposto com desfecho, b = exposto sem, c = não exposto com, d = não exposto sem */
+function t22(a,b,c,d){const r1=div(a,a+b),r0=div(c,c+d);return{a,b,c,d,r1,r0,rr:div(r1,r0),or:div(a*d,b*c),rd:r1-r0};}
+function ciRR(a,b,c,d){if(!a||!c)return null;const l=Math.log((a/(a+b))/(c/(c+d))),se=Math.sqrt(1/a-1/(a+b)+1/c-1/(c+d));return[Math.exp(l-1.96*se),Math.exp(l+1.96*se)];}
+function ciOR(a,b,c,d){if(!a||!b||!c||!d)return null;const l=Math.log(a*d/(b*c)),se=Math.sqrt(1/a+1/b+1/c+1/d);return[Math.exp(l-1.96*se),Math.exp(l+1.96*se)];}
+const ciTxt=ci=>ci?`IC 95%: ${fmt(ci[0],2)} a ${fmt(ci[1],2)}`:"";
+const rat=x=>!isFinite(x)?(x>0?"∞":"—"):fmt(x,2);
+
+/* grade de pessoas em SVG. Cada pessoa: {e:0|1|null, d:0|1|null, sq, off, lost, mis, nad} */
+function dotSVG(people,cols,o={}){const p=o.pitch||13,r=o.r||4.4,n=people.length,rows=Math.max(1,Math.ceil(n/cols)),W=cols*p,H=rows*p;let s="";
+  people.forEach((q,i)=>{const cx=(i%cols)*p+p/2,cy=Math.floor(i/cols)*p+p/2,cl=`p e${q.e==null?"u":q.e} d${q.d==null?"u":q.d}${q.off?" off":""}${q.lost?" lost":""}${q.mis?" mis":""}${q.nad?" nad":""}`;
+    s+=q.sq?`<rect class="${cl}" x="${cx-r+.3}" y="${cy-r+.3}" width="${2*r-.6}" height="${2*r-.6}" rx="1.2"/>`:`<circle class="${cl}" cx="${cx}" cy="${cy}" r="${r}"/>`;
+    if(q.lost)s+=`<path class="xm" d="M${cx-2.6} ${cy-2.6}l5.2 5.2M${cx+2.6} ${cy-2.6}l-5.2 5.2"/>`;});
+  return `<svg class="ppl" viewBox="0 0 ${W} ${H}" width="${Math.round(W*(o.scale||1.15))}" style="max-width:100%" aria-hidden="true">${s}</svg>`;}
+const grp=(label,sub,svg)=>`<div class="grp"><div class="grp-h"><b>${label}</b><span>${sub||""}</span></div>${svg}</div>`;
+/* item de legenda com o mesmo desenho das pessoas */
+const keyDot=(q,t)=>`<span><svg viewBox="0 0 13 13">${q.sq?`<rect class="p e${q.e==null?"u":q.e} d${q.d==null?"u":q.d}${q.mis?" mis":""}${q.nad?" nad":""}" x="1.5" y="1.5" width="10" height="10" rx="1.2"/>`:`<circle class="p e${q.e==null?"u":q.e} d${q.d==null?"u":q.d}${q.lost?" lost":""}${q.mis?" mis":""}${q.nad?" nad":""}" cx="6.5" cy="6.5" r="5"/>`}</svg>${t}</span>`;
+function table22(v,o={}){const L=Object.assign({r1:"Expostos",r0:"Não expostos",c1:"Com desfecho",c0:"Sem desfecho"},o),fx=o.fixCols?" fix":"";
+  return `<div class="tw"><table class="t22"><tr><th></th><th>${L.c1}</th><th>${L.c0}</th><th>Total</th></tr>
+  <tr><th class="rh">${L.r1}</th><td><small>a</small>${fmt(v.a,0)}</td><td><small>b</small>${fmt(v.b,0)}</td><td class="tot">${fmt(v.a+v.b,0)}</td></tr>
+  <tr><th class="rh">${L.r0}</th><td><small>c</small>${fmt(v.c,0)}</td><td><small>d</small>${fmt(v.d,0)}</td><td class="tot">${fmt(v.c+v.d,0)}</td></tr>
+  <tr><th class="rh">Total</th><td class="tot${fx}">${fmt(v.a+v.c,0)}</td><td class="tot${fx}">${fmt(v.b+v.d,0)}</td><td class="tot">${fmt(v.a+v.b+v.c+v.d,0)}</td></tr></table></div>`;}
+/* ponte para o 2×2 LAB: abre a mesma tabela lá, já com o desenho escolhido */
+const LAB22="https://andrebacchi.github.io/2-2-lab/";
+const lab22=(v,tipo)=>`<a class="btn small" target="_blank" rel="noopener" href="${LAB22}?a=${v.a}&amp;b=${v.b}&amp;c=${v.c}&amp;d=${v.d}&amp;tipo=${tipo}">Abrir esta tabela no 2×2 LAB ›</a>`;
+/* eixo logarítmico com marcadores (comparar RR, OR etc.) */
+function logAxis(el,marks,o={}){const H=o.h||(40+marks.length*26),W=box(el,H),L=o.L??12,Rm=12,iw=W-L-Rm,lo=o.lo||0.25,hi=o.hi||8,X=v=>L+(Math.log(clamp(v,lo,hi))-Math.log(lo))/(Math.log(hi)-Math.log(lo))*iw,yA=H-24;let s="";
+  s+=`<line x1="${X(1)}" x2="${X(1)}" y1="2" y2="${yA}" stroke="var(--tick)" stroke-dasharray="4 3"/>`;
+  marks.forEach((m,i)=>{const y=14+i*26;if(!has(m.v)&&m.v!==Infinity)return;const x=X(m.v===Infinity?hi:m.v),right=x<W*0.55;
+    if(m.ci)s+=`<line x1="${X(m.ci[0])}" x2="${X(m.ci[1])}" y1="${y}" y2="${y}" stroke="${m.c}" stroke-width="3" stroke-linecap="round" opacity=".5"/>`;
+    s+=m.dia?`<rect x="${x-6}" y="${y-6}" width="12" height="12" transform="rotate(45 ${x} ${y})" fill="${m.c}"/>`:`<circle cx="${x}" cy="${y}" r="6.5" fill="${m.c}"/>`;
+    s+=`<text x="${right?x+12:x-12}" y="${y+4}" text-anchor="${right?"start":"end"}" class="lbl" style="font-size:12.5px;fill:${m.c}">${m.t}</text>`;});
+  const tk=(o.ticks||[0.25,0.5,1,2,4,8]).filter(t=>t>=lo&&t<=hi);s+=xAxis(X,tk,yA,numTxt,L,W-Rm);el.innerHTML=s;}
+
+/* ===================== TRÊS PERGUNTAS ===================== */
+/* Quadro-resumo dos desenhos (Aula 10, resumo comparativo; quase-experimentais da Aula 12) */
+const DES={
+ serie:{n:"Relato ou série de casos",s:"descritivo",def:"Descreve em detalhe um ou vários pacientes com a mesma condição. Não há grupo de comparação.",unit:"Indivíduo",tempo:"Descrição da evolução",med:"Nenhuma (descritivo)",lim:"Sem comparação; não permite inferência causal"},
+ transversal:{n:"Transversal",s:"observacional",def:"Exposição e desfecho são medidos no mesmo momento, em uma amostra de uma população definida.",unit:"Indivíduo",tempo:"Um momento",med:"Prevalência; razão de prevalências (RP)",lim:"Sem temporalidade; viés de prevalência"},
+ ecologico:{n:"Ecológico",s:"observacional",def:"A unidade de análise é o grupo (município, estado, país), nunca o indivíduo.",unit:"Grupo",tempo:"Um momento ou série",med:"Correlação, regressão, razão de taxas",lim:"Falácia ecológica; confusão"},
+ cc:{n:"Caso-controle",s:"observacional",def:"Seleciona as pessoas pelo desfecho (casos e controles) e investiga a exposição passada.",unit:"Indivíduo",tempo:"Do desfecho para a exposição passada",med:"Razão de chances (OR)",lim:"Viés de memória; escolha dos controles"},
+ coorte:{n:"Coorte",s:"observacional",def:"Pessoas livres do desfecho são classificadas pela exposição e acompanhadas no tempo.",unit:"Indivíduo",tempo:"Da exposição para o desfecho",med:"Incidência; RR, HR",lim:"Custo, tempo, perdas de seguimento"},
+ ecr:{n:"Ensaio clínico randomizado",s:"experimental",def:"O pesquisador define a exposição (a intervenção) por sorteio e acompanha os grupos.",unit:"Indivíduo ou conglomerado",tempo:"Prospectivo",med:"RR, HR, diferença de risco, NNT",lim:"Custo; ética; validade externa"},
+ quase:{n:"Quase-experimental",s:"experimental",def:"Há intervenção controlada pelo pesquisador, mas a alocação não é aleatória.",unit:"Indivíduo ou grupo",tempo:"Antes e depois da intervenção",med:"Mudança antes e depois; comparação entre grupos",lim:"Sem sorteio: regressão à média, tendências e grupos diferentes"}};
+const DES_ORD=["serie","transversal","ecologico","cc","coorte","ecr","quase"];
+const TQ=[
+ {q:"Quem decidiu a exposição?",o:[["sorteio","O pesquisador, por sorteio",["ecr"]],["sem","O pesquisador, sem sorteio",["quase"]],["vida","A vida, o paciente, o médico",["serie","transversal","ecologico","cc","coorte"]]]},
+ {q:"Qual é a unidade de análise?",o:[["grupo","O grupo (município, estado, país)",["ecologico","ecr","quase"]],["ind","O indivíduo",["serie","transversal","cc","coorte","ecr","quase"]]]},
+ {q:"Como o tempo entra no estudo?",o:[["mesmo","Exposição e desfecho no mesmo momento",["transversal"]],["frente","Parte da exposição e segue até o desfecho",["coorte","ecr","quase"]],["tras","Parte do desfecho e investiga a exposição passada",["cc"]],["semcomp","Só descreve casos, sem grupo de comparação",["serie"]]]}];
+const T3={ans:[null,null,null]};
+/* múltiplos icebergs: para cada tipo de pergunta, o desenho de referência é outro (Aula 10) */
+const ICE=[
+ {k:"Terapia e intervenção",q:"Este anti-hipertensivo evita AVC?",top:"Ensaio clínico randomizado",mid:["Coortes","Caso-controle e séries"],sub:["Dados de mundo real","Registros eletrônicos","Farmacovigilância"],
+  li:["O ensaio randomizado é o desenho de referência: o sorteio equilibra, em média, confundidores conhecidos e desconhecidos.","Coortes entram quando o ensaio é inviável, antiético ou insuficiente (efeitos raros ou tardios, populações excluídas dos ensaios).","Na base submersa, dados de mundo real complementam o ensaio: seguimento longo, segurança pós-comercialização e subgrupos."]},
+ {k:"Etiologia, dano e prognóstico",q:"Trabalhar no turno da noite aumenta o risco de diabetes?",top:"Coorte prospectiva",mid:["Caso-controle","Séries e relatos de casos"],sub:["Dados genéticos","Dados sociais e ambientais","Registros populacionais"],
+  li:["Sortear pessoas para uma exposição nociva seria antiético: a evidência causal vem de estudos observacionais.","Coortes prospectivas dão a melhor garantia de temporalidade (a exposição antes do desfecho).","A emulação de ensaio-alvo organiza a análise observacional como se fosse um ensaio randomizado."]},
+ {k:"Acurácia diagnóstica",q:"Este teste rápido identifica a infecção?",top:"Estudo transversal",mid:["Coorte de casos suspeitos","Caso-controle diagnóstico"],sub:["Registros eletrônicos","Aprendizado de máquina","IA multimodal"],
+  li:["Sensibilidade e especificidade se medem em estudo transversal: teste-índice e padrão de referência no mesmo momento.","O caso-controle diagnóstico (“duas portas”) superestima a acurácia, porque compara doentes graves com sadios evidentes.","Saber se o exame melhora desfechos do paciente exige um ensaio randomizado de estratégias diagnósticas: raro e caro, mas possível."]}];
+let ICEi=0;
+LAB("tres","Reconhecer","Três perguntas",`
+<div class="intro"><span class="eyebrow">Reconhecer · classificação</span><h2>Três perguntas reconhecem qualquer desenho de estudo</h2><p>Responda pensando em um estudo que você leu. A cada resposta, os desenhos que não combinam saem do quadro.</p></div>
+<div class="grid two">
+ <div class="card wide"><div class="card-h"><h3>Qual é o desenho?</h3><button class="more-btn" data-learn="tres">Saiba mais</button></div>
+  <div class="cols2">
+   <div class="qs" id="t3Q"></div>
+   <div><div class="sub">Desenhos possíveis</div><div class="dzs" id="t3D"></div><div id="t3V"></div></div>
+  </div></div>
+ <div class="card wide"><div class="card-h"><h3>Cada pergunta tem o seu iceberg</h3><button class="more-btn" data-learn="iceberg">Saiba mais</button></div>
+  <p class="lede">A pirâmide clássica foi desenhada para tratamentos. Troque o tipo de pergunta e veja qual desenho fica no topo.</p>
+  <div class="chips" id="iceC"></div>
+  <div class="cols2" style="margin-top:12px"><div id="iceS"></div><div><p class="q" id="iceQ" style="font-size:19px;margin-top:0"></p><ul id="iceL" style="margin:0;padding-left:18px;display:grid;gap:6px;font-size:14px;max-width:60ch"></ul><p class="note">Em todos os icebergs, a revisão sistemática funciona como uma lente para examinar e combinar os estudos, não como um nível acima deles.</p></div></div></div>
+</div>`,()=>{
+  $("t3Q").addEventListener("click",e=>{const b=e.target.closest("[data-q]");if(!b)return;const q=+b.dataset.q;T3.ans[q]=T3.ans[q]===b.dataset.v?null:b.dataset.v;for(let i=q+1;i<3;i++)T3.ans[i]=null;renderT3();});
+  $("t3V").addEventListener("click",e=>{if(e.target.closest("#t3R")){T3.ans=[null,null,null];renderT3();}const g=e.target.closest("[data-go]");if(g){TP.des=g.dataset.go;TP.step=0;navGo("tempo");}});
+  chips($("iceC"),ICE.map(x=>x.k),i=>{ICEi=i;renderIce();},0);
+},()=>{renderT3();renderIce();});
+function t3Left(){let set=new Set(DES_ORD);T3.ans.forEach((a,i)=>{if(a==null)return;const keep=TQ[i].o.find(o=>o[0]===a)[2];set=new Set([...set].filter(k=>keep.includes(k)));});return set;}
+function renderT3(){const left=t3Left(),done=left.size===1;let h="",stop=false;
+  TQ.forEach((Q,i)=>{if(stop)return;h+=`<div class="qq"><b><i>${i+1}</i>${Q.q}</b><div class="opts">${Q.o.map(o=>`<button class="opt ${T3.ans[i]===o[0]?"on":""}" data-q="${i}" data-v="${o[0]}">${o[1]}</button>`).join("")}</div></div>`;
+    if(T3.ans[i]==null||t3LeftUpTo(i).size===1)stop=true;});
+  $("t3Q").innerHTML=h;
+  $("t3D").innerHTML=DES_ORD.map(k=>`<div class="dz ${left.has(k)?(done?"win":""):"out"}">${DES[k].n}<small>${DES[k].s}</small></div>`).join("");
+  if(done){const k=[...left][0],D=DES[k],tl={serie:"serie",transversal:"transversal",ecologico:"ecologico",cc:"cc",coorte:"coorte",ecr:"ecr"}[k];
+    $("t3V").innerHTML=`<div class="verdict"><h4>${D.n}</h4><p>${D.def}</p><dl><dt>Unidade</dt><dd>${D.unit}</dd><dt>Tempo</dt><dd>${D.tempo}</dd><dt>Medida principal</dt><dd>${D.med}</dd><dt>Limitação principal</dt><dd>${D.lim}</dd></dl><div class="row">${tl?`<button class="btn small primary" data-go="${tl}">Ver na linha do tempo ›</button>`:""}<button class="btn small" id="t3R">Recomeçar</button></div></div>`;}
+  else $("t3V").innerHTML=`<p class="note">${T3.ans[0]==null?"Sete desenhos em jogo. Comece pela primeira pergunta.":`Restam ${left.size} desenhos. Responda a próxima pergunta.`}</p>`;}
+function t3LeftUpTo(i){let set=new Set(DES_ORD);for(let j=0;j<=i;j++){const a=T3.ans[j];if(a==null)continue;const keep=TQ[j].o.find(o=>o[0]===a)[2];set=new Set([...set].filter(k=>keep.includes(k)));}return set;}
+function renderIce(){const I=ICE[ICEi],wl=116,H=284,cx=70;
+  $("iceS").innerHTML=`<div class="ice"><div class="water"></div>
+  <svg viewBox="0 0 140 ${H}" width="140" height="${H}" aria-hidden="true"><path d="M${cx} 12 L${cx+34} ${wl} L${cx-30} ${wl} Z" fill="var(--surface)" stroke="var(--fg)" stroke-width="1.6" stroke-linejoin="round"/><path d="M${cx-30} ${wl} L${cx+34} ${wl} L${cx+60} ${wl+62} L${cx+30} ${H-12} L${cx-28} ${H-20} L${cx-62} ${wl+74} Z" fill="var(--nex)" fill-opacity=".25" stroke="var(--nex)" stroke-width="1.6" stroke-linejoin="round"/><line x1="${cx+8}" x2="140" y1="34" y2="34" stroke="var(--accent)" stroke-width="1.5"/></svg>
+  <div class="ice-t"><div class="above"><b>${I.top}</b><small>desenho de referência</small>${I.mid.map(t=>`<span>${t}</span>`).join("")}</div><div class="below"><small>submerso</small>${I.sub.map(t=>`<span>${t}</span>`).join("")}</div></div></div>`;
+  $("iceQ").textContent="“"+I.q+"”";$("iceL").innerHTML=I.li.map(t=>`<li>${t}</li>`).join("");}
+
+/* ===================== LINHA DO TEMPO: a mesma população vista por cada desenho ===================== */
+const TP={des:"coorte",ef:1,step:0,seed:11,reveal:false,el:[],P:[],rank:[]};
+const TP_DES=[["serie","Série de casos"],["transversal","Transversal"],["ecologico","Ecológico"],["cc","Caso-controle"],["coorte","Coorte"],["ecr","Ensaio clínico"]];
+const TP_EF=["Sem efeito","Efeito moderado","Efeito forte"];
+/* 120 pessoas em 6 municípios de 20. Expostos por município e casos (entre expostos e entre não expostos) para cada força de efeito.
+   Somam 48 expostos; casos entre expostos: 6, 12 ou 24 (risco de 12,5%, 25% ou 50%); entre não expostos: 9 de 72 (12,5%). */
+const EG=[2,4,6,8,12,16],CE=[[0,1,1,1,1,2],[0,1,1,2,3,5],[1,2,3,4,6,8]],CU=[[2,2,2,2,1,0],[2,2,2,1,1,1],[2,2,2,2,1,0]],TRIAL=[12,6,3];
+function tpWorld(){const r=rng(TP.seed*7919+TP.ef*13+1),P=[];
+  for(let g=0;g<6;g++){const st=P.length;for(let j=0;j<20;j++)P.push({id:st+j,g,e:j<EG[g]?1:0,d:0,t:r()});
+    shuffle(P.slice(st).filter(p=>p.e===1),r).slice(0,CE[TP.ef][g]).forEach(p=>p.d=1);
+    shuffle(P.slice(st).filter(p=>p.e===0),r).slice(0,CU[TP.ef][g]).forEach(p=>p.d=1);}
+  const ord=shuffle(P.map(p=>p.id),r);TP.rank=[];ord.forEach((id,k)=>TP.rank[id]=k);
+  // ensaio: sorteio de 60 para cada braço; 12 eventos no controle e 12, 6 ou 3 na intervenção
+  const sh=shuffle(P.map(p=>p.id),r);sh.forEach((id,k)=>{P[id].arm=k<60?1:0;P[id].dT=0;});
+  shuffle(P.filter(p=>p.arm===1),r).slice(0,TRIAL[TP.ef]).forEach(p=>p.dT=1);shuffle(P.filter(p=>p.arm===0),r).slice(0,12).forEach(p=>p.dT=1);
+  // caso-controle: todos os casos e o mesmo número de controles, que representam a exposição de quem não adoeceu
+  const cases=P.filter(p=>p.d),nE=P.filter(p=>!p.d&&p.e),nU=P.filter(p=>!p.d&&!p.e),nC=cases.length,bE=Math.round(nC*nE.length/(nE.length+nU.length));
+  P.forEach(p=>p.cc=p.d?"caso":null);shuffle(nE,r).slice(0,bE).forEach(p=>p.cc="ctrl");shuffle(nU,r).slice(0,nC-bE).forEach(p=>p.cc="ctrl");
+  // transversal: amostra de dois terços de cada combinação; série: 8 dos casos
+  [[1,1],[1,0],[0,1],[0,0]].forEach(([e,d])=>{const c=P.filter(p=>p.e===e&&p.d===d);shuffle(c,r).slice(0,Math.round(c.length*2/3)).forEach(p=>p.tv=true);});
+  shuffle(cases.slice(),r).slice(0,8).forEach(p=>p.sr=true);
+  TP.P=P;}
+const tpIds=f=>TP.P.filter(f).map(p=>p.id).sort((x,y)=>TP.rank[x]-TP.rank[y]);
+const n1=(n,s,p)=>`${n} ${n===1?s:p}`;
+function tpSteps(){const P=TP.P,all=tpIds(()=>true),G=(label,sub,ids)=>({label,sub,ids}),cnt=f=>P.filter(f).length;
+  if(TP.des==="coorte"||TP.des==="ecr"){const tr=TP.des==="ecr",e=p=>tr?p.arm:p.e,d=p=>tr?p.dT:p.d,L1=tr?"Intervenção":"Expostos",L0=tr?"Controle":"Não expostos";
+    const E=tpIds(p=>e(p)===1),U=tpIds(p=>e(p)===0),v={a:cnt(p=>e(p)&&d(p)),b:cnt(p=>e(p)&&!d(p)),c:cnt(p=>!e(p)&&d(p)),d:cnt(p=>!e(p)&&!d(p))},m=t22(v.a,v.b,v.c,v.d);
+    return[
+     {tab:"População em risco",title:tr?"Reúne participantes livres do desfecho":"Começa com pessoas livres do desfecho",text:tr?"Os participantes elegíveis ainda não tiveram o desfecho e ninguém recebeu a intervenção.":"Ninguém tem o desfecho ainda. Só assim dá para contar casos novos, isto é, a incidência.",rows:[[G(tr?"Participantes elegíveis":"População em risco","120 pessoas, nenhuma com o desfecho",all)]],look:()=>({e:null,d:0})},
+     tr?{tab:"Sorteio",title:"O sorteio decide quem recebe a intervenção",text:"Quem define a exposição é o acaso, não o paciente nem o médico. Os dois grupos ficam comparáveis em média, inclusive no que ninguém mediu.",rows:[[G(L1,"60 sorteados",E),G(L0,"60 sorteados",U)]],look:p=>({e:p.arm,d:0})}
+       :{tab:"Exposição",title:"Classifica pela exposição",text:"O pesquisador não escolhe quem se expõe: apenas observa e registra. Formam-se dois grupos.",rows:[[G(L1,fmt(E.length,0)+" pessoas",E),G(L0,fmt(U.length,0)+" pessoas",U)]],look:p=>({e:p.e,d:0})},
+     {tab:"Seguimento",title:"Acompanha os dois grupos no tempo",text:"Os casos novos vão aparecendo. Como todos começaram livres do desfecho, a exposição veio antes.",rows:[[G(L1,n1(v.a,"caso novo","casos novos"),E),G(L0,n1(v.c,"caso novo","casos novos"),U)]],look:p=>({e:e(p),d:d(p)}),delay:true},
+     {tab:"Tabela 2×2",title:"Conta os casos novos de cada grupo",text:tr?"Com a incidência nos dois braços, compara-se o risco de quem recebeu a intervenção com o do controle.":"Com a incidência em cada grupo, calcula-se o risco relativo.",
+      rows:[[G(L1+", com desfecho","a = "+v.a,tpIds(p=>e(p)&&d(p))),G(L1+", sem desfecho","b = "+v.b,tpIds(p=>e(p)&&!d(p)))],[G(L0+", com desfecho","c = "+v.c,tpIds(p=>!e(p)&&d(p))),G(L0+", sem desfecho","d = "+v.d,tpIds(p=>!e(p)&&!d(p)))]],look:p=>({e:e(p),d:d(p)}),
+      result:()=>{const rar=m.r0-m.r1;return `<div class="tiles">${tile(tr?"Risco na intervenção":"Incidência nos expostos",pct(m.r1,1),`${v.a} de ${v.a+v.b}`)}${tile(tr?"Risco no controle":"Incidência nos não expostos",pct(m.r0,1),`${v.c} de ${v.c+v.d}`)}${tile("Risco relativo (RR)",rat(m.rr),ciTxt(ciRR(v.a,v.b,v.c,v.d)),"acc")}${tr?tile("Redução absoluta (RAR)",fmt(rar*100,1)+" p.p.","risco no controle − na intervenção")+tile("NNT",rar>0?fmt(Math.ceil(1/rar-1e-9),0):"—",rar>0?"tratar para evitar 1 desfecho":"sem redução de risco"):tile("Risco atribuível (RA)",fmt(m.rd*100,1)+" p.p.","diferença entre as incidências")}</div>
+       <div class="insight">${tr?"Mesma direção da coorte: da exposição para o desfecho. A diferença é quem definiu a exposição.":"A coorte parte da exposição e chega ao desfecho. Por isso mede incidência e calcula o RR diretamente."}</div><div class="row" style="margin-top:10px">${lab22(v,tr?"ensaio":"coorte")}</div>`;}}];}
+  if(TP.des==="cc"){const cs=tpIds(p=>p.cc==="caso"),ct=tpIds(p=>p.cc==="ctrl"),out=tpIds(p=>!p.cc),v={a:cnt(p=>p.cc==="caso"&&p.e),b:cnt(p=>p.cc==="ctrl"&&p.e),c:cnt(p=>p.cc==="caso"&&!p.e),d:cnt(p=>p.cc==="ctrl"&&!p.e)},m=t22(v.a,v.b,v.c,v.d),O=G("Fora do estudo",out.length+" pessoas",out),lk=(p,ex)=>({e:ex&&p.cc?p.e:null,d:p.d,off:!p.cc});
+    return[
+     {tab:"Desfecho",title:"O desfecho já aconteceu",text:"O estudo começa depois dos fatos. Na população de origem, algumas pessoas já adoeceram.",rows:[[G("População de origem",`${cs.length} pessoas com o desfecho`,all)]],look:p=>({e:null,d:p.d})},
+     {tab:"Casos e controles",title:"Seleciona as pessoas pelo desfecho",text:`Entram todos os casos e ${ct.length} controles, que não tiveram o desfecho. Quem decide quantos controles entram é o pesquisador.`,rows:[[G("Casos",cs.length+" pessoas",cs),G("Controles",ct.length+" pessoas",ct)],[O]],look:p=>lk(p,false)},
+     {tab:"Exposição passada",title:"Olha para trás: quem estava exposto?",text:"Entrevistas ou prontuários reconstroem a exposição passada de casos e controles.",rows:[[G("Casos",`${v.a} expostos, ${v.c} não`,cs),G("Controles",`${v.b} expostos, ${v.d} não`,ct)],[O]],look:p=>lk(p,true)},
+     {tab:"Tabela 2×2",title:"Compara a exposição de casos e controles",text:"As colunas da tabela foram fixadas pelo pesquisador. Por isso não há incidência nem RR: a medida é a razão de chances.",
+      rows:[[G("Casos expostos","a = "+v.a,tpIds(p=>p.cc==="caso"&&p.e)),G("Controles expostos","b = "+v.b,tpIds(p=>p.cc==="ctrl"&&p.e))],[G("Casos não expostos","c = "+v.c,tpIds(p=>p.cc==="caso"&&!p.e)),G("Controles não expostos","d = "+v.d,tpIds(p=>p.cc==="ctrl"&&!p.e))],[O]],look:p=>lk(p,true),
+      result:()=>`<div class="tiles">${tile("Chance de exposição nos casos",rat(v.a/v.c),`${v.a} ÷ ${v.c}`)}${tile("Chance de exposição nos controles",rat(v.b/v.d),`${v.b} ÷ ${v.d}`)}${tile("Razão de chances (OR)",rat(m.or),ciTxt(ciOR(v.a,v.b,v.c,v.d)),"acc")}${tile("Risco relativo",`<span class="strike">RR</span>`,"não se calcula aqui","muted")}</div>
+       <div class="insight">O caso-controle inverte a direção: parte do desfecho e investiga a exposição. Veja em <button class="lnk" data-nav="cc" style="border:0;background:none;padding:0">Caso-controle</button> por que o RR não funciona.</div><div class="row" style="margin-top:10px">${lab22(v,"caso_controle")}</div>`}];}
+  if(TP.des==="transversal"){const S=tpIds(p=>p.tv),out=tpIds(p=>!p.tv),O=G("Fora da amostra",out.length+" pessoas",out),f=(e,d)=>p=>p.tv&&p.e===e&&p.d===d,v={a:cnt(f(1,1)),b:cnt(f(1,0)),c:cnt(f(0,1)),d:cnt(f(0,0))},m=t22(v.a,v.b,v.c,v.d);
+    return[
+     {tab:"População",title:"Define a população",text:"Uma população delimitada: os moradores de um bairro, os alunos de uma escola.",rows:[[G("População definida","120 pessoas",all)]],look:()=>({e:null,d:null})},
+     {tab:"Amostra",title:"Sorteia uma amostra",text:"Uma amostra representativa é sorteada. Ainda não se sabe nada sobre exposição ou desfecho.",rows:[[G("Amostra",S.length+" pessoas",S)],[O]],look:p=>({e:null,d:null,off:!p.tv})},
+     {tab:"Uma visita",title:"Mede exposição e desfecho na mesma visita",text:"As duas informações chegam juntas, como numa foto. O estudo encontra casos existentes (prevalência), não casos novos.",rows:[[G("Amostra",`${v.a+v.c} com o desfecho`,S)],[O]],look:p=>p.tv?{e:p.e,d:p.d}:{e:null,d:null,off:true}},
+     {tab:"Tabela 2×2",title:"Compara as prevalências",text:"A conta é a mesma do RR, mas com casos existentes: o resultado é a razão de prevalências.",
+      rows:[[G("Expostos, com desfecho","a = "+v.a,tpIds(f(1,1))),G("Expostos, sem desfecho","b = "+v.b,tpIds(f(1,0)))],[G("Não expostos, com desfecho","c = "+v.c,tpIds(f(0,1))),G("Não expostos, sem desfecho","d = "+v.d,tpIds(f(0,0)))],[O]],look:p=>p.tv?{e:p.e,d:p.d}:{e:null,d:null,off:true},
+      result:()=>`<div class="tiles">${tile("Prevalência nos expostos",pct(m.r1,1),`${v.a} de ${v.a+v.b}`)}${tile("Prevalência nos não expostos",pct(m.r0,1),`${v.c} de ${v.c+v.d}`)}${tile("Razão de prevalências (RP)",rat(m.rr),ciTxt(ciRR(v.a,v.b,v.c,v.d)),"acc")}</div>
+       <div class="insight warn">A foto não mostra o que veio antes. Com exposição e desfecho medidos juntos, não há como garantir que a exposição precedeu o desfecho.</div><div class="row" style="margin-top:10px">${lab22(v,"transversal")}</div>`}];}
+  if(TP.des==="ecologico"){const nm="ABCDEF",gs=[0,1,2,3,4,5].map(g=>({g,ids:tpIds(p=>p.g===g),pe:EG[g]/20,rate:cnt(p=>p.g===g&&p.d)/20})),rows=s=>[0,2,4].map(i=>[gs[i],gs[i+1]].map(x=>G("Município "+nm[x.g],s?`${pct(x.pe,0)} expostos · ${fmt(x.rate*100,0)} casos por 100`:"20 pessoas",x.ids)));
+    return[
+     {tab:"Grupos",title:"A unidade de análise é o grupo",text:"As mesmas 120 pessoas, agora vistas como seis municípios. O estudo não vai olhar para nenhuma delas individualmente.",rows:rows(false),look:()=>({e:null,d:null})},
+     {tab:"Medidas do grupo",title:"Mede exposição e desfecho de cada grupo",text:"De cada município chegam dois números, em geral de bases de dados já existentes: a proporção de expostos e a taxa do desfecho.",rows:rows(true),look:()=>({e:null,d:null})},
+     {tab:"Comparação",title:"Compara os grupos entre si",text:"Cada município vira um ponto. Não há tabela 2×2: ninguém sabe se os casos de um município estavam entre os expostos.",rows:rows(true),look:p=>TP.reveal?{e:p.e,d:p.d}:{e:null,d:null},
+      result:()=>`<svg class="ch" id="tpEco" style="max-width:640px" role="img" aria-label="Taxa do desfecho por proporção de expostos em cada município"></svg>
+       <div class="insight warn">O gráfico diz o que acontece com os municípios, não com as pessoas. Concluir sobre indivíduos a partir dele é a falácia ecológica.</div>
+       <div class="row" style="margin-top:10px"><button class="btn small" id="tpRev">${TP.reveal?"Esconder as pessoas":"Revelar as pessoas (o estudo não vê isto)"}</button><button class="btn small" data-nav="eco">Ir para Ecológico ›</button></div>`,
+      after:()=>{const el=$("tpEco");if(!el)return;const H=200,W=box(el,H),L=40,Rm=14,T=24,ih=H-T-34,iw=W-L-Rm,X=v=>L+v*iw,ym=Math.max(.2,...gs.map(x=>x.rate))*1.25,Y=v=>T+ih-v/ym*ih;
+        let s=yGrid(Y,[0,.1,.2,.3,.4,.5].filter(t=>t<=ym),L,W-Rm,v=>fmt(v*100,0))+xAxis(X,[0,.25,.5,.75,1],T+ih,v=>pct(v,0),L,W-Rm);
+        gs.forEach(x=>s+=`<circle cx="${X(x.pe)}" cy="${Y(x.rate)}" r="9" fill="var(--accent)"/><text x="${X(x.pe)}" y="${Y(x.rate)+4}" text-anchor="middle" style="fill:var(--on-accent);font-size:11px;font-weight:600">${nm[x.g]}</text>`);
+        s+=`<text x="${W-Rm}" y="${H-1}" text-anchor="end" style="font-size:11px">expostos no município</text><text x="${L}" y="10" style="font-size:11px">casos por 100 pessoas</text>`;el.innerHTML=s;}}];}
+  /* série de casos */
+  const S=tpIds(p=>p.sr),out=tpIds(p=>!p.sr),k=cnt(p=>p.sr&&p.e),O=G("Resto da população","não foi observado",out);
+  return[
+   {tab:"Casos",title:"Pacientes com o desfecho chegam ao serviço",text:"Oito pacientes com a mesma condição incomum chamam a atenção da equipe. O estudo é feito só com eles.",rows:[[G("Casos atendidos","8 pacientes",S)],[O]],look:p=>p.sr?{e:null,d:1}:{e:null,d:null,off:true}},
+   {tab:"Descrição",title:"Descreve cada caso em detalhe",text:`História, achados, tratamento, evolução. Na descrição aparece que ${k} dos 8 tinham a mesma exposição.`,rows:[[G("Casos atendidos",`${k} expostos, ${8-k} não`,S)],[O]],look:p=>p.sr?{e:p.e,d:1}:(TP.reveal?{e:p.e,d:p.d}:{e:null,d:null,off:true}),
+    result:()=>`<div class="tiles">${tile("Expostos entre os casos",pct(k/8,0),`${k} de 8`,"acc")}${tile("Expostos na população",TP.reveal?"40%":"?",TP.reveal?"48 de 120":"ninguém mediu",TP.reveal?"":"muted")}</div>
+     <div class="insight warn">${k} em 8 é muito? Sem grupo de comparação, não dá para saber. O relato levanta a hipótese; são os outros desenhos que a testam. Aqui não há tabela 2×2 nem medida de associação.</div>
+     <div class="row" style="margin-top:10px"><button class="btn small" id="tpRev">${TP.reveal?"Esconder a população":"Revelar a população (o estudo não vê isto)"}</button></div>`}];}
+/* esquema Exposição → Desfecho: onde o estudo começa e para onde olha */
+function tpDiagram(){const el=$("tpDia"),H=92,W=box(el,H),bw=Math.min(118,(W-70)/2),bh=32,x1=W/2-bw-28,x2=W/2+28,y=8,cy=y+bh/2,d=TP.des,grp=d==="ecologico";let s="";
+  const bx=(x,t,on,dash)=>`<rect x="${x}" y="${y}" width="${bw}" height="${bh}" rx="7" fill="${on?"var(--ink)":"var(--surface)"}" stroke="${on?"var(--ink)":"var(--tick)"}" stroke-width="1.5" ${dash?'stroke-dasharray="4 3"':""}/><text x="${x+bw/2}" y="${cy+4.5}" text-anchor="middle" style="font-size:12.5px;font-weight:600;fill:${on?"var(--on-ink)":"var(--muted)"}">${t}</text>`;
+  const pin=(x,t)=>`<path d="M${x} ${y+bh+4}l-5 8h10z" fill="var(--accent)"/><text x="${clamp(x,74,W-74)}" y="${y+bh+27}" text-anchor="middle" style="font-size:12px;fill:var(--accent);font-weight:600">${t}</text>`;
+  const arrow=(dir)=>{const a=x1+bw+5,b=x2-5;return dir>0?`<path d="M${a} ${cy}H${b-7}" stroke="var(--fg)" stroke-width="2"/><path d="M${b} ${cy}l-9 -5v10z" fill="var(--fg)"/>`:`<path d="M${b} ${cy}H${a+7}" stroke="var(--exp)" stroke-width="2"/><path d="M${a} ${cy}l9 -5v10z" fill="var(--exp)"/>`;};
+  const E=d==="ecr"?"Intervenção":"Exposição",D="Desfecho";
+  if(d==="coorte"||d==="ecr")s=bx(x1,E,true)+bx(x2,D,false)+arrow(1)+pin(x1+bw/2,d==="ecr"?"começa aqui, com sorteio":"o estudo começa aqui");
+  else if(d==="cc")s=bx(x1,E,false)+bx(x2,D,true)+arrow(-1)+pin(x2+bw/2,"o estudo começa aqui");
+  else if(d==="serie")s=bx(x1,E,false,true)+bx(x2,D,true)+pin(x2+bw/2,"só há casos");
+  else s=bx(x1,E,true)+bx(x2,D,true)+`<path d="M${x1+bw/2} ${y+bh+4}v7H${x2+bw/2}v-7" fill="none" stroke="var(--accent)" stroke-width="1.5"/><text x="${W/2}" y="${y+bh+27}" text-anchor="middle" style="font-size:12px;fill:var(--accent);font-weight:600">${grp?"medidas do grupo, não da pessoa":"medidos no mesmo momento"}</text>`;
+  el.innerHTML=s;}
+function tpLayout(rows){const st=$("tpStage"),W=st.clientWidth||320,gapX=18,pitch=clamp((W-gapX)/20,10,30),size=Math.max(6,Math.round(pitch-5)),capH=38,x0=Math.max(0,(W-20*pitch-gapX)/2);let y=0,caps="";
+  rows.forEach(row=>{const two=row.length===2;let hmax=0;
+    row.forEach((g,gi)=>{const cols=two?10:20,bx=x0+(two?gi*(10*pitch+gapX):0),w=cols*pitch+(two?0:gapX);
+      caps+=`<div class="cap" style="transform:translate(${bx.toFixed(1)}px,${y}px);width:${w.toFixed(0)}px"><b>${g.label}</b><span>${g.sub||""}</span></div>`;
+      const pc=two?pitch:(20*pitch+gapX)/20;
+      g.ids.forEach((id,j)=>{const el=TP.el[id];el.style.width=el.style.height=size+"px";el.style.transform=`translate(${(bx+(j%cols)*pc+(pc-size)/2).toFixed(1)}px,${(y+capH+Math.floor(j/cols)*pitch+(pitch-size)/2).toFixed(1)}px)`;});
+      hmax=Math.max(hmax,capH+Math.max(1,Math.ceil(g.ids.length/cols))*pitch);});
+    y+=hmax+12;});
+  st.style.height=y+"px";$("tpCaps").innerHTML=caps;}
+function renderTP(){const steps=tpSteps();TP.step=clamp(TP.step,0,steps.length-1);const S=steps[TP.step],last=TP.step===steps.length-1,di=TP_DES.findIndex(d=>d[0]===TP.des);
+  chipOn($("tpDes"),di);tpDiagram();
+  $("tpBar").innerHTML=steps.map((s,i)=>`<button class="stp ${i===TP.step?"on":i<TP.step?"done":""}" data-s="${i}"><i>Passo ${i+1}</i><b>${s.tab}</b></button>`).join("");
+  $("tpTxt").innerHTML=`<b class="t">${S.title}</b>${S.text}`;
+  TP.P.forEach(p=>{const L=S.look(p),el=TP.el[p.id];el.style.transitionDelay=S.delay&&L.d?`0s,${(p.t*1.6).toFixed(2)}s,${(p.t*1.6).toFixed(2)}s,0s`:"";el.className=`e${L.e==null?"u":L.e} d${L.d==null?"u":L.d}${L.off?" off":""}`;});
+  tpLayout(S.rows);
+  $("tpNav").innerHTML=`<button class="btn small" id="tpPrev" ${TP.step?"":"disabled"}>‹ Voltar</button>${last?`<button class="btn small" id="tpAgain">Recomeçar</button>${di<TP_DES.length-1?`<button class="btn small primary" id="tpNextD">Próximo desenho: ${TP_DES[di+1][1]} ›</button>`:""}`:`<button class="btn small primary" id="tpNext">Próximo passo ›</button>`}`;
+  $("tpRes").hidden=!S.result;$("tpRes").innerHTML=S.result?S.result():"";S.after&&S.after();
+  $("tpEfW").hidden=TP.des==="serie";
+  $("tpKey").innerHTML=(TP.des==="ecr"?keyDot({e:1,d:0},"intervenção")+keyDot({e:0,d:0},"controle"):keyDot({e:1,d:0},"exposto")+keyDot({e:0,d:0},"não exposto"))+keyDot({e:null,d:1},"com o desfecho")+keyDot({e:null,d:0},"sem o desfecho")+keyDot({e:null,d:null},"ainda não medido");}
+LAB("tempo","Reconhecer","Linha do tempo",`
+<div class="intro"><span class="eyebrow">Reconhecer · como cada desenho enxerga</span><h2>As mesmas 120 pessoas, vistas por seis desenhos de estudo</h2><p>Escolha o desenho e avance os passos. Repare em onde o estudo começa, o que ele mede primeiro e o que fica de fora.</p></div>
+<div class="grid">
+ <div class="card"><div class="card-h"><h3>Onde o estudo começa e para onde ele olha</h3><button class="more-btn" data-learn="tempo">Saiba mais</button></div>
+  <div class="chips" id="tpDes"></div>
+  <svg class="ch" id="tpDia" style="margin-top:12px;max-width:560px" role="img" aria-label="Direção do estudo entre exposição e desfecho"></svg>
+  <div class="stepbar" id="tpBar"></div>
+  <div class="tpw">
+   <div class="steptxt" id="tpTxt" aria-live="polite"></div>
+   <div class="tps"><div class="stage" id="tpStage" aria-hidden="true"><div id="tpCaps"></div></div><div class="key" id="tpKey"></div></div>
+   <div class="stepnav" id="tpNav"></div>
+   <div class="result" id="tpRes"></div>
+  </div>
+  <details class="fold"><summary>Mudar a população</summary>
+   <div class="stack" style="margin-top:10px"><div id="tpEfW"><div class="sub">Efeito verdadeiro da exposição</div><div class="chips" id="tpEf"></div><p class="note">Na população, o risco de quem não se expõe é sempre 12,5%. O de quem se expõe é 12,5%, 25% ou 50%. No ensaio clínico, a intervenção mantém o risco, reduz pela metade ou reduz a um quarto.</p></div>
+   <div class="row"><button class="btn small" id="tpNew">Sortear outra população</button></div></div></details>
+ </div>
+</div>`,()=>{
+  const st=$("tpStage");for(let i=0;i<120;i++){const d=document.createElement("i");st.appendChild(d);TP.el.push(d);}
+  tpWorld();
+  chips($("tpDes"),TP_DES.map(d=>d[1]),i=>{TP.des=TP_DES[i][0];TP.step=0;TP.reveal=false;renderTP();},TP_DES.findIndex(d=>d[0]===TP.des));
+  chips($("tpEf"),TP_EF,i=>{TP.ef=i;tpWorld();renderTP();},TP.ef);
+  $("tpNew").onclick=()=>{TP.seed++;tpWorld();renderTP();};
+  $("tpBar").addEventListener("click",e=>{const b=e.target.closest("[data-s]");if(b){TP.step=+b.dataset.s;renderTP();}});
+  $("tpNav").addEventListener("click",e=>{const id=e.target.id;if(id==="tpNext")TP.step++;else if(id==="tpPrev")TP.step--;else if(id==="tpAgain")TP.step=0;else if(id==="tpNextD"){const i=TP_DES.findIndex(d=>d[0]===TP.des);TP.des=TP_DES[i+1][0];TP.step=0;}else return;TP.reveal=false;renderTP();});
+  $("tpRes").addEventListener("click",e=>{if(e.target.id==="tpRev"){TP.reveal=!TP.reveal;renderTP();}const n=e.target.closest("[data-nav]");if(n)navGo(n.dataset.nav);});
+},()=>renderTP());
+
+/* ===================== QUAL ESTUDO É ESTE? ===================== */
+const QOPT=[["serie","Relato ou série de casos"],["transversal","Transversal"],["ecologico","Ecológico"],["cc","Caso-controle"],["coorte","Coorte"],["ecr","Ensaio clínico randomizado"],["quase","Quase-experimental"],["rs","Revisão sistemática"]];
+const WHO={vida:"A vida, o paciente, o médico",sort:"O pesquisador, por sorteio",sem:"O pesquisador, sem sorteio"};
+/* [texto, resposta, quem decidiu, unidade, tempo, comentário] — exemplos fictícios */
+const VIG=[
+ ["Pesquisadores visitaram 600 domicílios sorteados de um bairro. Na mesma visita, mediram a pressão arterial dos moradores e perguntaram sobre o consumo de sal.","transversal","vida","Indivíduo","Exposição e desfecho no mesmo momento","Amostra de uma população definida, tudo medido de uma vez: é um inquérito. Mede prevalência."],
+ ["Foram identificadas 80 mulheres com trombose venosa e 160 mulheres sem trombose atendidas no mesmo hospital. Todas foram entrevistadas sobre o uso anterior de contraceptivos.","cc","vida","Indivíduo","Do desfecho para a exposição passada","A seleção foi pelo desfecho (com e sem trombose) e a exposição foi buscada no passado."],
+ ["Trabalhadores de uma fábrica, sem doença respiratória no início, foram classificados conforme a exposição à poeira e reavaliados todos os anos, por dez anos.","coorte","vida","Indivíduo","Da exposição para o desfecho","Pessoas livres do desfecho, classificadas pela exposição e acompanhadas: dá para medir incidência."],
+ ["Pacientes com enxaqueca foram sorteados para receber um novo fármaco ou placebo e acompanhados por 12 semanas.","ecr","sort","Indivíduo","Da intervenção para o desfecho","Quem definiu a exposição foi o sorteio. Essa é a marca do ensaio clínico randomizado."],
+ ["Com dados do IBGE e do DATASUS, comparou-se a cobertura de saneamento básico com a taxa de internação por diarreia em 141 municípios.","ecologico","vida","Grupo (município)","Um momento","Só há números por município. Ninguém sabe se quem foi internado morava em casa sem saneamento."],
+ ["Um artigo descreve cinco pacientes jovens que desenvolveram miocardite depois de usar um suplemento para emagrecer.","serie","vida","Indivíduo","Descrição da evolução","Só há casos, descritos em detalhe, sem grupo de comparação. Levanta a hipótese, não a testa."],
+ ["Uma UBS implantou um programa de caminhada. A hemoglobina glicada dos participantes foi medida antes do programa e seis meses depois. Não houve grupo de comparação.","quase","sem","Indivíduo","Antes e depois da intervenção","O pesquisador aplicou a intervenção, mas sem sorteio nem controle: é um estudo antes e depois. História natural e regressão à média entram na conta."],
+ ["Em prontuários de 2010, pesquisadores separaram os funcionários de um hospital que trabalhavam no turno da noite e no turno do dia. Depois verificaram, nos registros até 2025, quem desenvolveu diabetes.","coorte","vida","Indivíduo","Da exposição para o desfecho, em registros","A seleção foi pela exposição (o turno), não pelo desfecho. Feita com registros do passado, é uma coorte retrospectiva."],
+ ["Os autores registraram um protocolo, buscaram em cinco bases todos os ensaios sobre um antidepressivo, avaliaram o risco de viés de cada um e combinaram os resultados.","rs","—","Estudos já publicados","—","Não é um estudo primário: é uma pesquisa sobre pesquisas, com protocolo, busca exaustiva e síntese (aqui, com metanálise)."],
+ ["Em uma escola, as turmas da manhã receberam um programa de educação alimentar e as da tarde não, por decisão da direção. O IMC dos alunos foi comparado ao fim do ano.","quase","sem","Indivíduo","Da intervenção para o desfecho","Há intervenção e grupo de comparação, mas sem sorteio: os grupos podem ser diferentes desde o início (controle não equivalente)."],
+ ["Trinta UBS foram sorteadas: metade passou a usar um aplicativo de lembretes de consulta e metade manteve a rotina. Comparou-se a proporção de faltas.","ecr","sort","Conglomerado (UBS)","Da intervenção para o desfecho","Parece ecológico porque a unidade é a UBS, mas a exposição foi definida por sorteio: é um ensaio randomizado por conglomerados."],
+ ["Em uma maternidade, 300 gestantes fizeram no mesmo dia um teste rápido e o exame padrão de referência, para estimar sensibilidade e especificidade.","transversal","vida","Indivíduo","Teste e referência no mesmo momento","Acurácia diagnóstica se mede em estudo transversal: teste-índice e padrão de referência aplicados juntos."],
+ ["Depois de um surto de gastroenterite em uma festa, a vigilância entrevistou 45 pessoas que adoeceram e 90 convidados que não adoeceram sobre o que comeram.","cc","vida","Indivíduo","Do desfecho para a exposição passada","Em surtos, parte-se de quem adoeceu e de quem não adoeceu e investigam-se as exposições: rápido e com poucos participantes."],
+ ["Um estudo comparou o consumo médio de refrigerante por habitante com a prevalência de obesidade em 30 países.","ecologico","vida","Grupo (país)","Um momento","Médias por país. Não dá para dizer que as pessoas que bebem mais refrigerante são as obesas."]];
+const QZ={order:[],i:0,ans:null,ok:0,done:0};
+function qzNew(){QZ.order=shuffle(VIG.map((_,i)=>i),rng(Date.now()%1e9));QZ.i=0;QZ.ans=null;QZ.ok=0;QZ.done=0;}
+LAB("quiz","Reconhecer","Qual estudo é este?",`
+<div class="intro"><span class="eyebrow">Reconhecer · prática</span><h2>Leia o resumo e diga qual é o desenho</h2><p>São 14 estudos fictícios. Antes de responder, faça as três perguntas: quem decidiu a exposição, qual é a unidade de análise e como o tempo entra.</p></div>
+<div class="grid"><div class="card">
+ <div class="row" style="justify-content:space-between"><span class="eyebrow" id="qzN"></span><span class="score" id="qzS"></span></div>
+ <div class="progress"><i id="qzP"></i></div>
+ <div id="qzB" style="margin-top:14px"></div>
+</div></div>`,()=>{qzNew();
+  $("qzB").addEventListener("click",e=>{const b=e.target.closest("[data-a]");if(b&&QZ.ans==null){QZ.ans=b.dataset.a;QZ.done++;if(QZ.ans===VIG[QZ.order[QZ.i]][1])QZ.ok++;renderQZ();}
+    if(e.target.id==="qzNext"){QZ.i++;QZ.ans=null;renderQZ();}if(e.target.id==="qzAgain"){qzNew();renderQZ();}});
+},()=>renderQZ());
+function renderQZ(){const n=VIG.length;$("qzS").textContent=QZ.done?`${QZ.ok} de ${QZ.done} certas`:"";$("qzP").style.width=(QZ.done/n*100)+"%";
+  if(QZ.i>=n){$("qzN").textContent="Fim";$("qzB").innerHTML=`<p class="q">Você acertou ${QZ.ok} de ${n}.</p><p class="lede">${QZ.ok===n?"Nenhum desenho escapou.":"Os erros mais comuns são confundir coorte retrospectiva com caso-controle e ensaio por conglomerados com estudo ecológico. O critério é sempre o mesmo: por onde o estudo começou e quem definiu a exposição."}</p><button class="btn primary" id="qzAgain">Jogar de novo</button>`;return;}
+  const V=VIG[QZ.order[QZ.i]],a=QZ.ans;$("qzN").textContent=`Estudo ${QZ.i+1} de ${n}`;
+  let h=`<p class="vig">${V[0]}</p><div class="quizopts">${QOPT.map(o=>`<button class="opt ${a==null?"":o[0]===V[1]?"right":o[0]===a?"wrong":""}" data-a="${o[0]}" ${a==null?"":"disabled"}>${o[1]}</button>`).join("")}</div>`;
+  if(a!=null)h+=`<div class="fb"><b class="${a===V[1]?"ok":"no"}">${a===V[1]?"Isso mesmo.":"Não é esse."}</b> ${V[5]}<dl class="why"><dt>Quem decidiu a exposição</dt><dd>${WHO[V[2]]||V[2]}</dd><dt>Unidade de análise</dt><dd>${V[3]}</dd><dt>Tempo</dt><dd>${V[4]}</dd></dl></div><div class="row" style="margin-top:12px"><button class="btn primary" id="qzNext">${QZ.i===n-1?"Ver resultado":"Próximo estudo ›"}</button></div>`;
+  $("qzB").innerHTML=h;}
+
+/* ===================== CERTEZA DA EVIDÊNCIA (GRADE) ===================== */
+const GR_DOWN=[["vies","Risco de viés","problemas metodológicos que podem distorcer o resultado"],["inc","Inconsistência","variabilidade inesperada entre os estudos"],["imp","Imprecisão","intervalos de confiança amplos, amostras pequenas"],["ind","Evidência indireta","a população ou a pergunta dos estudos difere da sua"],["pub","Viés de publicação","resultados negativos tendem a não ser publicados"]];
+const GR_UP=[["mag","Efeito de grande magnitude","associação muito forte, difícil de explicar só por confusão"],["dose","Gradiente dose-resposta","quanto maior a exposição, maior o efeito"],["conf","Confusão jogaria contra","os confundidores plausíveis reduziriam o efeito observado"]];
+const GR_LV=["Muito baixa","Baixa","Moderada","Alta"],GR_COL=["var(--bad)","var(--warn)","var(--nex)","var(--good)"];
+const GR={A:{},B:{}};
+const grLevel=k=>{const S=GR[k],base=k==="A"?4:2,dn=GR_DOWN.filter(x=>S[x[0]]).length,up=k==="B"?GR_UP.filter(x=>S[x[0]]).length:0;return clamp(base-dn+up,1,4);};
+const GR_PRE=[["Ponto de partida",{},{}],["Ensaios frágeis, coortes fortes",{vies:1,inc:1,imp:1},{mag:1,dose:1}],["Ensaios bons, coortes com problemas",{},{vies:1,imp:1}]];
+LAB("grade","Reconhecer","Certeza da evidência",`
+<div class="intro"><span class="eyebrow">Reconhecer · além do desenho</span><h2>O desenho define o ponto de partida, não o ponto de chegada</h2><p>No sistema GRADE, a certeza sobe ou desce conforme a qualidade do conjunto de estudos. Marque os problemas e veja a evidência mudar de degrau.</p></div>
+<div class="grid"><div class="card"><div class="card-h"><h3>A escada da certeza</h3><button class="more-btn" data-learn="grade">Saiba mais</button></div>
+ <div class="chips" id="grPre"></div>
+ <svg class="ch" id="grS" style="margin-top:12px;max-width:640px" role="img" aria-label="Nível de certeza de dois conjuntos de evidência"></svg>
+ <div class="insight" id="grTxt"></div>
+ <div class="gcols" style="margin-top:14px" id="grC"></div>
+ <p class="note">Simplificação didática: aqui cada problema desce um degrau e cada ponto forte sobe um. No GRADE real, o julgamento é qualitativo e um problema muito grave pode descer dois.</p>
+</div></div>`,()=>{
+  chips($("grPre"),GR_PRE.map(p=>p[0]),i=>{GR.A=Object.assign({},GR_PRE[i][1]);GR.B=Object.assign({},GR_PRE[i][2]);renderGR();},0);
+  $("grC").addEventListener("change",e=>{const c=e.target;if(c.dataset.k){GR[c.dataset.k][c.dataset.f]=c.checked;$("grPre").querySelectorAll(".chip").forEach(x=>x.classList.remove("on"));renderGR(true);}});
+},()=>renderGR());
+function renderGR(keep){const a=grLevel("A"),b=grLevel("B"),el=$("grS"),H=188,W=box(el,H),L=96,rh=40,X1=L+(W-L)*0.3,X2=L+(W-L)*0.7;let s="";
+  for(let lv=4;lv>=1;lv--){const y=8+(4-lv)*rh;s+=`<rect x="${L}" y="${y}" width="${W-L}" height="${rh-5}" rx="8" fill="${GR_COL[lv-1]}" opacity=".13"/><text x="${L-10}" y="${y+rh/2+2}" text-anchor="end" class="lbl" style="font-size:13px;fill:${GR_COL[lv-1]}">${GR_LV[lv-1]}</text>`;}
+  const tok=(x,lv,c,t)=>{const y=8+(4-lv)*rh+(rh-5)/2;return `<g style="transition:transform .35s" transform="translate(${x},${y})"><rect x="-58" y="-13" width="116" height="26" rx="13" fill="${c}"/><text x="0" y="4.5" text-anchor="middle" style="fill:var(--surface);font-size:12.5px;font-weight:600">${t}</text></g>`;};
+  s+=tok(X1,a,"var(--exp)","Ensaios")+tok(X2,b,"var(--accent)","Observacionais");el.innerHTML=s;
+  $("grTxt").innerHTML=a===b?`Os dois conjuntos chegaram ao mesmo degrau: certeza <b>${GR_LV[a-1].toLowerCase()}</b>.`:a>b?`Os ensaios randomizados sustentam certeza <b>${GR_LV[a-1].toLowerCase()}</b>; os estudos observacionais, <b>${GR_LV[b-1].toLowerCase()}</b>.`:`Aqui os estudos observacionais (certeza <b>${GR_LV[b-1].toLowerCase()}</b>) informam mais que os ensaios (<b>${GR_LV[a-1].toLowerCase()}</b>). Um ensaio mal conduzido pode valer menos que uma coorte bem desenhada: qualidade não é só o rótulo do desenho.`;
+  if(keep)return;
+  const tg=(k,x)=>`<label class="toggle"><input type="checkbox" id="gr_${k}_${x[0]}" data-k="${k}" data-f="${x[0]}" ${GR[k][x[0]]?"checked":""}><span>${x[1]}<small>${x[2]}</small></span></label>`;
+  $("grC").innerHTML=`<div class="gset"><h4><i style="background:var(--exp)"></i>Ensaios clínicos randomizados</h4><p class="mini">Começam em certeza alta.</p><div class="sub">O que reduz a certeza</div>${GR_DOWN.map(x=>tg("A",x)).join("")}</div>
+  <div class="gset"><h4><i style="background:var(--accent)"></i>Estudos observacionais</h4><p class="mini">Começam em certeza baixa.</p><div class="sub">O que reduz a certeza</div>${GR_DOWN.map(x=>tg("B",x)).join("")}<div class="sub">O que pode elevar a certeza</div>${GR_UP.map(x=>tg("B",x)).join("")}</div>`;}
+
+/* ===================== TRANSVERSAL ===================== */
+const TV={t:7,dR:0.3,dL:4,ep:[],world:0,rev:false};
+function tvWorld(){const r=rng(31),n=40,ty=shuffle(Array.from({length:n},(_,i)=>i%2),r);TV.ep=ty.map((t,i)=>({on:(i+0.15+0.7*r())/n*10,ty:t}));}
+/* Quem veio primeiro? 12 pessoas; no dia do inquérito: 5 expostas com desfecho, 1 só exposta, 1 só com desfecho, 5 sem nada.
+   Em cada mundo a história é outra, mas a foto é idêntica. [início da exposição, início do desfecho, início do terceiro fator] */
+const RVW=[
+ {n:"A exposição veio antes do desfecho",p:[[1.2,4.6],[2.0,6.1],[2.8,5.2],[3.5,7.8],[4.4,8.3],[6.0,null],[null,5.0]]},
+ {n:"O desfecho veio antes da exposição",p:[[4.8,1.4],[6.3,2.2],[5.0,2.9],[7.6,3.6],[8.4,4.3],[7.0,null],[null,4.0]]},
+ {n:"Um terceiro fator veio antes dos dois",p:[[4.2,5.6,1.0],[6.4,5.1,1.8],[5.3,6.6,2.4],[7.9,6.8,3.2],[7.2,8.5,4.0],[6.0,null],[null,5.0]]}];
+LAB("transv","Observacionais","Transversal",`
+<div class="intro"><span class="eyebrow">Observacionais · transversal</span><h2>Uma foto da população: o que ela mostra e o que ela esconde</h2><p>O estudo transversal mede exposição e desfecho no mesmo momento. Encontra casos existentes (prevalência), e não sabe o que veio antes.</p></div>
+<div class="grid two">
+ <div class="card wide"><div class="card-h"><h3>A foto favorece as doenças longas</h3><button class="more-btn" data-learn="foto">Saiba mais</button></div>
+  <p class="lede">Quarenta pessoas adoecem ao longo de dez anos: metade com uma forma rápida (cura ou morte em pouco tempo), metade com uma forma longa. Arraste o dia do inquérito e veja quem aparece na foto.</p>
+  <svg class="ch" id="tvS" style="touch-action:pan-y;cursor:ew-resize" role="img" aria-label="Episódios de doença ao longo de dez anos e o dia do inquérito"></svg>
+  <div class="legend"><span><i style="background:var(--g4);height:8px"></i>forma rápida</span><span><i style="background:var(--g3);height:8px"></i>forma longa</span><span><i style="background:var(--bad)"></i>dia do inquérito</span></div>
+  <div class="cols2" style="margin-top:12px"><div class="stack">
+   <div class="range"><label for="tvT">Dia do inquérito</label><output id="tvTo"></output><input type="range" id="tvT" min="0" max="10" step="0.1" value="7"></div>
+   <div class="range"><label for="tvR">Duração da forma rápida</label><output id="tvRo"></output><input type="range" id="tvR" min="0.1" max="2" step="0.1" value="0.3"></div>
+   <div class="range"><label for="tvL">Duração da forma longa</label><output id="tvLo"></output><input type="range" id="tvL" min="1" max="8" step="0.5" value="4"></div>
+  </div><div><div class="tiles" id="tvTiles"></div><div class="insight" id="tvTxt"></div></div></div></div>
+ <div class="card wide"><div class="card-h"><h3>Quem veio primeiro?</h3><button class="more-btn" data-learn="reversa">Saiba mais</button></div>
+  <p class="lede">Um inquérito encontra o desfecho muito mais frequente entre os expostos. Três histórias diferentes produzem exatamente essa foto. Escolha um mundo, tente adivinhar qual é a história e só então revele o passado.</p>
+  <div class="row"><div class="chips" id="rvC"></div><button class="btn small primary" id="rvB"></button></div>
+  <svg class="ch" id="rvS" style="margin-top:12px" role="img" aria-label="Linha do tempo de doze pessoas até o dia do inquérito"></svg>
+  <div class="legend"><span><i style="background:var(--exp);height:5px"></i>período de exposição</span><span><i style="background:var(--fg);height:5px"></i>período com o desfecho</span><span id="rvLg3"><i style="background:var(--hi);height:5px"></i>terceiro fator</span></div>
+  <div class="tiles" id="rvTiles" style="margin-top:12px"></div><div class="insight" id="rvTxt"></div></div>
+</div>`,()=>{tvWorld();
+  $("tvT").oninput=e=>{TV.t=+e.target.value;renderTV();};$("tvR").oninput=e=>{TV.dR=+e.target.value;renderTV();};$("tvL").oninput=e=>{TV.dL=+e.target.value;renderTV();};
+  const sv=$("tvS");let drag=false;const mv=e=>{const p=svgPt(sv,e),W=sv.viewBox.baseVal.width;TV.t=clamp(Math.round((p.x-10)/(W-20)*100)/10,0,10);$("tvT").value=TV.t;renderTV();};
+  sv.addEventListener("pointerdown",e=>{drag=true;sv.setPointerCapture(e.pointerId);mv(e);});sv.addEventListener("pointermove",e=>{if(drag)mv(e);});["pointerup","pointercancel"].forEach(t=>sv.addEventListener(t,()=>drag=false));
+  chips($("rvC"),["Mundo A","Mundo B","Mundo C"],i=>{TV.world=i;TV.rev=false;renderRV();},0);$("rvB").onclick=()=>{TV.rev=!TV.rev;renderRV();};
+},()=>{renderTV();renderRV();});
+function renderTV(){const el=$("tvS"),n=TV.ep.length,rh=7,T=16,H=T+n*rh+30,W=box(el,H),X=v=>10+v/10*(W-20);let s="",cR=0,cL=0;
+  for(let y=0;y<=10;y+=2)s+=`<line class="gr" x1="${X(y)}" x2="${X(y)}" y1="${T}" y2="${T+n*rh}"/>`;
+  TV.ep.forEach((p,i)=>{const dur=p.ty?TV.dL:TV.dR,end=p.on+dur,hit=p.on<=TV.t&&TV.t<end,y=T+i*rh+1.5;if(hit){p.ty?cL++:cR++;}
+    s+=`<rect x="${X(p.on)}" y="${y}" width="${Math.max(2.5,X(Math.min(10,end))-X(p.on))}" height="${rh-3}" rx="2" fill="${p.ty?"var(--g3)":"var(--g4)"}" opacity="${hit?1:.28}"/>`;});
+  const xt=X(TV.t);s+=`<line x1="${xt}" x2="${xt}" y1="${T-4}" y2="${T+n*rh+2}" stroke="var(--bad)" stroke-width="2.5"/><rect x="${xt-9}" y="${T-14}" width="18" height="11" rx="3" fill="var(--bad)"/>`;
+  s+=xAxis(X,[0,2,4,6,8,10],T+n*rh+4,v=>v===0?"início":"ano "+v,10,W-10);el.innerHTML=s;
+  $("tvTo").textContent=TV.t===0?"início":"ano "+fmt(TV.t,1);$("tvRo").textContent=TV.dR<1?fmt(TV.dR*12,0)+" meses":fmt(TV.dR,1)+" ano"+(TV.dR>1?"s":"");$("tvLo").textContent=fmt(TV.dL,1)+" anos";
+  const tot=cR+cL;$("tvTiles").innerHTML=tile("Casos novos em 10 anos","20 + 20","rápida + longa")+tile("Casos na foto",`${cR} + ${cL}`,"rápida + longa","acc")+tile("Forma longa entre os casos da foto",tot?pct(cL/tot,0):"—","era 50% dos casos novos",tot&&cL/tot>.6?"alt":"");
+  $("tvTxt").innerHTML=!tot?"Neste dia, ninguém está doente: a foto sairia vazia.":cL/tot>.6?`As duas formas surgem com a mesma frequência, mas a foto encontra quase só a forma longa. Quem se curou ou morreu depressa não está lá para ser contado. É o <b>viés de prevalência</b>: o que a foto mostra depende de quantos adoecem e de quanto tempo a doença dura.`:"Com durações parecidas, a foto representa bem as duas formas. Aumente a diferença entre as durações e observe.";}
+function renderRV(){const Wd=RVW[TV.world],el=$("rvS"),n=12,rh=20,T=18,H=T+n*rh+26,W=box(el,H),L=10,xs=W-34,X=v=>L+v/10*(xs-L),rev=TV.rev;let s="";
+  const st=[[1,1],[1,1],[1,1],[1,1],[1,1],[1,0],[0,1],[0,0],[0,0],[0,0],[0,0],[0,0]],ord=[0,7,5,1,8,2,9,6,3,10,4,11];
+  ord.forEach((pi,row)=>{const y=T+row*rh+rh/2,p=Wd.p[pi]||[null,null],e=st[pi][0],d=st[pi][1];
+    s+=`<line x1="${L}" x2="${xs}" y1="${y}" y2="${y}" stroke="var(--line)" stroke-width="1"/>`;
+    if(rev){if(p[2]!=null)s+=`<line x1="${X(p[2])}" x2="${xs}" y1="${y+5}" y2="${y+5}" stroke="var(--hi)" stroke-width="3" stroke-linecap="round" opacity=".8"/><rect x="${X(p[2])-4}" y="${y+1}" width="8" height="8" transform="rotate(45 ${X(p[2])} ${y+5})" fill="var(--hi)"/>`;
+      if(p[0]!=null)s+=`<line x1="${X(p[0])}" x2="${xs}" y1="${y-4}" y2="${y-4}" stroke="var(--exp)" stroke-width="4" stroke-linecap="round"/>`;
+      if(p[1]!=null)s+=`<line x1="${X(p[1])}" x2="${xs}" y1="${y+.5}" y2="${y+.5}" stroke="var(--fg)" stroke-width="4" stroke-linecap="round"/>`;}
+    s+=`<circle class="p e${e} d${d}" cx="${xs+18}" cy="${y}" r="6"/>`;});
+  if(!rev)s+=`<rect x="${L}" y="${T}" width="${xs-L-6}" height="${n*rh}" rx="8" fill="var(--sunk)"/><text x="${(L+xs)/2}" y="${T+n*rh/2+4}" text-anchor="middle" style="font-style:italic">o inquérito não vê o passado</text>`;
+  s+=`<line x1="${xs}" x2="${xs}" y1="${T-6}" y2="${T+n*rh+2}" stroke="var(--bad)" stroke-width="2"/><text x="${xs}" y="${T-8}" text-anchor="end" style="font-size:11px;fill:var(--bad)">dia do inquérito</text><text x="${L}" y="${H-6}" style="font-size:11px">passado</text><text x="${W}" y="${H-6}" text-anchor="end" style="font-size:11px">a foto</text>`;
+  el.innerHTML=s;$("rvB").textContent=rev?"Esconder o passado":"Revelar o passado";$("rvLg3").hidden=!(rev&&TV.world===2);
+  $("rvTiles").innerHTML=tile("Prevalência nos expostos","83%","5 de 6")+tile("Prevalência nos não expostos","17%","1 de 6")+tile("Razão de prevalências","5,00","igual nos três mundos","acc");
+  $("rvTxt").className="insight"+(rev?"":" warn");
+  $("rvTxt").innerHTML=rev?`<b>${Wd.n}.</b> ${["A leitura causal faria sentido, mas a foto sozinha não permitia saber.","É a <b>causalidade reversa</b>: o desfecho levou as pessoas à exposição, e não o contrário.","Nem a exposição causa o desfecho, nem o contrário: um <b>fator de confusão</b> produz os dois."][TV.world]} Troque de mundo: a tabela e a RP não mudam.`:"A foto só mostra a coluna da direita: quem está exposto e quem tem o desfecho hoje. A RP de 5,00 é compatível com mais de uma história.";}
+
+/* ===================== ECOLÓGICO ===================== */
+/* cinco municípios de 40 pessoas: expostos e casos de cada um. As taxas nunca mudam; o que muda é QUEM adoece dentro do município. */
+const EC={th:1,open:false,E:[4,10,16,22,28],C:[4,6,8,10,12]};
+function ecK(g){const c=EC.C[g],k0=c*EC.E[g]/40;return Math.round(EC.th>=0?k0+EC.th*(c-k0):k0*(1+EC.th));}
+const RT={oa:"84",pa:"350.000",ob:"45",pb:"250.000",per:100000};
+LAB("eco","Observacionais","Ecológico",`
+<div class="intro"><span class="eyebrow">Observacionais · ecológico</span><h2>O que vale para o grupo pode não valer para as pessoas</h2><p>No estudo ecológico, a unidade de análise é o grupo. As medidas de exposição e de desfecho chegam agregadas por município, estado ou país.</p></div>
+<div class="grid two">
+ <div class="card wide"><div class="card-h"><h3>A falácia ecológica</h3><button class="more-btn" data-learn="falacia">Saiba mais</button></div>
+  <p class="lede">Cinco municípios: quanto maior a proporção de expostos, maior a taxa do desfecho. Isso é tudo o que o estudo enxerga. Agora abra os municípios e decida quem adoece dentro de cada um.</p>
+  <div class="cols2">
+   <div><div class="sub">O que o estudo ecológico vê</div><svg class="ch" id="ecS" role="img" aria-label="Taxa do desfecho por proporção de expostos em cinco municípios"></svg></div>
+   <div class="stack"><div class="sub">Dentro de cada município, quem adoece?</div>
+    <div class="chips" id="ecC"></div>
+    <div class="range"><label for="ecT">Só não expostos ‹ › só expostos</label><output id="ecTo"></output><input type="range" id="ecT" min="-100" max="100" step="5" value="100"></div>
+    <label class="toggle"><input type="checkbox" id="ecO"> Abrir os municípios (o estudo não vê isto)</label>
+    <div class="tiles" id="ecTiles"></div></div>
+  </div>
+  <div class="grps" id="ecG" style="margin-top:14px"></div>
+  <div class="key" id="ecK"></div>
+  <div class="insight" id="ecTxt"></div></div>
+ <div class="card wide"><div class="card-h"><h3>Comparar taxas de dois lugares</h3><button class="more-btn" data-learn="taxas">Saiba mais</button></div>
+  <p class="lede">A comparação mais simples entre grupos é a razão de taxas. Use o exemplo ou digite os seus números.</p>
+  <div class="cols2"><div class="stack">
+   <div class="fields tight"><div class="inp"><label for="rtOa">Óbitos em A</label><div class="box"><input id="rtOa" inputmode="numeric"></div></div><div class="inp"><label for="rtPa">População de A</label><div class="box"><input id="rtPa" inputmode="numeric"></div></div></div>
+   <div class="fields tight"><div class="inp"><label for="rtOb">Óbitos em B</label><div class="box"><input id="rtOb" inputmode="numeric"></div></div><div class="inp"><label for="rtPb">População de B</label><div class="box"><input id="rtPb" inputmode="numeric"></div></div></div>
+   <div><div class="sub">Taxa por</div><div class="seg" id="rtPer"><button data-v="1000">1.000</button><button data-v="10000">10.000</button><button data-v="100000">100.000</button></div></div>
+  </div><div><div class="tiles" id="rtTiles"></div><div class="cmp" id="rtBars"></div><div class="f" id="rtF"></div></div></div>
+  <div class="insight warn">A razão de taxas não controla fatores de confusão. Se um município tem população mais idosa, mais poluição ou menos acesso a serviços, a diferença pode vir daí.</div></div>
+</div>`,()=>{
+  chips($("ecC"),["Só os expostos","Mesmo risco para todos","Só os não expostos"],i=>{EC.th=[1,0,-1][i];$("ecT").value=EC.th*100;if(!EC.open){EC.open=true;$("ecO").checked=true;}renderEC();},0);
+  $("ecT").oninput=e=>{EC.th=+e.target.value/100;chipOn($("ecC"),[1,0,-1].indexOf(EC.th));renderEC();};$("ecO").onchange=e=>{EC.open=e.target.checked;renderEC();};
+  [["rtOa","oa"],["rtPa","pa"],["rtOb","ob"],["rtPb","pb"]].forEach(([id,k])=>{$(id).value=RT[k];$(id).oninput=e=>{RT[k]=e.target.value;renderRT();};});
+  segBind($("rtPer"),String(RT.per),v=>{RT.per=+v;renderRT();});
+},()=>{renderEC();renderRT();});
+function renderEC(){const el=$("ecS"),H=208,W=box(el,H),L=40,Rm=14,T=24,ih=H-T-34,iw=W-L-Rm,X=v=>L+v*iw,Y=v=>T+ih-v/.4*ih,nm="ABCDE";
+  let s=yGrid(Y,[0,.1,.2,.3,.4],L,W-Rm,v=>fmt(v*100,0))+xAxis(X,[0,.25,.5,.75,1],T+ih,v=>pct(v,0),L,W-Rm);
+  s+=`<line x1="${X(.02)}" y1="${Y(.02/3+.0667)}" x2="${X(.8)}" y2="${Y(.8/3+.0667)}" stroke="var(--alt)" stroke-width="2" stroke-dasharray="6 4"/>`;
+  EC.E.forEach((e,g)=>s+=`<circle cx="${X(e/40)}" cy="${Y(EC.C[g]/40)}" r="10" fill="var(--accent)"/><text x="${X(e/40)}" y="${Y(EC.C[g]/40)+4}" text-anchor="middle" style="fill:var(--on-accent);font-size:11.5px;font-weight:600">${nm[g]}</text>`);
+  s+=`<text x="${W-Rm}" y="${H-1}" text-anchor="end" style="font-size:11px">expostos no município</text><text x="${L}" y="10" style="font-size:11px">casos por 100 pessoas</text>`;el.innerHTML=s;
+  $("ecTo").textContent=EC.th===0?"mesmo risco":EC.th>0?`${fmt(EC.th*100,0)}% rumo aos expostos`:`${fmt(-EC.th*100,0)}% rumo aos não expostos`;
+  let num=0,den=0,h="";
+  EC.E.forEach((E,g)=>{const c=EC.C[g],a=ecK(g),cu=c-a,U=40-E;num+=a*U/40;den+=cu*E/40;const P=[];
+    for(let i=0;i<E;i++)P.push(EC.open?{e:1,d:i<a?1:0}:{e:null,d:null});for(let i=0;i<U;i++)P.push(EC.open?{e:0,d:i<cu?1:0}:{e:null,d:null});
+    h+=grp("Município "+nm[g],EC.open?`risco: ${pct(a/E,0)} expostos · ${pct(cu/U,0)} não`:`${pct(E/40,0)} expostos · ${fmt(c/40*100,0)} casos por 100`,dotSVG(P,8,{scale:1}));});
+  $("ecG").innerHTML=h;const mh=den?num/den:Infinity;
+  $("ecK").innerHTML=EC.open?keyDot({e:1,d:1},"exposto, com desfecho")+keyDot({e:1,d:0},"exposto, sem")+keyDot({e:0,d:1},"não exposto, com desfecho")+keyDot({e:0,d:0},"não exposto, sem"):keyDot({e:null,d:null},"pessoa do município: o estudo só tem os totais");
+  $("ecTiles").innerHTML=tile("Entre municípios","mais expostos, mais casos","não muda","acc")+tile("RR entre pessoas do mesmo município",EC.open?(mh===Infinity?"∞":rat(mh)):"?",EC.open?(mh===Infinity?"todos os casos são expostos":"combinando os cinco municípios"):"abra os municípios",EC.open&&mh<.8?"bad":"");
+  $("ecTxt").className="insight"+(EC.open&&EC.th<=.3?" warn":"");
+  $("ecTxt").innerHTML=!EC.open?"O gráfico sugere que a exposição aumenta o risco. Mas ele é feito de municípios, não de pessoas: qualquer distribuição dos casos dentro de cada município produz o mesmo gráfico.":EC.th>.3?"Neste cenário, os casos estão mesmo entre os expostos, e a leitura individual coincidiria com a ecológica. O estudo ecológico, porém, não tem como saber disso.":EC.th>=-.3?"Dentro de cada município, expostos e não expostos adoecem quase na mesma proporção. O que muda é o município: algo do lugar, e não a exposição da pessoa, acompanha as taxas. O gráfico de cima continua igual.":"Dentro de cada município, quem adoece são os não expostos. Concluir que “quem se expõe adoece mais” seria exatamente o contrário da verdade. É a <b>falácia ecológica</b>, e o gráfico de cima continua igual.";}
+function renderRT(){const oa=parse(RT.oa),pa=parse(RT.pa),ob=parse(RT.ob),pb=parse(RT.pb),ok=[oa,pa,ob,pb].every(has)&&pa>0&&pb>0&&oa>=0&&ob>=0,per=RT.per,pt=fmt(per,0);
+  if(!ok){$("rtTiles").innerHTML=tile("Razão de taxas","—","preencha os quatro campos");$("rtBars").innerHTML="";$("rtF").textContent="";return;}
+  const ta=oa/pa*per,tb=ob/pb*per,rt=div(ta,tb),mx=Math.max(ta,tb,1e-9);
+  $("rtTiles").innerHTML=tile("Taxa em A",fmt(ta,1),"por "+pt)+tile("Taxa em B",fmt(tb,1),"por "+pt)+tile("Razão de taxas (A ÷ B)",rat(rt),"","acc");
+  $("rtBars").innerHTML=[["Município A",ta,"var(--accent)"],["Município B",tb,"var(--tick)"]].map(([n,v,c])=>`<div class="rowb"><span>${n}</span><div class="bar"><i style="width:${v/mx*100}%;background:${c}"></i></div><b>${fmt(v,1)}</b></div>`).join("");
+  $("rtF").innerHTML=`RT = ${fmt(ta,1)} ÷ ${fmt(tb,1)} = <b>${rat(rt)}</b>${has(rt)&&rt>0?`: a taxa em A é ${rt>=1?fmt((rt-1)*100,0)+"% maior":fmt((1-rt)*100,0)+"% menor"} que em B.`:""}`;}
+
+/* ===================== COORTE ===================== */
+/* 100 expostos (32 adoecerão em 10 anos) e 100 não expostos (16 adoecerão): RR verdadeiro = 2,0 */
+const CO={T:10,L:0,mode:"acaso",P:[],timer:null,h:20};
+function coWorld(){const r=rng(52);CO.P=[];[[1,32],[0,16]].forEach(([e,nc])=>{const a=[];for(let i=0;i<100;i++)a.push({e,ev:null,lu:r(),lt:r()});shuffle(a.slice(),r).slice(0,nc).forEach(p=>p.ev=0.4+r()*9.6);CO.P.push(...a);});}
+/* marca quem se perde: ao acaso (na mesma proporção entre futuros casos e os demais) ou, entre os expostos, metade das perdas é de quem iria adoecer */
+function coLoss(){[1,0].forEach(e=>{const g=CO.P.filter(p=>p.e===e),cs=g.filter(p=>p.ev!=null).sort((x,y)=>x.lu-y.lu),nc=g.filter(p=>p.ev==null).sort((x,y)=>x.lu-y.lu),n=Math.round(100*CO.L);
+  const k=Math.min(cs.length,Math.round(n*(CO.mode==="dif"&&e===1?0.5:cs.length/100)));g.forEach(p=>p.lost=null);
+  cs.slice(0,k).forEach(p=>p.lost=p.lt*p.ev);nc.slice(0,n-k).forEach(p=>p.lost=p.lt*10);});}
+function coAt(T){const o={};[1,0].forEach(e=>{const g=CO.P.filter(p=>p.e===e),lost=g.filter(p=>p.lost!=null&&p.lost<=T).length,obs=g.filter(p=>p.ev!=null&&p.ev<=T&&p.lost==null).length,tru=g.filter(p=>p.ev!=null&&p.ev<=T).length;o[e]={lost,obs,tru,inc:div(obs,100-lost),incT:tru/100};});return o;}
+LAB("coorte","Observacionais","Coorte",`
+<div class="intro"><span class="eyebrow">Observacionais · coorte</span><h2>Da exposição ao desfecho, contando casos novos</h2><p>Pessoas livres do desfecho são classificadas pela exposição e acompanhadas no tempo. Só assim se mede incidência, e só com incidência se calcula o risco relativo.</p></div>
+<div class="grid two">
+ <div class="card wide"><div class="card-h"><h3>Dez anos de seguimento</h3><button class="more-btn" data-learn="seguimento">Saiba mais</button></div>
+  <div class="playrow"><button class="btn small primary" id="coPlay">▶ Acompanhar</button><div class="range"><label for="coT">Tempo de seguimento</label><output id="coTo"></output><input type="range" id="coT" min="0" max="10" step="0.1" value="10"></div></div>
+  <div class="cols2" style="margin-top:12px">
+   <div><div class="grps" id="coG"></div><div class="key" id="coK"></div></div>
+   <div><svg class="ch" id="coS" role="img" aria-label="Incidência acumulada em expostos e não expostos"></svg><div class="tiles" id="coTiles" style="margin-top:8px"></div></div>
+  </div>
+  <div class="sub" style="margin-top:16px">E se parte das pessoas sumir do estudo?</div>
+  <div class="cols2"><div class="range"><label for="coL">Perdas de seguimento</label><output id="coLo"></output><input type="range" id="coL" min="0" max="40" step="5" value="0"></div>
+   <div><div class="seg" id="coM"><button data-v="acaso">Perdas ao acaso</button><button data-v="dif">Expostos que iriam adoecer saem mais</button></div></div></div>
+  <div class="insight" id="coTxt"></div></div>
+ <div class="card wide"><div class="card-h"><h3>Prospectiva, retrospectiva ou ambidirecional?</h3><button class="more-btn" data-learn="prosp">Saiba mais</button></div>
+  <p class="lede">O desenho é o mesmo: da exposição para o desfecho. O que muda é onde está o “hoje” em relação ao seguimento. Arraste e veja.</p>
+  <div class="seg" id="prSeg"><button data-v="20">Prospectiva</button><button data-v="50">Ambidirecional</button><button data-v="80">Retrospectiva</button></div>
+  <svg class="ch" id="prS" style="margin-top:12px;max-width:720px" role="img" aria-label="Posição do hoje em relação ao seguimento da coorte"></svg>
+  <div class="range" style="max-width:720px"><label for="prH">Onde está o hoje?</label><output id="prHo"></output><input type="range" id="prH" min="5" max="95" step="1" value="20"></div>
+  <div class="insight" id="prTxt"></div></div>
+</div>`,()=>{coWorld();
+  $("coT").oninput=e=>{coStop();CO.T=+e.target.value;renderCO();};$("coL").oninput=e=>{CO.L=+e.target.value/100;renderCO();};
+  segBind($("coM"),CO.mode,v=>{CO.mode=v;if(!CO.L){CO.L=.2;$("coL").value=20;}renderCO();});
+  $("coPlay").onclick=()=>{if(CO.timer){coStop();return;}if(CO.T>=10)CO.T=0;$("coPlay").textContent="❚❚ Pausar";CO.timer=setInterval(()=>{CO.T=Math.min(10,+(CO.T+.1).toFixed(1));$("coT").value=CO.T;renderCO();if(CO.T>=10)coStop();},70);};
+  segBind($("prSeg"),"20",v=>{CO.h=+v;$("prH").value=v;renderPR();});$("prH").oninput=e=>{CO.h=+e.target.value;renderPR();};
+},()=>{renderCO();renderPR();});
+function coStop(){clearInterval(CO.timer);CO.timer=null;const b=$("coPlay");if(b)b.textContent="▶ Acompanhar";}
+function renderCO(){coLoss();const T=CO.T,A=coAt(T),rr=div(A[1].inc,A[0].inc),rrT=div(A[1].incT,A[0].incT);
+  $("coTo").textContent=fmt(T,1)+" anos";$("coLo").textContent=pct(CO.L,0);
+  const look=p=>p.lost!=null&&p.lost<=T?{e:p.e,d:0,lost:true}:{e:p.e,d:p.ev!=null&&p.ev<=T?1:0};
+  $("coG").innerHTML=[1,0].map(e=>grp(e?"Expostos":"Não expostos",`${n1(A[e].obs,"caso novo","casos novos")}${A[e].lost?` · ${n1(A[e].lost,"perda","perdas")}`:""}`,dotSVG(CO.P.filter(p=>p.e===e).map(look),10))).join("");
+  $("coK").innerHTML=keyDot({e:1,d:1},"caso novo")+keyDot({e:1,d:0},"segue em risco")+(CO.L?keyDot({e:1,d:0,lost:true},"perdido"):"");
+  const el=$("coS"),H=210,W=box(el,H),L=40,Rm=12,Tp=22,ih=H-Tp-32,iw=W-L-Rm,X=v=>L+v/10*iw,Y=v=>Tp+ih-v/.5*ih;let s=yGrid(Y,[0,.1,.2,.3,.4,.5],L,W-Rm,v=>pct(v,0))+xAxis(X,[0,2,4,6,8,10],Tp+ih,v=>v,L,W-Rm);
+  const path=(e,k,to)=>{let d="";for(let t=0;t<=to+1e-9;t+=.1){const v=coAt(t)[e][k];d+=(d?"L":"M")+X(t).toFixed(1)+","+Y(clamp(has(v)?v:0,0,.5)).toFixed(1);}return d;};
+  if(CO.L)[1,0].forEach(e=>s+=`<path d="${path(e,"incT",10)}" fill="none" stroke="${e?"var(--exp)":"var(--nex)"}" stroke-width="1.5" stroke-dasharray="3 4" opacity=".7"/>`);
+  [1,0].forEach(e=>{s+=`<path d="${path(e,"inc",T)}" fill="none" stroke="${e?"var(--exp)":"var(--nex)"}" stroke-width="2.4"/><circle cx="${X(T)}" cy="${Y(clamp(has(A[e].inc)?A[e].inc:0,0,.5))}" r="4.5" fill="${e?"var(--exp)":"var(--nex)"}"/>`;});
+  s+=`<text x="${W-Rm}" y="${H-1}" text-anchor="end" style="font-size:11px">anos de seguimento</text><text x="${L}" y="10" style="font-size:11px">incidência acumulada${CO.L?" (tracejado: sem perdas)":""}</text>`;el.innerHTML=s;
+  $("coTiles").innerHTML=tile("Incidência nos expostos",has(A[1].inc)?pct(A[1].inc,1):"—",`${A[1].obs} de ${100-A[1].lost}`)+tile("Incidência nos não expostos",has(A[0].inc)?pct(A[0].inc,1):"—",`${A[0].obs} de ${100-A[0].lost}`)+tile("RR observado",rat(rr),"","acc")+(CO.L?tile("RR sem perdas",rat(rrT),"o que deveria ser visto"):tile("Risco atribuível",has(A[1].inc-A[0].inc)?fmt((A[1].inc-A[0].inc)*100,1)+" p.p.":"—","diferença entre as incidências"));
+  $("coTxt").className="insight"+(CO.L&&CO.mode==="dif"?" warn":"");
+  $("coTxt").innerHTML=T<1?"No início ninguém tem o desfecho. É essa a condição que permite contar casos novos.":!CO.L?`Em ${fmt(T,1)} anos, a incidência entre expostos é ${rat(rr)} vezes a dos não expostos. A exposição foi registrada antes do desfecho: a relação temporal é clara.`:CO.mode==="acaso"?"Com perdas ao acaso, o estudo perde gente e precisão, mas o RR oscila em torno do valor verdadeiro: expostos e não expostos encolhem do mesmo jeito.":"Quando quem some é justamente o exposto que iria adoecer, os casos desaparecem do grupo exposto e o RR observado cai em direção a 1. É um <b>viés de seleção por perda diferencial</b>: os que ficaram já não representam os que entraram.";}
+function renderPR(){const el=$("prS"),H=128,W=box(el,H),L=14,Rm=14,iw=W-L-Rm,X=v=>L+v/100*iw,h=CO.h,y=62,a=20,b=80,kind=h<=22?0:h>=78?2:1;let s="";
+  s+=`<line class="ax" x1="${L}" x2="${W-Rm}" y1="${y+34}" y2="${y+34}"/><text x="${L}" y="${H-2}" style="font-size:11px">passado</text><text x="${W-Rm}" y="${H-2}" text-anchor="end" style="font-size:11px">futuro</text>`;
+  const cut=clamp(h,a,b);
+  if(cut>a)s+=`<rect x="${X(a)}" y="${y-9}" width="${X(cut)-X(a)}" height="18" rx="4" fill="var(--tick)" opacity=".55"/><text x="${(X(a)+X(cut))/2}" y="${y+24}" text-anchor="middle" style="font-size:11px">${X(cut)-X(a)>70?"em registros":""}</text>`;
+  if(cut<b)s+=`<rect x="${X(cut)}" y="${y-9}" width="${X(b)-X(cut)}" height="18" rx="4" fill="var(--accent)"/><text x="${(X(cut)+X(b))/2}" y="${y+24}" text-anchor="middle" style="font-size:11px">${X(b)-X(cut)>90?"a acompanhar":""}</text>`;
+  s+=`<circle cx="${X(a)}" cy="${y}" r="6" fill="var(--fg)"/><path d="M${X(b)+10} ${y}l-10 -6v12z" fill="var(--fg)"/>`;
+  s+=`<text x="${X(a)}" y="${y-16}" text-anchor="start" style="font-size:11.5px;fill:var(--fg)">exposição</text><text x="${X(b)+10}" y="${y-16}" text-anchor="end" style="font-size:11.5px;fill:var(--fg)">desfecho</text>`;
+  s+=`<line x1="${X(h)}" x2="${X(h)}" y1="14" y2="${y+34}" stroke="var(--bad)" stroke-width="2" stroke-dasharray="5 4"/><text x="${clamp(X(h),20,W-20)}" y="11" text-anchor="middle" class="lbl" style="fill:var(--bad);font-size:12.5px">hoje</text>`;el.innerHTML=s;
+  $("prHo").textContent=["Prospectiva","Ambidirecional","Retrospectiva"][kind];$("prSeg").querySelectorAll("button").forEach((x,i)=>x.classList.toggle("on",i===kind));
+  $("prTxt").innerHTML=["<b>Prospectiva:</b> a coorte é montada hoje e acompanhada adiante. A coleta é padronizada e controlada, mas custa caro e demora.","<b>Ambidirecional:</b> parte do seguimento já aconteceu e está em registros; o restante ainda será acompanhado.","<b>Retrospectiva:</b> exposição e desfecho já aconteceram. A coorte é reconstruída com registros do passado até hoje: rápida e barata, mas os dados podem ser incompletos ou não padronizados. Continua sendo coorte porque a seleção é pela exposição."][kind];}
+
+/* ===================== CASO-CONTROLE ===================== */
+/* 40 casos (24 expostos) e, para cada 40 controles, 12 expostos: OR = (24×28)/(12×16) = 3,5 com qualquer número de controles */
+const CC={k:1,rr:2,r0:5,mc:100,mk:100,src:0};
+const CC_SRC=[["Populacionais",20,"Amostra aleatória da população que originou os casos. É o ideal, porém mais caro e difícil. Os controles mostram a exposição como ela é nessa população."],
+ ["Hospitalares",28,"Acessíveis e cooperativos. Mas, se as doenças que levaram os controles ao hospital também estão ligadas à exposição, há expostos demais entre eles e a OR encolhe (viés de Berkson)."],
+ ["Vizinhos e amigos",26,"Parecidos com os casos em condição socioeconômica, o que ajuda. O risco é que também tenham hábitos parecidos: um pareamento excessivo na própria exposição, que esconde a associação."]];
+LAB("cc","Observacionais","Caso-controle",`
+<div class="intro"><span class="eyebrow">Observacionais · caso-controle</span><h2>Do desfecho para a exposição: a lógica invertida</h2><p>O estudo seleciona pessoas com o desfecho (casos) e sem ele (controles) e compara a exposição passada. É rápido e serve para doenças raras, mas exige cuidado com a medida e com os vieses.</p></div>
+<div class="grid two">
+ <div class="card wide"><div class="card-h"><h3>Por que a OR, e não o RR?</h3><button class="more-btn" data-learn="orrr">Saiba mais</button></div>
+  <p class="lede">Os 40 casos são sempre os mesmos. Quem decide quantos controles entram é você. Mude esse número e veja qual medida resiste.</p>
+  <div class="range" style="max-width:520px"><label for="ccK">Controles para cada caso</label><output id="ccKo"></output><input type="range" id="ccK" min="1" max="5" step="1" value="1"></div>
+  <div class="cols2" style="margin-top:12px"><div><div class="grps" id="ccG"></div><div class="key" id="ccKey"></div></div>
+   <div class="stack"><div id="ccT"></div><svg class="ch" id="ccS" role="img" aria-label="Comparação entre o falso risco relativo e a razão de chances"></svg></div></div>
+  <div class="tiles" id="ccTiles" style="margin-top:12px"></div><div class="insight" id="ccTxt"></div></div>
+ <div class="card wide"><div class="card-h"><h3>Quando a OR se parece com o RR</h3><button class="more-btn" data-learn="orrr">Saiba mais</button></div>
+  <p class="lede">A OR só se aproxima do RR quando a doença é rara. Fixe o RR verdadeiro e aumente a frequência da doença.</p>
+  <div class="cols2"><div class="stack">
+   <div class="range"><label for="ccRR">RR verdadeiro</label><output id="ccRRo"></output><input type="range" id="ccRR" min="1.5" max="5" step="0.5" value="2"></div>
+   <div class="range"><label for="ccR0">Incidência nos não expostos</label><output id="ccR0o"></output><input type="range" id="ccR0" min="1" max="18" step="1" value="5"></div>
+   <div class="tiles" id="ccTiles2"></div></div>
+   <svg class="ch" id="ccS2" role="img" aria-label="Razão de chances conforme a incidência da doença"></svg></div>
+  <div class="insight" id="ccTxt2"></div></div>
+ <div class="card"><div class="card-h"><h3>Viés de memória</h3><button class="more-btn" data-learn="memoria">Saiba mais</button></div>
+  <p class="lede">A exposição vem da lembrança. Entre 50 casos, 30 estiveram expostos; entre 50 controles, 20. E se nem todos lembrarem?</p>
+  <div class="chips" id="mmC"></div>
+  <div class="stack" style="margin-top:10px"><div class="range"><label for="mmA">Casos expostos que lembram</label><output id="mmAo"></output><input type="range" id="mmA" min="50" max="100" step="5" value="100"></div>
+  <div class="range"><label for="mmB">Controles expostos que lembram</label><output id="mmBo"></output><input type="range" id="mmB" min="50" max="100" step="5" value="100"></div></div>
+  <div class="grps" id="mmG" style="margin-top:12px"></div><div class="key" id="mmK"></div>
+  <div class="tiles" id="mmTiles" style="margin-top:12px"></div><div class="insight" id="mmTxt"></div></div>
+ <div class="card"><div class="card-h"><h3>De onde vêm os controles?</h3><button class="more-btn" data-learn="controles">Saiba mais</button></div>
+  <p class="lede">Os controles devem representar a exposição na população que originou os casos. Os mesmos 50 casos (30 expostos), com três fontes de controles.</p>
+  <div class="chips" id="scC"></div>
+  <div class="grps" id="scG" style="margin-top:12px"></div>
+  <div class="tiles" id="scTiles" style="margin-top:12px"></div><div class="insight" id="scTxt"></div></div>
+</div>`,()=>{
+  $("ccK").oninput=e=>{CC.k=+e.target.value;renderCC1();};
+  $("ccRR").oninput=e=>{CC.rr=+e.target.value;renderCC2();};$("ccR0").oninput=e=>{CC.r0=+e.target.value;renderCC2();};
+  const MP=[[100,100],[100,70],[70,70]];chips($("mmC"),["Todos lembram","Casos lembram melhor","Todos esquecem igual"],i=>{CC.mc=MP[i][0];CC.mk=MP[i][1];$("mmA").value=CC.mc;$("mmB").value=CC.mk;renderMM();},0);
+  const un=()=>chipOn($("mmC"),MP.findIndex(m=>m[0]===CC.mc&&m[1]===CC.mk));$("mmA").oninput=e=>{CC.mc=+e.target.value;un();renderMM();};$("mmB").oninput=e=>{CC.mk=+e.target.value;un();renderMM();};
+  chips($("scC"),CC_SRC.map(s=>s[0]),i=>{CC.src=i;renderSC();},0);
+},()=>{renderCC1();renderCC2();renderMM();renderSC();});
+function renderCC1(){const k=CC.k,v={a:24,b:12*k,c:16,d:28*k},m=t22(v.a,v.b,v.c,v.d);$("ccKo").textContent=k+" : 1";
+  const cs=[],ct=[];for(let i=0;i<24;i++)cs.push({e:1,d:1});for(let i=0;i<16;i++)cs.push({e:0,d:1});for(let i=0;i<v.b;i++)ct.push({e:1,d:0});for(let i=0;i<v.d;i++)ct.push({e:0,d:0});
+  $("ccG").innerHTML=grp("Casos","40 pessoas: 24 expostas, 16 não",dotSVG(cs,20))+grp("Controles",`${40*k} pessoas: ${v.b} expostas, ${v.d} não`,dotSVG(ct,20));
+  $("ccKey").innerHTML=keyDot({e:1,d:1},"caso exposto")+keyDot({e:0,d:1},"caso não exposto")+keyDot({e:1,d:0},"controle exposto")+keyDot({e:0,d:0},"controle não exposto");
+  $("ccT").innerHTML=table22(v,{c1:"Casos",c0:"Controles",fixCols:true});
+  logAxis($("ccS"),[{v:m.rr,c:"var(--bad)",t:`“RR” ${rat(m.rr)}`},{v:m.or,c:"var(--accent)",t:`OR ${rat(m.or)}`,dia:true}],{lo:1,hi:6,ticks:[1,1.5,2,3,4,6]});
+  $("ccTiles").innerHTML=tile("“Risco” nos expostos",pct(m.r1,0),`a ÷ (a + b) = ${v.a} ÷ ${v.a+v.b}`,"bad")+tile("“Risco” nos não expostos",pct(m.r0,0),`c ÷ (c + d) = ${v.c} ÷ ${v.c+v.d}`,"bad")+tile("“RR” calculado",rat(m.rr),"muda com o número de controles","bad")+tile("Razão de chances (OR)",rat(m.or),`(${v.a} × ${v.d}) ÷ (${v.b} × ${v.c})`,"acc");
+  $("ccTxt").innerHTML=`Os totais das colunas (destacados na tabela) foram fixados por você. Por isso a ÷ (a + b) não é um risco: com ${k===1?"um controle":k+" controles"} por caso, “${pct(m.r1,0)} dos expostos adoecem”; basta mudar o número de controles para esse valor mudar. A OR compara a chance de exposição nos casos com a dos controles e não depende de quantos controles você escolheu.`;}
+function renderCC2(){const RRv=CC.rr,max=Math.floor(90/RRv);$("ccR0").max=Math.min(40,max);if(CC.r0>+$("ccR0").max){CC.r0=+$("ccR0").max;$("ccR0").value=CC.r0;}
+  const r0=CC.r0/100,r1=r0*RRv,or=v=>{const a=v*RRv;return(a/(1-a))/(v/(1-v));},o=or(r0),x1=+$("ccR0").max/100;$("ccRRo").textContent=fmt(RRv,1);$("ccR0o").textContent=pct(r0,0);
+  const el=$("ccS2"),H=220,W=box(el,H),L=38,Rm=14,T=14,ih=H-T-34,iw=W-L-Rm,ym=Math.max(or(x1)*1.05,RRv*1.6),X=v=>L+v/x1*iw,Y=v=>T+ih-(Math.log(v)-Math.log(1))/(Math.log(ym)-Math.log(1))*ih;
+  const yt=[1,1.5,2,3,5,8,12,20,40].filter(t=>t<=ym),xt=[0,.05,.1,.2,.3,.4].filter(t=>t<=x1+1e-9);let s=yGrid(Y,yt,L,W-Rm,numTxt)+xAxis(X,xt,T+ih,v=>pct(v,0),L,W-Rm);
+  if(x1>.1)s+=`<rect x="${X(0)}" y="${T}" width="${X(.1)-X(0)}" height="${ih}" fill="var(--good)" opacity=".1"/><text x="${X(.05)}" y="${T+12}" text-anchor="middle" style="font-size:11px;fill:var(--good)">doença rara</text>`;
+  s+=`<line x1="${L}" x2="${W-Rm}" y1="${Y(RRv)}" y2="${Y(RRv)}" stroke="var(--nex)" stroke-width="2"/><text x="${W-Rm}" y="${Y(RRv)+15}" text-anchor="end" class="lbl" style="fill:var(--nex);font-size:12px">RR = ${fmt(RRv,1)}</text>`;
+  let d="";for(let i=0;i<=80;i++){const v=.005+(x1-.005)*i/80;d+=(i?"L":"M")+X(v).toFixed(1)+","+Y(or(v)).toFixed(1);}
+  s+=`<path d="${d}" fill="none" stroke="var(--accent)" stroke-width="2.4"/><circle cx="${X(r0)}" cy="${Y(o)}" r="6" fill="var(--accent)"/><text x="${clamp(X(r0),L+34,W-Rm-34)}" y="${Y(o)-11}" text-anchor="middle" class="lbl" style="fill:var(--accent);font-size:12px">OR ${rat(o)}</text>`;
+  s+=`<text x="${W-Rm}" y="${H-1}" text-anchor="end" style="font-size:11px">incidência nos não expostos</text>`;el.innerHTML=s;
+  $("ccTiles2").innerHTML=tile("Incidência nos expostos",pct(r1,0),`${pct(r0,0)} × ${fmt(RRv,1)}`)+tile("RR",fmt(RRv,2))+tile("OR",rat(o),`${fmt((o/RRv-1)*100,0)}% acima do RR`,o/RRv>1.15?"bad":"acc");
+  $("ccTxt2").className="insight"+(o/RRv>1.15?" warn":"");
+  $("ccTxt2").innerHTML=o/RRv<=1.15?`Com a doença rara, a OR (${rat(o)}) é uma boa aproximação do RR (${fmt(RRv,1)}). Regra prática: incidência abaixo de 10%.`:`Com a doença frequente, a OR (${rat(o)}) se afasta do RR (${fmt(RRv,1)}) e sempre exagera para longe de 1. Ler essa OR como “risco ${rat(o)} vezes maior” seria um erro: chance não é risco.`;}
+function renderMM(){const a=Math.round(30*CC.mc/100),b=Math.round(20*CC.mk/100),v={a,b,c:50-a,d:50-b},m=t22(v.a,v.b,v.c,v.d),tr=2.25;$("mmAo").textContent=CC.mc+"%";$("mmBo").textContent=CC.mk+"%";
+  const mk=(real,rec,dd)=>{const P=[];for(let i=0;i<rec;i++)P.push({e:1,d:dd});for(let i=rec;i<real;i++)P.push({e:0,d:dd,mis:true});for(let i=real;i<50;i++)P.push({e:0,d:dd});return P;};
+  $("mmG").innerHTML=grp("Casos",`${a} relatam exposição${a<30?` · ${30-a} esqueceram`:""}`,dotSVG(mk(30,a,1),10))+grp("Controles",`${b} relatam exposição${b<20?` · ${20-b} esqueceram`:""}`,dotSVG(mk(20,b,0),10));
+  $("mmK").innerHTML=keyDot({e:1,d:1},"relata exposição")+keyDot({e:0,d:1},"não exposto")+(a<30||b<20?keyDot({e:0,d:1,mis:true},"exposto que não lembrou"):"");
+  $("mmTiles").innerHTML=tile("OR verdadeira",fmt(tr,2),"(30 × 30) ÷ (20 × 20)")+tile("OR observada",rat(m.or),`(${v.a} × ${v.d}) ÷ (${v.b} × ${v.c})`,Math.abs(m.or-tr)<.01?"acc":"bad");
+  const dif=CC.mc-CC.mk;$("mmTxt").className="insight"+(Math.abs(m.or-tr)<.01?"":" warn");
+  $("mmTxt").innerHTML=CC.mc===100&&CC.mk===100?"Com lembrança perfeita, a OR observada é a verdadeira.":dif>0?"Quem adoeceu já revirou o passado procurando uma causa e lembra melhor. Os controles esquecem mais, parecem menos expostos e a OR fica <b>inflada</b>. É o viés de memória, um erro diferencial.":dif<0?"Aqui os controles lembram melhor que os casos, e a OR fica <b>subestimada</b>. Sempre que casos e controles lembram de forma diferente, o erro é diferencial e pode ir para qualquer lado.":"Casos e controles esquecem na mesma proporção. O erro não é diferencial e puxa a OR <b>em direção a 1</b>: a associação parece mais fraca do que é.";}
+function renderSC(){const S=CC_SRC[CC.src],b=S[1],v={a:30,b,c:20,d:50-b},m=t22(v.a,v.b,v.c,v.d);
+  const mk=(n,dd)=>{const P=[];for(let i=0;i<n;i++)P.push({e:1,d:dd});for(let i=n;i<50;i++)P.push({e:0,d:dd});return P;};
+  $("scG").innerHTML=grp("Casos","60% expostos",dotSVG(mk(30,1),10))+grp("Controles: "+S[0].toLowerCase(),`${pct(b/50,0)} expostos`,dotSVG(mk(b,0),10));
+  $("scTiles").innerHTML=tile("Exposição na população de origem","40%","o que os controles deveriam mostrar")+tile("OR observada",rat(m.or),`(30 × ${v.d}) ÷ (${v.b} × 20)`,CC.src?"bad":"acc");
+  $("scTxt").className="insight"+(CC.src?" warn":"");$("scTxt").innerHTML=`<b>${S[0]}.</b> ${S[2]}`;}
+
+/* ===================== SORTEIO: quem decide a exposição? ===================== */
+/* 40% dos pacientes são graves (risco do desfecho 50%); os demais, leves (risco 10%). O tratamento não muda nada ou corta o risco pela metade. */
+const SO={n:100,mode:"vida",bias:-0.75,ef:0,seed:1,hist:[],P:[]};
+const SO_M=[["vida","A vida escolhe"],["simples","Sorteio simples"],["blocos","Sorteio em blocos"],["estrat","Sorteio estratificado"]];
+function soAlloc(seed){const n=SO.n,nG=Math.round(n*.4),r=rng(seed*101+n*7+3),P=[];for(let i=0;i<n;i++)P.push({g:i<nG?1:0});shuffle(P,r);
+  const blocks=list=>{for(let i=0;i<list.length;i+=4){const b=shuffle([1,1,0,0],r);list.slice(i,i+4).forEach((p,j)=>p.t=b[j]);}};
+  if(SO.mode==="vida"){const pg=.5-.4*SO.bias,pl=.5+.4*SO.bias,G=P.filter(p=>p.g),Lv=P.filter(p=>!p.g);G.forEach((p,i)=>p.t=i<Math.round(G.length*pg)?1:0);Lv.forEach((p,i)=>p.t=i<Math.round(Lv.length*pl)?1:0);}
+  else if(SO.mode==="simples")P.forEach(p=>p.t=r()<.5?1:0);
+  else if(SO.mode==="blocos")blocks(P);
+  else{blocks(P.filter(p=>p.g));blocks(P.filter(p=>!p.g));}
+  const rrT=SO.ef?.5:1;[[1,1],[1,0],[0,1],[0,0]].forEach(([t,g])=>{const c=P.filter(p=>p.t===t&&p.g===g),k=Math.round(c.length*(g?.5:.1)*(t?rrT:1));c.forEach((p,i)=>p.d=i<k?1:0);});
+  return P;}
+function soStats(P){const o={};[1,0].forEach(t=>{const c=P.filter(p=>p.t===t);o[t]={n:c.length,g:div(c.filter(p=>p.g).length,c.length),r:div(c.filter(p=>p.d).length,c.length),ev:c.filter(p=>p.d).length};});o.rr=div(o[1].r,o[0].r);o.dg=(o[1].g-o[0].g)*100;return o;}
+function soDraw(k){for(let i=0;i<k;i++){SO.seed++;SO.P=soAlloc(SO.seed);if(SO.mode!=="vida"){const s=soStats(SO.P);if(has(s.dg))SO.hist.push(s.dg);}}}
+LAB("sorteio","Experimentais","Sorteio",`
+<div class="intro"><span class="eyebrow">Experimentais · randomização</span><h2>Na coorte, quem escolhe a exposição é a vida. No ensaio, é o sorteio</h2><p>Coortes e ensaios clínicos são longitudinais e medem incidência. A diferença está em quem decide quem recebe o tratamento, e é ela que permite concluir sobre causa.</p></div>
+<div class="grid"><div class="card"><div class="card-h"><h3>Os grupos eram comparáveis antes do tratamento?</h3><button class="more-btn" data-learn="sorteio">Saiba mais</button></div>
+ <p class="lede">Entre os pacientes, 40% são graves e têm risco bem maior do desfecho, com ou sem tratamento. Veja em que grupo eles vão parar.</p>
+ <div class="seg" id="soM">${SO_M.map(m=>`<button data-v="${m[0]}">${m[1]}</button>`).join("")}</div>
+ <div class="cols2" style="margin-top:12px">
+  <div class="stack">
+   <div id="soBW"><div class="range"><label for="soB">Quem recebe o tratamento?</label><output id="soBo"></output><input type="range" id="soB" min="-100" max="100" step="5" value="-75"></div><p class="mini" style="margin:2px 0 0;display:flex;justify-content:space-between;gap:12px"><span>‹ os mais graves</span><span>os mais saudáveis ›</span></p></div>
+   <div class="row" id="soRW"><button class="btn small primary" id="so1">Sortear de novo</button><button class="btn small" id="so50">Sortear 50 vezes</button></div>
+   <div class="range"><label for="soN">Participantes</label><output id="soNo"></output><input type="range" id="soN" min="20" max="200" step="20" value="100"></div>
+   <div><div class="sub">Efeito verdadeiro do tratamento</div><div class="chips" id="soE"></div></div>
+  </div>
+  <div><div class="grps" id="soG"></div><div class="key" id="soK"></div></div>
+ </div>
+ <div class="cmp" id="soBars"></div>
+ <div class="tiles" id="soTiles" style="margin-top:12px"></div>
+ <div id="soHW"><div class="sub" style="margin-top:14px">Diferença na proporção de graves, sorteio após sorteio</div><svg class="ch" id="soH" role="img" aria-label="Histórico da diferença de graves entre os grupos em cada sorteio"></svg></div>
+ <div class="insight" id="soTxt"></div>
+</div></div>`,()=>{SO.P=soAlloc(SO.seed);
+  segBind($("soM"),SO.mode,v=>{SO.mode=v;SO.hist=[];soDraw(1);renderSO();});
+  $("soB").oninput=e=>{SO.bias=+e.target.value/100;SO.P=soAlloc(SO.seed);renderSO();};$("soN").oninput=e=>{SO.n=+e.target.value;SO.hist=[];soDraw(1);renderSO();};
+  chips($("soE"),["Nenhum (RR 1,0)","Reduz o risco pela metade (RR 0,5)"],i=>{SO.ef=i;SO.P=soAlloc(SO.seed);renderSO();},0);
+  $("so1").onclick=()=>{soDraw(1);renderSO();};$("so50").onclick=()=>{soDraw(50);renderSO();};
+},()=>renderSO());
+function renderSO(){const P=SO.P,S=soStats(P),life=SO.mode==="vida",rrT=SO.ef?.5:1;
+  $("soBW").hidden=!life;$("soRW").hidden=life;$("soHW").hidden=life;$("soNo").textContent=SO.n;
+  $("soBo").textContent=Math.abs(SO.bias)<.05?"indiferente":SO.bias<0?"os mais graves":"os mais saudáveis";
+  const ppl=t=>P.filter(p=>p.t===t).sort((a,b)=>b.g-a.g||b.d-a.d).map(p=>({e:t,d:p.d,sq:!!p.g}));
+  $("soG").innerHTML=grp("Tratados",`${S[1].n} pessoas · ${has(S[1].g)?pct(S[1].g,0):"—"} graves`,dotSVG(ppl(1),10))+grp("Não tratados",`${S[0].n} pessoas · ${has(S[0].g)?pct(S[0].g,0):"—"} graves`,dotSVG(ppl(0),10));
+  $("soK").innerHTML=keyDot({e:1,d:0,sq:true},"grave")+keyDot({e:1,d:0},"leve")+keyDot({e:1,d:1},"teve o desfecho")+keyDot({e:0,d:0},"não tratado");
+  $("soBars").innerHTML=`<div class="sub" style="margin:14px 0 0">Graves em cada grupo, antes de qualquer tratamento</div>`+[["Tratados",S[1].g,"var(--exp)"],["Não tratados",S[0].g,"var(--nex)"]].map(([n,v,c])=>`<div class="rowb"><span>${n}</span><div class="bar"><i style="width:${has(v)?v*100:0}%;background:${c}"></i></div><b>${has(v)?pct(v,0):"—"}</b></div>`).join("");
+  const off=has(S.rr)?S.rr/rrT:NaN,bad=has(off)&&(off>1.25||off<.8);
+  $("soTiles").innerHTML=tile("Risco nos tratados",has(S[1].r)?pct(S[1].r,0):"—",`${S[1].ev} de ${S[1].n}`)+tile("Risco nos não tratados",has(S[0].r)?pct(S[0].r,0):"—",`${S[0].ev} de ${S[0].n}`)+tile("RR observado",rat(S.rr),"",bad?"bad":"acc")+tile("RR verdadeiro",fmt(rrT,2),"o efeito real do tratamento");
+  if(!life){const el=$("soH"),H=92,W=box(el,H),L=14,Rm=14,X=v=>L+(clamp(v,-60,60)+60)/120*(W-L-Rm),yb=H-30,bins=new Map();let s=`<line x1="${X(0)}" x2="${X(0)}" y1="4" y2="${yb+2}" stroke="var(--tick)" stroke-dasharray="4 3"/>`;
+    SO.hist.forEach((v,i)=>{const k=Math.round(v/4),c=bins.get(k)||0;bins.set(k,c+1);const cy=yb-5-c*5.2;if(cy<5)return;s+=`<circle cx="${X(k*4)}" cy="${cy}" r="${i===SO.hist.length-1?4.6:2.6}" fill="${i===SO.hist.length-1?"var(--exp)":"var(--accent)"}" opacity="${i===SO.hist.length-1?1:.6}"/>`;});
+    s+=xAxis(X,[-60,-40,-20,0,20,40,60],yb,v=>(v>0?"+":"")+v,L,W-Rm)+`<text x="${W-Rm}" y="${H}" text-anchor="end" style="font-size:11px">mais graves entre os tratados › (pontos percentuais)</text>`;el.innerHTML=s;}
+  const m=SO.hist.length?SO.hist.reduce((a,b)=>a+b,0)/SO.hist.length:0,dg=S.dg;
+  $("soTxt").className="insight"+(life&&Math.abs(SO.bias)>=.2?" warn":"");
+  $("soTxt").innerHTML=life?(Math.abs(SO.bias)<.2?"Quando a gravidade não influencia quem é tratado, os grupos ficam parecidos. Na vida real isso é raro: o prognóstico costuma decidir a exposição."
+    :SO.bias<0?`Os mais graves recebem mais tratamento: ${pct(S[1].g,0)} dos tratados são graves, contra ${pct(S[0].g,0)} dos não tratados. O tratamento parece ${S.rr>1?"aumentar o risco":"pior do que é"} (RR observado ${rat(S.rr)}, verdadeiro ${fmt(rrT,2)}). É o <b>confundimento por indicação</b>.`
+    :`Quem adere ao tratamento já era mais saudável: só ${pct(S[1].g,0)} dos tratados são graves, contra ${pct(S[0].g,0)} dos não tratados. O tratamento parece proteger mais do que protege (RR observado ${rat(S.rr)}, verdadeiro ${fmt(rrT,2)}). É o <b>efeito do usuário saudável</b>.`)
+   :SO.mode==="simples"?`Sorteio simples é como jogar uma moeda: imprevisível, mas pode desbalancear estudos pequenos. Neste sorteio, a diferença de graves foi de ${fmt(Math.abs(dg),0)} pontos percentuais. ${SO.hist.length>=20?`Em ${SO.hist.length} sorteios, a diferença média foi de ${fmt(m,1)}: o sorteio equilibra <b>em média</b>, e melhor quanto maior o estudo.`:"Sorteie várias vezes e diminua o número de participantes para ver."}`
+   :SO.mode==="blocos"?`O sorteio em blocos (aqui, de 4) garante grupos do mesmo tamanho ao longo do recrutamento. A gravidade continua por conta do acaso: neste sorteio, a diferença foi de ${fmt(Math.abs(dg),0)} pontos percentuais.`
+   :"O sorteio estratificado faz um sorteio separado para graves e para leves. A gravidade fica igual nos dois grupos em todos os sorteios, e o RR observado reflete o efeito do tratamento.";}
+
+/* ===================== O QUE PARECE EFEITO ===================== */
+const EF_C=[["hn","História natural da doença","var(--g3)"],["rm","Regressão à média","var(--g1)"],["eh","Efeito Hawthorne","var(--g5)"],["ep","Efeito placebo","var(--g4)"],["et","Efeito do tratamento","var(--exp)"]];
+const EF_D=[["Antes e depois, sem controle",null,"Sem grupo de comparação, toda a melhora vai para a conta do tratamento: a doença que melhoraria sozinha, a regressão à média, o fato de estar sendo observado e a expectativa do paciente."],
+ ["Controle sem tratamento, estudo aberto",["hn","rm","eh"],"O grupo controle desconta o que aconteceria de qualquer modo. Mas só os tratados sabem que receberam algo: o efeito placebo continua somado ao do tratamento."],
+ ["Sorteio, placebo e mascaramento",["hn","rm","eh","ep"],"Os dois grupos passam por tudo, menos pelo princípio ativo. A diferença entre eles é o efeito do tratamento, e é para isso que o ensaio randomizado e mascarado existe."]];
+const EF={des:0,hn:15,rm:10,eh:8,ep:12,et:10};
+const RM={thr:155,noise:8,seed:4,P:[]};
+function rmWorld(){const r=rng(RM.seed*17+5);RM.P=[];for(let i=0;i<300;i++)RM.P.push({v:135+12*gauss(r),z1:gauss(r),z2:gauss(r)});}
+LAB("efeito","Experimentais","O que parece efeito",`
+<div class="intro"><span class="eyebrow">Experimentais · por que controlar, sortear e mascarar</span><h2>Nem toda melhora depois do tratamento é efeito do tratamento</h2><p>Pacientes melhoram por vários motivos ao mesmo tempo. Cada elemento do ensaio clínico existe para descontar um deles.</p></div>
+<div class="grid two">
+ <div class="card wide"><div class="card-h"><h3>As camadas da melhora</h3><button class="more-btn" data-learn="efeito">Saiba mais</button></div>
+  <p class="lede">A melhora é medida em pontos de uma escala de sintomas. Escolha o desenho do estudo e veja quanto dela é atribuído ao tratamento.</p>
+  <div class="chips" id="efD"></div>
+  <svg class="ch" id="efS" style="margin-top:14px" role="img" aria-label="Componentes da melhora no grupo tratado e no grupo de comparação"></svg>
+  <div class="legend" id="efLg"></div>
+  <div class="tiles" id="efTiles" style="margin-top:12px"></div><div class="insight" id="efTxt"></div>
+  <details class="fold"><summary>Mudar o tamanho de cada camada</summary><div class="fields" style="margin-top:10px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))" id="efR"></div></details></div>
+ <div class="card wide"><div class="card-h"><h3>Regressão à média</h3><button class="more-btn" data-learn="rm">Saiba mais</button></div>
+  <p class="lede">Trezentas pessoas têm a pressão sistólica medida. Quem passa do corte entra no estudo e é medido de novo, sem receber tratamento algum.</p>
+  <svg class="ch" id="rmS" role="img" aria-label="Primeira e segunda medida de pressão dos selecionados"></svg>
+  <div class="cols2" style="margin-top:10px"><div class="stack">
+   <div class="range"><label for="rmT">Corte para entrar no estudo</label><output id="rmTo"></output><input type="range" id="rmT" min="135" max="170" step="1" value="155"></div>
+   <div class="range"><label for="rmN">Variação entre uma medida e outra</label><output id="rmNo"></output><input type="range" id="rmN" min="0" max="15" step="1" value="8"></div>
+   <div class="row"><button class="btn small" id="rmNew">Nova amostra</button></div></div>
+   <div><div class="tiles" id="rmTiles"></div></div></div>
+  <div class="insight" id="rmTxt"></div></div>
+</div>`,()=>{rmWorld();
+  chips($("efD"),EF_D.map(d=>d[0]),i=>{EF.des=i;renderEF();},0);
+  $("efR").innerHTML=EF_C.map(c=>`<div class="range"><label for="ef_${c[0]}">${c[1]}</label><output id="ef_${c[0]}o"></output><input type="range" id="ef_${c[0]}" min="0" max="30" step="1" value="${EF[c[0]]}" data-k="${c[0]}"></div>`).join("");
+  $("efR").addEventListener("input",e=>{const k=e.target.dataset.k;if(k){EF[k]=+e.target.value;renderEF();}});
+  $("rmT").oninput=e=>{RM.thr=+e.target.value;renderRM();};$("rmN").oninput=e=>{RM.noise=+e.target.value;renderRM();};$("rmNew").onclick=()=>{RM.seed++;rmWorld();renderRM();};
+},()=>{renderEF();renderRM();});
+function renderEF(){const D=EF_D[EF.des],all=EF_C.map(c=>c[0]),rows=[["Tratados",all]].concat(D[1]?[["Controle",D[1]]]:[]),sum=ks=>ks.reduce((a,k)=>a+EF[k],0),tot=sum(all),cmp=D[1]?sum(D[1]):0,att=tot-cmp;
+  EF_C.forEach(c=>$("ef_"+c[0]+"o").textContent=EF[c[0]]+" pontos");
+  const el=$("efS"),rh=46,T=6,H=T+rows.length*rh+62,W=box(el,H),L=74,Rm=14,iw=W-L-Rm,mx=Math.max(40,tot),X=v=>L+v/mx*iw;let s="";
+  rows.forEach((r,i)=>{const y=T+i*rh;let x=0;s+=`<text x="0" y="${y+21}" class="lbl" style="font-size:13px">${r[0]}</text>`;
+    EF_C.forEach(c=>{if(!r[1].includes(c[0])||!EF[c[0]])return;const w=X(x+EF[c[0]])-X(x);s+=`<rect x="${X(x)+.5}" y="${y}" width="${Math.max(0,w-1)}" height="32" rx="3" fill="${c[2]}"/>${w>24?`<text x="${X(x)+w/2}" y="${y+20.5}" text-anchor="middle" style="fill:var(--surface);font-size:12px;font-weight:600">${EF[c[0]]}</text>`:""}`;x+=EF[c[0]];});});
+  const yb=T+rows.length*rh+2;if(att>0)s+=`<path d="M${X(cmp)} ${yb}v8H${X(tot)}v-8" fill="none" stroke="var(--fg)" stroke-width="1.6"/><text x="${clamp((X(cmp)+X(tot))/2,L+112,W-Rm-112)}" y="${yb+24}" text-anchor="middle" class="lbl" style="font-size:12.5px">atribuído ao tratamento: ${att} pontos</text>`;
+  s+=xAxis(X,[0,10,20,30,40,50,60,70,80,90,100,120,150].filter(t=>t<=mx),yb+34,v=>v,L,W-Rm);el.innerHTML=s;
+  $("efLg").innerHTML=EF_C.map(c=>`<span><i style="background:${c[2]};height:10px;width:10px;border-radius:2px"></i>${c[1]}</span>`).join("");
+  $("efTiles").innerHTML=tile("Melhora nos tratados",tot+" pontos")+tile("Melhora na comparação",D[1]?cmp+" pontos":"—",D[1]?"grupo controle":"não há grupo controle")+tile("Atribuído ao tratamento",att+" pontos","",att===EF.et?"acc":"bad")+tile("Efeito verdadeiro",EF.et+" pontos",att>EF.et?`exagero de ${att-EF.et} pontos`:"medido sem exagero");
+  $("efTxt").className="insight"+(att===EF.et?"":" warn");$("efTxt").innerHTML=D[2];}
+function renderRM(){const P=RM.P.map(p=>({m1:p.v+RM.noise*p.z1,m2:p.v+RM.noise*p.z2})),sel=P.filter(p=>p.m1>=RM.thr),mean=a=>a.reduce((x,y)=>x+y,0)/a.length,n=sel.length,a1=n?mean(sel.map(p=>p.m1)):NaN,a2=n?mean(sel.map(p=>p.m2)):NaN;
+  $("rmTo").textContent=RM.thr+" mmHg ou mais";$("rmNo").textContent=RM.noise===0?"nenhuma":"± "+RM.noise+" mmHg";
+  const el=$("rmS"),ph=92,T=32,H=T+ph*2+66,W=box(el,H),L=10,Rm=10,lo=90,hi=190,bw=4,nb=(hi-lo)/bw,X=v=>L+(clamp(v,lo,hi)-lo)/(hi-lo)*(W-L-Rm);
+  const hist=(vals)=>{const c=new Array(nb).fill(0);vals.forEach(v=>{const i=clamp(Math.floor((v-lo)/bw),0,nb-1);c[i]++;});return c;},h1=hist(P.map(p=>p.m1)),hs=hist(sel.map(p=>p.m1)),h2=hist(sel.map(p=>p.m2)),ym=Math.max(...h1,1),bwp=(W-L-Rm)/nb;let s="";
+  const y1=T+ph,y2=T+ph*2+26,sc=ph/ym,sc2=(ph-34)/Math.max(...h2,1);
+  h1.forEach((c,i)=>{if(c)s+=`<rect x="${L+i*bwp+.5}" y="${y1-c*sc}" width="${Math.max(1,bwp-1)}" height="${c*sc}" fill="var(--dot)"/>`;if(hs[i])s+=`<rect x="${L+i*bwp+.5}" y="${y1-hs[i]*sc}" width="${Math.max(1,bwp-1)}" height="${hs[i]*sc}" fill="var(--exp)"/>`;});
+  h2.forEach((c,i)=>{if(c)s+=`<rect x="${L+i*bwp+.5}" y="${y2-c*sc2}" width="${Math.max(1,bwp-1)}" height="${c*sc2}" fill="var(--nex)"/>`;});
+  s+=`<line x1="${X(RM.thr)}" x2="${X(RM.thr)}" y1="${T-6}" y2="${y2}" stroke="var(--bad)" stroke-width="1.6" stroke-dasharray="5 4"/><text x="${clamp(X(RM.thr),40,W-40)}" y="${T-8}" text-anchor="middle" style="font-size:11px;fill:var(--bad)">corte</text>`;
+  s+=`<text x="${L}" y="11" class="lbl" style="font-size:12px">1ª medida: todos (selecionados em laranja)</text><text x="${L}" y="${y1+22}" class="lbl" style="font-size:12px">2ª medida: só os selecionados</text>`;
+  if(n){s+=`<line x1="${X(a1)}" x2="${X(a1)}" y1="${y1-ph+10}" y2="${y1}" stroke="var(--fg)" stroke-width="2.5"/><line x1="${X(a2)}" x2="${X(a2)}" y1="${y2-ph+30}" y2="${y2}" stroke="var(--fg)" stroke-width="2.5"/><line x1="${X(a1)}" x2="${X(a1)}" y1="${y1}" y2="${y2}" stroke="var(--fg)" stroke-width="1" stroke-dasharray="2 3"/>`;}
+  s+=`<line class="ax" x1="${L}" x2="${W-Rm}" y1="${y1}" y2="${y1}"/>`+xAxis(X,[100,120,140,160,180],y2,v=>v,L,W-Rm)+`<text x="${W-Rm}" y="${H-1}" text-anchor="end" style="font-size:11px">pressão sistólica (mmHg)</text>`;el.innerHTML=s;
+  $("rmTiles").innerHTML=tile("Selecionados",n,"de 300 pessoas")+tile("Média na 1ª medida",n?fmt(a1,1):"—","mmHg","alt")+tile("Média na 2ª medida",n?fmt(a2,1):"—","mmHg")+tile("Queda sem tratamento",n?fmt(a1-a2,1):"—","mmHg",n&&a1-a2>2?"bad":"");
+  $("rmTxt").className="insight"+(n&&a1-a2>2?" warn":"");
+  $("rmTxt").innerHTML=!n?"Ninguém passou do corte. Diminua o corte.":RM.noise===0?"Sem variação entre as medidas, cada pessoa repete o mesmo valor e não há regressão à média.":`Ninguém foi tratado e a pressão “caiu” ${fmt(a1-a2,1)} mmHg. Quem foi selecionado por um valor extremo estava, em parte, em um dia ruim; na medida seguinte, tende a ficar mais perto da própria média. Um estudo antes e depois chamaria essa queda de efeito do tratamento.`;}
+
+/* ===================== INTENÇÃO DE TRATAR × POR PROTOCOLO ===================== */
+/* cada braço: 100 sorteados, 30 graves (risco 40%) e 70 leves (risco 10%). No controle: 12 + 7 = 19 desfechos. */
+const IT={na:30,w:100,ef:0};
+function itCalc(){const rr=IT.ef?.5:1,n=IT.na,nG=Math.min(30,Math.round(n*(.3+.7*IT.w/100))),nL=n-nG,aG=30-nG,aL=70-nL;
+  const ev={aG:Math.round(aG*.4*rr),aL:Math.round(aL*.1*rr),nG:Math.round(nG*.4),nL:Math.round(nL*.1)},evA=ev.aG+ev.aL,evN=ev.nG+ev.nL,ad=100-n;
+  return{rr,n,nG,nL,aG,aL,ev,evA,evN,ad,itt:div((evA+evN)/100,.19),pp:div(div(evA,ad),.19),rI:(evA+evN)/100,rP:div(evA,ad)};}
+LAB("itt","Experimentais","Intenção de tratar",`
+<div class="intro"><span class="eyebrow">Experimentais · análise</span><h2>Quem abandona o tratamento sai da análise?</h2><p>Nem todo sorteado segue o protocolo. A análise por intenção de tratar mantém cada pessoa no grupo em que foi sorteada; a análise por protocolo fica só com quem seguiu o tratamento.</p></div>
+<div class="grid"><div class="card"><div class="card-h"><h3>Duas análises do mesmo ensaio</h3><button class="more-btn" data-learn="itt">Saiba mais</button></div>
+ <p class="lede">Cem pessoas em cada braço, com a mesma proporção de graves, porque foram sorteadas. Depois, parte do grupo intervenção abandona o tratamento.</p>
+ <div class="cols2">
+  <div class="stack">
+   <div class="range"><label for="itN">Abandonam o tratamento</label><output id="itNo"></output><input type="range" id="itN" min="0" max="50" step="5" value="30"></div>
+   <div><div class="range"><label for="itW">Quem abandona?</label><output id="itWo"></output><input type="range" id="itW" min="0" max="100" step="10" value="100"></div><p class="mini" style="margin:2px 0 0;display:flex;justify-content:space-between;gap:12px"><span>‹ qualquer um</span><span>os mais graves ›</span></p></div>
+   <div><div class="sub">Efeito verdadeiro do tratamento</div><div class="chips" id="itE"></div></div>
+  </div>
+  <div><div class="grps" id="itG"></div><div class="key" id="itK"></div></div>
+ </div>
+ <svg class="ch" id="itS" style="margin-top:14px;max-width:720px" role="img" aria-label="Risco relativo verdadeiro, por intenção de tratar e por protocolo"></svg>
+ <div class="tiles" id="itTiles" style="margin-top:8px"></div><div class="insight" id="itTxt"></div>
+</div></div>`,()=>{
+  $("itN").oninput=e=>{IT.na=+e.target.value;renderIT();};$("itW").oninput=e=>{IT.w=+e.target.value;renderIT();};
+  chips($("itE"),["Nenhum (RR 1,0)","Reduz o risco pela metade (RR 0,5)"],i=>{IT.ef=i;renderIT();},0);
+},()=>renderIT());
+function renderIT(){const c=itCalc(),P=[],C=[],push=(arr,k,ev,o)=>{for(let i=0;i<k;i++)arr.push(Object.assign({d:i<ev?1:0},o));};
+  push(P,c.aG,c.ev.aG,{e:1,sq:true});push(P,c.aL,c.ev.aL,{e:1});push(P,c.nG,c.ev.nG,{e:1,sq:true,nad:true});push(P,c.nL,c.ev.nL,{e:1,nad:true});
+  push(C,30,12,{e:0,sq:true});push(C,70,7,{e:0});
+  $("itNo").textContent=c.n+" de 100";$("itWo").textContent=IT.w<=10?"ao acaso":IT.w>=90?"quase só os graves":"mais os graves";
+  $("itG").innerHTML=grp("Intervenção",`${c.ad} seguem o tratamento · ${c.n} abandonam`,dotSVG(P,10))+grp("Controle","100 pessoas",dotSVG(C,10));
+  $("itK").innerHTML=keyDot({e:1,d:0,sq:true},"grave")+keyDot({e:1,d:0},"leve")+keyDot({e:1,d:1},"teve o desfecho")+(c.n?keyDot({e:1,d:0,nad:true},"abandonou o tratamento"):"");
+  logAxis($("itS"),[{v:c.rr,c:"var(--nex)",t:`Efeito verdadeiro: RR ${fmt(c.rr,2)}`,dia:true},{v:c.itt,c:"var(--accent)",t:`Intenção de tratar: RR ${rat(c.itt)}`},{v:c.pp,c:"var(--bad)",t:`Por protocolo: RR ${rat(c.pp)}`}],{lo:.25,hi:2,ticks:[.25,.5,1,2]});
+  $("itTiles").innerHTML=tile("Controle","19%","19 de 100")+tile("Intenção de tratar",pct(c.rI,0),`${c.evA+c.evN} de 100 sorteados`,"acc")+tile("Por protocolo",has(c.rP)?pct(c.rP,0):"—",`${c.evA} de ${c.ad} que seguiram`,"bad");
+  const pb=has(c.pp)&&Math.abs(Math.log(c.pp/c.rr))>.18,ib=Math.abs(Math.log(c.itt/c.rr))>.12;$("itTxt").className="insight"+(pb?" warn":"");
+  $("itTxt").innerHTML=!c.n?"Com adesão total, as duas análises são idênticas e mostram o efeito verdadeiro.":
+   pb?`Quem abandonou era ${IT.w>=50?"mais grave":"diferente"} do que quem ficou. Ao excluir essas pessoas, a análise por protocolo compara um grupo intervenção mais saudável com o controle inteiro: <b>a randomização foi quebrada</b>${IT.ef?" e o benefício parece maior do que é":" e aparece um benefício que não existe"}. ${ib?"A intenção de tratar dilui o efeito em direção a 1, mas preserva a comparação.":"A intenção de tratar mantém os grupos comparáveis."}`:
+   ib?"O abandono foi ao acaso, e a análise por protocolo fica perto do efeito verdadeiro. A intenção de tratar aparece <b>diluída em direção a 1</b>, porque conta como tratados os que não tomaram o remédio. Ela estima o efeito de oferecer o tratamento, que é o que acontece na prática.":
+   "Aqui as duas análises ficam perto do efeito verdadeiro. A análise por protocolo só é confiável quando quem abandona não difere de quem fica, e isso raramente se sabe.";}
+
+/* ===================== METANÁLISE: forest plot ===================== */
+/* cada estudo: n por grupo, RR, incluído?, alto risco de viés? Risco no controle fixo em 30%. */
+const MT_PRE=[
+ ["Estudos concordantes",[[120,.7],[200,.65],[80,.75],[400,.7],[150,.6],[60,.8]]],
+ ["Um estudo grande discorda",[[60,.5],[80,.55],[50,.45],[2000,1],[70,.6],[40,.5]]],
+ ["Estudos discordantes",[[150,.4],[200,1.3],[120,.6],[300,1.1],[100,.35],[180,1.5]]],
+ ["Pequenos e com alto risco de viés",[[40,.4,1],[50,.45,1],[30,.35,1],[600,.95],[800,1],[45,.5,1]]]];
+const MT={st:[],sel:0,model:"re",drop:false};
+const mtLoad=i=>{MT.st=MT_PRE[i][1].map((s,j)=>({name:"Estudo "+"ABCDEF"[j],n:s[0],rr:s[1],on:true,bias:!!s[2]}));MT.sel=0;};
+const mtN=x=>{const v=20*Math.pow(100,x/100);return v<100?Math.round(v/5)*5:v<1000?Math.round(v/10)*10:Math.round(v/50)*50;},mtX=n=>Math.round(Math.log(n/20)/Math.log(100)*100);
+function mtCalc(){const rows=MT.st.map(s=>{const c=Math.round(s.n*.3),a=Math.max(1,Math.round(s.n*.3*s.rr)),y=Math.log((a/s.n)/(c/s.n)),v=1/a-1/s.n+1/c-1/s.n,se=Math.sqrt(v);return{s,a,c,y,v,lo:Math.exp(y-1.96*se),hi:Math.exp(y+1.96*se),rr:Math.exp(y),use:s.on&&!(MT.drop&&s.bias)};});
+  const U=rows.filter(r=>r.use),k=U.length;if(!k)return{rows,k};
+  const sw=U.reduce((t,r)=>t+1/r.v,0),yf=U.reduce((t,r)=>t+r.y/r.v,0)/sw,Q=U.reduce((t,r)=>t+(r.y-yf)**2/r.v,0),C=sw-U.reduce((t,r)=>t+1/r.v**2,0)/sw,tau2=k>1&&C>0?Math.max(0,(Q-(k-1))/C):0,I2=k>1&&Q>0?Math.max(0,(Q-(k-1))/Q):0;
+  const w=r=>1/(r.v+(MT.model==="re"?tau2:0)),W=U.reduce((t,r)=>t+w(r),0),yp=U.reduce((t,r)=>t+w(r)*r.y,0)/W,sp=Math.sqrt(1/W);rows.forEach(r=>r.w=r.use?w(r)/W:0);
+  return{rows,k,pool:Math.exp(yp),lo:Math.exp(yp-1.96*sp),hi:Math.exp(yp+1.96*sp),I2,wmax:Math.max(...rows.map(r=>r.w))};}
+LAB("meta","Experimentais","Metanálise",`
+<div class="intro"><span class="eyebrow">Experimentais · revisões</span><h2>A metanálise combina estudos, e herda os problemas deles</h2><p>A revisão sistemática é uma pesquisa sobre pesquisas. Quando os estudos são combináveis, a metanálise junta os resultados em uma estimativa só. Monte a sua e leia o forest plot.</p></div>
+<div class="grid"><div class="card"><div class="card-h"><h3>Forest plot</h3><button class="more-btn" data-learn="forest">Saiba mais</button></div>
+ <div class="chips" id="mtP"></div>
+ <svg class="ch" id="mtS" style="margin-top:12px" role="img" aria-label="Forest plot dos estudos e estimativa combinada"></svg>
+ <div class="row" style="margin-top:6px"><div class="seg" id="mtM"><button data-v="re">Efeitos aleatórios</button><button data-v="fe">Efeito fixo</button></div><label class="toggle"><input type="checkbox" id="mtD"> Excluir estudos com alto risco de viés</label></div>
+ <div class="tiles" id="mtTiles" style="margin-top:12px"></div><div class="insight" id="mtTxt"></div>
+ <div class="ed" id="mtEd"></div>
+ <p class="note">Toque em um estudo no gráfico para editá-lo. Em todos, o desfecho ocorre em 30% do grupo controle.</p>
+</div></div>`,()=>{mtLoad(0);
+  chips($("mtP"),MT_PRE.map(p=>p[0]),i=>{mtLoad(i);renderMT();},0);
+  segBind($("mtM"),MT.model,v=>{MT.model=v;renderMT(true);});$("mtD").onchange=e=>{MT.drop=e.target.checked;renderMT(true);};
+  $("mtS").addEventListener("click",e=>{const r=e.target.closest("[data-i]");if(r){MT.sel=+r.dataset.i;renderMT();}});
+  $("mtEd").addEventListener("input",e=>{const s=MT.st[MT.sel],t=e.target;if(t.id==="mtN")s.n=mtN(+t.value);else if(t.id==="mtR")s.rr=+t.value;else if(t.id==="mtOn")s.on=t.checked;else if(t.id==="mtB")s.bias=t.checked;else return;chipOn($("mtP"),-1);renderMT(true);});
+},()=>renderMT());
+function renderMT(keepEd){const R=mtCalc(),el=$("mtS"),rh=32,T=22,n=R.rows.length,H=T+n*rh+70,W=box(el,H),wide=W>=560,L=wide?104:92,Rn=wide?150:10,iw=W-L-Rn,lo=.15,hi=4,X=v=>L+(Math.log(clamp(v,lo,hi))-Math.log(lo))/(Math.log(hi)-Math.log(lo))*iw;let s="";
+  s+=`<line x1="${X(1)}" x2="${X(1)}" y1="${T-8}" y2="${T+n*rh+30}" stroke="var(--tick)" stroke-dasharray="4 3"/>`;
+  if(wide)s+=`<text x="${W}" y="12" text-anchor="end" style="font-size:11px">RR (IC 95%) · peso</text>`;
+  R.rows.forEach((r,i)=>{const y=T+i*rh+rh/2,on=r.use,sd=on?7+15*Math.sqrt(r.w/(R.wmax||1)):8,c=r.s.bias?"var(--bad)":"var(--fg)";
+    s+=`<g class="metarow" data-i="${i}" opacity="${on?1:.35}">${i===MT.sel?`<rect x="0" y="${y-rh/2+1}" width="${W}" height="${rh-2}" rx="6" fill="var(--accent-soft)"/>`:`<rect x="0" y="${y-rh/2+1}" width="${W}" height="${rh-2}" fill="transparent"/>`}
+    <text x="6" y="${y+(wide?4:-1)}" class="lbl" style="font-size:12.5px">${r.s.name}${r.s.bias?" ⚑":""}</text>${wide?"":`<text x="6" y="${y+12}" style="font-size:10.5px">n = ${fmt(r.s.n*2,0)}</text>`}
+    <line x1="${X(r.lo)}" x2="${X(r.hi)}" y1="${y}" y2="${y}" stroke="${c}" stroke-width="1.6"/><rect x="${X(r.rr)-sd/2}" y="${y-sd/2}" width="${sd}" height="${sd}" fill="${c}"/>
+    ${wide?`<text x="${W-4}" y="${y+4}" text-anchor="end" style="font-size:11.5px;font-variant-numeric:tabular-nums">${fmt(r.rr,2)} (${fmt(r.lo,2)}–${fmt(r.hi,2)}) · ${on?pct(r.w,0):"fora"}</text>`:""}</g>`;});
+  const yd=T+n*rh+14;if(R.k){s+=`<path d="M${X(R.lo)} ${yd}L${X(R.pool)} ${yd-9}L${X(R.hi)} ${yd}L${X(R.pool)} ${yd+9}Z" fill="var(--accent)"/><text x="6" y="${yd+4}" class="lbl" style="font-size:12.5px;fill:var(--accent)">Combinado</text>`;if(wide)s+=`<text x="${W-4}" y="${yd+4}" text-anchor="end" class="lbl" style="font-size:11.5px;fill:var(--accent)">${fmt(R.pool,2)} (${fmt(R.lo,2)}–${fmt(R.hi,2)})</text>`;}
+  s+=xAxis(X,[.25,.5,1,2,4],yd+18,numTxt,L,L+iw)+`<text x="${X(1)-8}" y="${H-2}" text-anchor="end" style="font-size:11px">‹ favorece a intervenção</text><text x="${X(1)+8}" y="${H-2}" style="font-size:11px">favorece o controle ›</text>`;el.innerHTML=s;
+  const nb=R.rows.filter(r=>r.use&&r.s.bias).length,big=R.k?R.rows.reduce((a,b)=>b.w>a.w?b:a):null;
+  $("mtTiles").innerHTML=R.k?tile("RR combinado",fmt(R.pool,2),`IC 95%: ${fmt(R.lo,2)} a ${fmt(R.hi,2)}`,"acc")+tile("Heterogeneidade (I²)",pct(R.I2,0),R.I2>.5?"alta":R.I2>.25?"moderada":"baixa",R.I2>.5?"bad":"")+tile("Estudos incluídos",R.k+" de "+n,nb?n1(nb,"com alto risco de viés","com alto risco de viés"):"")+tile("Maior peso",pct(big.w,0),big.s.name):tile("RR combinado","—","nenhum estudo incluído");
+  $("mtTxt").className="insight"+(R.k&&(nb||R.I2>.5)?" warn":"");
+  $("mtTxt").innerHTML=!R.k?"Inclua pelo menos um estudo.":nb?`${n1(nb,"estudo incluído tem","estudos incluídos têm")} alto risco de viés (⚑). A metanálise não corrige isso: compilar estudos duvidosos gera uma estimativa igualmente duvidosa, só que com cara de precisa. Marque a exclusão e compare.`:R.I2>.5?"Os estudos discordam mais do que o acaso explicaria. O losango resume mal resultados tão diferentes: antes de combinar, é preciso entender por que eles diferem. Às vezes, a melhor síntese é narrativa. Troque entre efeitos aleatórios e efeito fixo e veja o losango mudar.":R.hi<1||R.lo>1?`Os estudos apontam na mesma direção e o IC do losango não inclui 1. Combinados, eles têm mais precisão do que qualquer um sozinho${big.w>.5?`. Repare que o ${big.s.name} responde por ${pct(big.w,0)} do peso`:""}.`:"O IC do losango inclui 1: os dados combinados são compatíveis com ausência de efeito, e talvez também com efeitos relevantes.";
+  if(keepEd){const o=$("mtNo");if(o){const s0=MT.st[MT.sel];o.textContent=fmt(s0.n,0)+" por grupo";$("mtRo").textContent=fmt(R.rows[MT.sel].rr,2);}return;}
+  const s0=MT.st[MT.sel];$("mtEd").innerHTML=`<h4>${s0.name}</h4><div class="cols2"><div class="range"><label for="mtN">Tamanho do estudo</label><output id="mtNo">${fmt(s0.n,0)} por grupo</output><input type="range" id="mtN" min="0" max="100" step="1" value="${mtX(s0.n)}"></div><div class="range"><label for="mtR">RR encontrado</label><output id="mtRo">${fmt(R.rows[MT.sel].rr,2)}</output><input type="range" id="mtR" min="0.3" max="2" step="0.05" value="${s0.rr}"></div></div>
+   <div class="row"><label class="toggle"><input type="checkbox" id="mtOn" ${s0.on?"checked":""}> Incluir na metanálise</label><label class="toggle"><input type="checkbox" id="mtB" ${s0.bias?"checked":""}> Alto risco de viés</label></div>`;}
+
+/* ===================== SAIBA MAIS (conteúdo das Aulas 10, 11 e 12) ===================== */
+const LEARN={
+tres:["Como os desenhos se organizam",`<p>Dependendo da pergunta, do ponto em que o estudo começa e da forma de execução, as investigações epidemiológicas se classificam em modelos diferentes.</p>
+<h4>Epidemiologia descritiva (descreve amostras)</h4><ul><li>Relatos e séries de casos</li><li>Transversal descritivo</li><li>Ecológico descritivo</li></ul>
+<h4>Epidemiologia analítica</h4><ul><li><b>Observacional (avalia relações):</b> transversal, ecológico, caso-controle e coorte.</li><li><b>Experimental (busca causa e efeito):</b> ensaio clínico e quase-experimental.</li></ul>
+<h4>As três perguntas</h4><ol><li><b>Quem decidiu a exposição?</b> O pesquisador, por sorteio: experimental. A vida, o paciente, o médico: observacional.</li><li><b>Qual é a unidade de análise?</b> O grupo (município, país): ecológico. O indivíduo: os demais.</li><li><b>Como o tempo entra?</b> Exposição e desfecho no mesmo momento: transversal. Da exposição ao desfecho: coorte. Do desfecho à exposição passada: caso-controle.</li></ol>
+<div class="trap"><h4>Série de casos ou coorte?</h4><p>O que define a série de casos não é o número de pacientes, e sim a ausência de comparação. Muitas revistas chamam de relato até 3 pacientes e de série a partir de 4; outras usam 10. Atenção: uma “série” que acompanha pacientes selecionados pela exposição e mede desfechos é, na verdade, uma coorte sem controle.</p></div>
+<p class="src">Dekkers OM et al. Distinguishing case series from cohort studies. Ann Intern Med. 2012;156(1):37-40.</p>`],
+iceberg:["Da pirâmide aos icebergs",`<p>A pirâmide de evidências, popularizada nos anos 1990, põe revisões sistemáticas no topo, depois ensaios randomizados, coortes, caso-controle, séries de casos e opinião de especialistas. Ela tem quatro problemas:</p>
+<ol><li><b>Uma pergunta só.</b> Foi desenhada para tratamentos. Para diagnóstico, prognóstico e etiologia, o desenho ideal é outro.</li><li><b>Degraus rígidos.</b> Um ensaio mal conduzido pode informar menos que uma coorte bem desenhada.</li><li><b>Síntese no “topo”.</b> Revisões sistemáticas não são um tipo de estudo primário: são uma forma de ler e combinar os demais.</li><li><b>Dados fora do quadro.</b> Dados de mundo real, registros eletrônicos, ômicas, dispositivos vestíveis e IA não têm lugar no desenho.</li></ol>
+<h4>A nova pirâmide</h4><p>As linhas entre os níveis ficam onduladas: a certeza sobe ou desce conforme risco de viés, consistência, precisão e aplicabilidade. As revisões saem do topo e viram a lente com que se examina cada nível.</p>
+<h4>O iceberg</h4><p>A pirâmide clássica é só a ponta. Abaixo da linha d’água estão dados de mundo real, registros eletrônicos, biossensores e vestíveis, aprendizado de máquina e IA multimodal. E há um iceberg para cada tipo de pergunta.</p>
+<h4>Ferramentas de cada iceberg</h4><ul><li><b>Terapia:</b> risco de viés com RoB 2; relato com CONSORT 2025.</li><li><b>Etiologia, dano e prognóstico:</b> risco de viés com ROBINS-I e ROBINS-E; emulação de ensaio-alvo relatada pela diretriz TARGET.</li><li><b>Acurácia diagnóstica:</b> risco de viés com QUADAS-3, que substituiu o QUADAS-2; relato com STARD 2015.</li></ul>
+<p class="src">Murad MH et al. New evidence pyramid. Evid Based Med. 2016;21(4):125-7. Subbiah V. The next generation of evidence-based medicine. Nat Med. 2023;29(1):49-58.</p>`],
+tempo:["Direção do estudo e medida de associação",`<p>Coorte e caso-controle estudam a mesma relação entre exposição e desfecho. <b>Muda apenas a direção da investigação.</b></p>
+<ul><li><b>Coorte:</b> seleciona pela exposição e segue até o desfecho.</li><li><b>Caso-controle:</b> seleciona pelo desfecho e investiga a exposição passada.</li><li><b>Transversal:</b> mede os dois no mesmo momento.</li><li><b>Ensaio clínico:</b> mesma direção da coorte, mas quem define a exposição é o pesquisador, idealmente por sorteio.</li></ul>
+<h4>Toda análise parte da tabela 2×2</h4><p>a = exposto com desfecho; b = exposto sem desfecho; c = não exposto com desfecho; d = não exposto sem desfecho. Cada pessoa ocupa apenas uma das quatro células.</p>
+<ul><li><b>Transversal:</b> razão de prevalências, RP = [a ÷ (a + b)] ÷ [c ÷ (c + d)].</li><li><b>Coorte e ensaio clínico:</b> risco relativo, RR = [a ÷ (a + b)] ÷ [c ÷ (c + d)], agora com casos novos.</li><li><b>Caso-controle:</b> razão de chances, OR = (a × d) ÷ (b × c).</li><li><b>Ensaio clínico:</b> também RRR = 1 − RR, RAR = risco no controle − risco na intervenção e NNT = 1 ÷ RAR.</li></ul>
+<p>RP e RR usam a mesma conta. A interpretação é diferente porque uma conta casos existentes e a outra, casos novos.</p>
+<div class="trap"><h4>Calcular não é interpretar</h4><p>Aqui você vê de onde a tabela vem. Para explorar a tabela (intervalos de confiança, qui-quadrado, confundimento, medidas de impacto), use o botão que abre os mesmos números no 2×2 LAB.</p></div>`],
+grade:["O sistema GRADE",`<p>O GRADE (Grading of Recommendations Assessment, Development and Evaluation), adotado internacionalmente desde 2004, avalia a certeza das evidências considerando não apenas o tipo de estudo.</p>
+<h4>O que reduz a certeza</h4><ul><li><b>Risco de viés:</b> problemas metodológicos que podem distorcer o resultado.</li><li><b>Inconsistência:</b> variabilidade inesperada entre estudos.</li><li><b>Imprecisão:</b> intervalos de confiança amplos, amostras pequenas.</li><li><b>Evidência indireta:</b> diferença entre a pergunta e a população do estudo.</li><li><b>Viés de publicação:</b> tendência de não publicar resultados negativos.</li></ul>
+<h4>O que pode elevar a certeza de estudos observacionais</h4><ul><li>Efeito de grande magnitude.</li><li>Gradiente dose-resposta.</li><li>Confundidores plausíveis que, se atuassem, reduziriam o efeito observado.</li></ul>
+<h4>Os quatro níveis</h4><p>Alta, moderada, baixa e muito baixa. Conjuntos de ensaios randomizados começam em alta; conjuntos de estudos observacionais, em baixa.</p>
+<div class="trap"><h4>Qualidade não é só o rótulo do desenho</h4><p>É isso que as linhas onduladas da nova pirâmide representam: a certeza sobe ou desce conforme risco de viés, consistência, precisão e aplicabilidade.</p></div>
+<p class="src">Guyatt et al. BMJ 2008. Schünemann et al. Cochrane Handbook 2022.</p>`],
+foto:["Estudo transversal",`<p>Estudo observacional em que exposição e desfecho são medidos no mesmo momento (ou em um período curto), em uma amostra de uma população definida. Também chamado seccional, de corte transversal, inquérito ou estudo de prevalência.</p>
+<ul><li><b>Mede</b> prevalência (casos existentes), não incidência.</li><li><b>Pode ser</b> descritivo (quanto?) ou analítico (associado a quê?).</li></ul>
+<h4>Quando optar</h4><ul><li>Medir e descrever a frequência de doenças e de fatores de risco conhecidos.</li><li>Gerar hipóteses etiológicas para estudos analíticos mais robustos.</li><li>Avaliar doenças crônicas e de baixa letalidade, que têm mais probabilidade de estar presentes no momento da coleta.</li><li>Avaliar e planejar serviços de saúde.</li></ul>
+<h4>Quando não serve</h4><p>Doenças raras têm baixa prevalência e exigem amostras enormes. Doenças agudas e letais duram pouco: os pacientes somem da amostra.</p>
+<div class="trap"><h4>Viés de prevalência e de sobrevivência</h4><p>Doenças de maior duração têm mais probabilidade de ser encontradas que as de curso curto. Quem morre depressa ou se cura em pouco tempo não é capturado, o que subestima as formas graves e superestima as formas crônicas e leves.</p></div>
+<h4>Vantagens</h4><ul><li>Rápidos e de baixo custo, sem seguimento.</li><li>Fornecem dados de prevalência para o planejamento em saúde.</li><li>Permitem estudar várias exposições e desfechos ao mesmo tempo.</li></ul>`],
+reversa:["Temporalidade no estudo transversal",`<p>No estudo transversal não se sabe se a exposição precedeu o desfecho. A simultaneidade impede definir a direção.</p>
+<h4>Três leituras para a mesma associação</h4><ul><li>A exposição causa o desfecho.</li><li><b>Causalidade reversa:</b> o desfecho leva à exposição.</li><li><b>Confundimento:</b> um terceiro fator, associado aos dois, produz a associação.</li></ul>
+<h4>Outros vieses do desenho</h4><ul><li><b>Seleção:</b> dificuldade de definir a base populacional adequada.</li><li><b>Informação e memória:</b> doentes tendem a lembrar melhor de exposições passadas; medidas subjetivas introduzem ruído.</li></ul>
+<h4>Para minimizar</h4><p>Amostras aleatórias, definição clara dos critérios de desfecho, questionários validados e tamanho de amostra calculado.</p>
+<div class="trap"><h4>Associação não é causa</h4><p>Uma RP com intervalo de confiança que exclui 1 é compatível com um efeito real, o que não significa causalidade.</p></div>`],
+falacia:["Estudos ecológicos",`<p>A unidade de análise é o grupo ou a população, nunca o indivíduo. As medidas de exposição e de desfecho são agregadas por unidades populacionais e comparadas entre si.</p>
+<h4>Tipos de medida</h4><ul><li><b>Agregadas:</b> resumo de dados individuais do grupo (taxa de mortalidade infantil, proporção de fumantes).</li><li><b>Ambientais:</b> características físicas do lugar (poluição do ar, flúor na água, temperatura média).</li><li><b>Globais:</b> atributos do grupo sem equivalente individual (tipo de sistema de saúde, PIB per capita, legislação).</li></ul>
+<h4>Tipos de desenho</h4><ul><li><b>Exploratório</b> (descreve padrões) ou <b>analítico</b> (mede e testa a associação).</li><li>De <b>múltiplos grupos</b>, de <b>tendência temporal</b> ou <b>misto</b>.</li></ul>
+<div class="trap"><h4>Falácia ecológica</h4><p>Erro de interpretação que ocorre quando se fazem inferências sobre indivíduos com base em dados agregados de grupos. O que se observa no grupo não se aplica, necessariamente, a cada pessoa dentro dele.</p></div>
+<h4>Vantagens</h4><ul><li>Baixo custo e rapidez: usam dados secundários já disponíveis (DATASUS, IBGE, GBD).</li><li>Geram hipóteses em nível populacional.</li><li>Medem efeitos que só existem no grupo (o efeito do PIB na saúde, por exemplo).</li></ul>
+<h4>Limitações</h4><ul><li>Não permitem extrapolar para indivíduos.</li><li>Sem dados individuais, não há como controlar confundidores.</li><li>Dependem de fontes de dados confiáveis e comparáveis.</li></ul>
+<p>Os resultados de um estudo ecológico devem ser comparados com estudos que tenham dados individuais.</p>`],
+taxas:["Razão de taxas",`<p>Taxa = número de eventos ÷ população, multiplicado por uma base (1.000, 10.000 ou 100.000 habitantes) para facilitar a leitura.</p>
+<p><b>Razão de taxas (RT) = taxa em A ÷ taxa em B.</b> Uma RT de 1,25 significa que a taxa em A é 25% maior que em B.</p>
+<div class="trap"><h4>Cuidado</h4><p>A comparação direta não controla fatores de confusão, como estrutura etária, poluição e cobertura de serviços de saúde. Dois municípios podem ter taxas diferentes só porque um deles tem população mais idosa.</p></div>`],
+seguimento:["Estudo de coorte",`<p>Estudo observacional longitudinal em que pessoas livres do desfecho são classificadas segundo a exposição e acompanhadas no tempo, comparando-se a incidência do desfecho entre expostos e não expostos.</p>
+<h4>Quando optar</h4><ol><li><b>Medir incidência:</b> é a forma de obter o RR diretamente.</li><li><b>Sequência temporal:</b> estabelecer que a exposição precede o desfecho.</li><li><b>Fatores de risco conhecidos:</b> medir frequência e características das exposições.</li><li><b>Múltiplos desfechos</b> para uma mesma exposição.</li><li><b>História natural:</b> evolução e prognóstico de uma doença.</li></ol>
+<h4>Medidas</h4><ul><li><b>Incidência acumulada</b> = casos novos ÷ população em risco no início.</li><li><b>Risco relativo (RR)</b> = incidência nos expostos ÷ incidência nos não expostos.</li><li><b>Risco atribuível (RA)</b> = incidência nos expostos − incidência nos não expostos.</li><li><b>Risco atribuível populacional (RAP)</b> = incidência na população − incidência nos não expostos.</li></ul>
+<h4>Vieses e como prevenir</h4><ul><li><b>Seleção:</b> autosseleção ou perda diferencial de seguimento. Manter contato periódico, buscar dados com familiares e fazer análise de sensibilidade com os piores cenários.</li><li><b>Informação:</b> erros de medição. Instrumentos validados, treinamento e cegamento para a exposição quando possível.</li><li><b>Confundimento:</b> variável associada à exposição e ao desfecho. Medir os confundidores e ajustar na análise, estratificar ou emparelhar.</li></ul>
+<h4>Desvantagens</h4><ul><li>A prospectiva custa caro e demora.</li><li>Inadequada para doenças raras e para doenças com longo período de latência.</li></ul>`],
+prosp:["Coorte retrospectiva × caso-controle",`<p>“Retrospectivo” descreve onde estão os dados, não o desenho. Uma coorte pode ser inteiramente retrospectiva.</p>
+<div class="tw"><table class="t"><tr><th>Critério</th><th>Coorte retrospectiva</th><th>Caso-controle</th></tr>
+<tr><td>Seleção por</td><td>Exposição</td><td>Desfecho</td></tr><tr><td>Medida principal</td><td>Incidência, RR, RA</td><td>Odds ratio</td></tr><tr><td>Desfechos raros</td><td>Exige bases enormes</td><td>Eficiente</td></tr><tr><td>Exposições raras</td><td>Eficiente</td><td>Ineficiente</td></tr><tr><td>Temporalidade</td><td>Clara, se o registro da exposição antecede o desfecho</td><td>Pode ser ambígua</td></tr><tr><td>Múltiplos…</td><td>desfechos</td><td>exposições</td></tr></table></div>
+<div class="trap"><h4>O critério</h4><p>Pergunte como as pessoas entraram no estudo. Se foi pela exposição, é coorte. Se foi pelo desfecho, é caso-controle.</p></div>`],
+orrr:["Razão de chances (odds ratio)",`<p><b>OR = chance de exposição nos casos ÷ chance de exposição nos controles = (a ÷ c) ÷ (b ÷ d) = (a × d) ÷ (b × c).</b></p>
+<p>Com a exposição nas linhas e o desfecho nas colunas, a e c são os casos; b e d, os controles.</p>
+<h4>Por que não o RR?</h4><p>O pesquisador fixa o número de casos e de controles. Se escolho 100 casos e 100 controles, metade da amostra “tem a doença” por decisão minha. A proporção de doentes entre expostos, a ÷ (a + b), é artificial: basta dobrar os controles para o “risco” mudar.</p>
+<h4>A simetria da OR</h4><p>A chance de exposição (casos ÷ controles) e a chance de doença (expostos ÷ não expostos) levam ao mesmo número: ad ÷ bc. Por isso a OR funciona nos dois sentidos.</p>
+<h4>Interpretação</h4><ul><li><b>OR = 1:</b> sem associação.</li><li><b>OR &gt; 1:</b> exposição mais frequente entre os casos.</li><li><b>OR &lt; 1:</b> exposição menos frequente entre os casos; possível proteção.</li></ul>
+<div class="trap"><h4>Chance não é risco</h4><p>A OR se aproxima do RR quando a doença é rara na população (regra prática: menos de 10%). Fora disso, descreva como “chance” e não leia a OR como RR.</p></div>
+<h4>Quando usar o caso-controle</h4><ul><li>Doença rara ou com longo período de latência.</li><li>Epidemias de causa desconhecida e surtos.</li><li>Várias exposições para um único desfecho.</li><li>Recursos limitados ou urgência na resposta.</li></ul>`],
+memoria:["Vieses no caso-controle",`<ul><li><b>Viés de memória (recordação):</b> casos tendem a lembrar mais, ou de forma diferente, das exposições passadas, sobretudo quando sabem que se busca uma causa para a doença.</li><li><b>Viés de informação:</b> erros na classificação da exposição ou do desfecho. Podem ser diferenciais (afetam casos e controles de modo diferente) ou não diferenciais.</li><li><b>Viés de seleção:</b> os controles não representam a população de origem dos casos.</li></ul>
+<h4>Como prevenir</h4><ul><li>Fontes independentes da memória: prontuários e registros.</li><li>Entrevistador cego para a condição de caso ou controle.</li><li>Instrumentos validados e marcadores objetivos de exposição.</li><li>Controles com doença que exija a mesma atenção à exposição.</li></ul>
+<div class="trap"><h4>Direção do erro</h4><p>O erro não diferencial costuma enfraquecer a associação. O erro diferencial pode aumentar ou diminuir a OR, e por isso preocupa mais.</p></div>`],
+controles:["A escolha dos controles",`<p>Os controles devem representar a exposição na mesma população que originou os casos. Um bom teste: se esse controle tivesse adoecido, teria entrado no estudo como caso?</p>
+<ul><li><b>Populacionais:</b> amostra aleatória da população-base. Ideal, porém mais caro.</li><li><b>Hospitalares:</b> acessíveis e cooperativos; há risco de viés de Berkson se a doença do controle se associa à exposição.</li><li><b>Vizinhança e amigos:</b> semelhança socioeconômica; há risco de pareamento excessivo na exposição.</li><li><b>Pareamento:</b> controla confundidores como idade e sexo, mas exige análise pareada e impede estimar o efeito da variável pareada.</li></ul>
+<p>A seleção dos controles é a etapa mais crítica e mais difícil do desenho.</p>`],
+sorteio:["Por que randomizar",`<p>Ensaios clínicos e coortes são longitudinais e acompanham a incidência de desfechos. Mas, na coorte, quem escolhe a exposição é a vida.</p>
+<ol><li><b>Confundimento por indicação:</b> pacientes mais graves tendem a receber mais tratamento. O prognóstico decide a exposição.</li><li><b>Efeito do usuário saudável:</b> quem adere a um tratamento preventivo costuma ter outros hábitos que protegem.</li><li><b>A randomização rompe esse vínculo:</b> o sorteio não conhece o prognóstico. Os grupos ficam comparáveis em média, inclusive em fatores nunca medidos.</li></ol>
+<p>Um exemplo histórico: em coortes, usuárias de terapia hormonal na pós-menopausa pareciam ter menos doença coronariana. O ensaio randomizado não mostrou proteção. As usuárias eram, desde o início, mais saudáveis.</p>
+<h4>Formas de randomizar</h4><ul><li><b>Simples:</b> como jogar uma moeda. Imprevisível, mas pode desbalancear estudos pequenos.</li><li><b>Em blocos:</b> garante tamanhos semelhantes ao longo do recrutamento. Os blocos devem ter tamanho variável e oculto.</li><li><b>Estratificada:</b> sorteio separado dentro de estratos prognósticos (idade, centro).</li><li><b>Minimização:</b> aloca para reduzir desequilíbrios em vários fatores.</li><li><b>Adaptativa por resposta:</b> as probabilidades mudam conforme resultados interinos.</li><li><b>Por conglomerados:</b> sorteia grupos (escolas, UBS) quando a intervenção é coletiva.</li></ul>
+<div class="trap"><h4>Sigilo de alocação não é mascaramento</h4><p>O <b>sigilo de alocação</b> atua até a designação: quem recruta não sabe qual será o próximo grupo. Previne viés de seleção e é sempre possível. O <b>mascaramento</b> atua depois: esconde qual tratamento cada um recebe e previne vieses de performance e de aferição.</p></div>`],
+efeito:["O que o ensaio clínico desconta",`<p>Quatro fenômenos fazem pacientes melhorar sem que o tratamento tenha efeito:</p>
+<ul><li><b>História natural da doença:</b> muitas condições melhoram sozinhas.</li><li><b>Regressão à média:</b> quem é selecionado por um valor extremo tende a apresentar valores menos extremos depois.</li><li><b>Efeito Hawthorne:</b> pessoas mudam de comportamento por saberem que estão sendo observadas.</li><li><b>Efeito placebo:</b> a expectativa de receber um tratamento altera sintomas.</li></ul>
+<h4>Estudos quase-experimentais</h4><p>Há intervenção controlada pelo pesquisador, mas a alocação não é aleatória.</p><ul><li><b>Sem grupo controle:</b> antes e depois; séries temporais interrompidas.</li><li><b>Com grupo controle, sem sorteio:</b> controle não equivalente; controles históricos.</li></ul>
+<p>São viáveis quando randomizar é impraticável ou antiético e servem para avaliar intervenções comunitárias e políticas de saúde. A inferência causal é mais frágil: regressão à média, tendências seculares e eventos concomitantes.</p>
+<h4>Quem está mascarado?</h4><ul><li><b>Aberto:</b> ninguém.</li><li><b>Simples-cego:</b> em geral, o participante.</li><li><b>Duplo-cego:</b> participante e equipe que trata ou avalia.</li><li><b>Triplo-cego:</b> os anteriores e também o analista de dados ou o comitê.</li></ul>
+<div class="trap"><h4>Mascaramento e tipo de desfecho</h4><p>Quanto mais subjetivo o desfecho, mais o mascaramento importa. Estudo aberto com desfecho subjetivo (intensidade de ansiedade) é inaceitável; com desfecho objetivo (óbito), é possível. O ideal é estudo cego com desfecho objetivo.</p></div>`],
+rm:["Regressão à média",`<p>Toda medida tem uma parte estável e uma parte que varia de um dia para o outro. Quando se escolhem pessoas pelo valor mais alto de uma única medida, escolhem-se, em parte, pessoas que estavam em um dia de valor alto.</p>
+<p>Na medida seguinte, a parte variável muda e o valor tende a se aproximar da média da própria pessoa. A média do grupo cai sem que nada tenha sido feito.</p>
+<h4>O que aumenta a regressão</h4><ul><li>Corte de seleção mais extremo.</li><li>Maior variação entre uma medida e outra.</li></ul>
+<div class="trap"><h4>Por que importa</h4><p>Pacientes procuram tratamento quando estão piores. Em um estudo antes e depois, a melhora por regressão à média se soma à história natural e é confundida com o efeito do tratamento. Um grupo controle selecionado do mesmo jeito regride igual, e a diferença entre os grupos fica livre desse efeito.</p></div>`],
+itt:["Intenção de tratar × por protocolo",`<h4>Intenção de tratar (ITT)</h4><ul><li>Analisa cada participante no grupo para o qual foi sorteado, tenha ou não aderido.</li><li>Preserva a randomização e a comparabilidade dos grupos.</li><li>Estima o efeito de oferecer o tratamento, próximo da efetividade.</li><li>A não adesão tende a diluir o efeito em direção ao nulo.</li><li>É a análise principal em ensaios de superioridade.</li></ul>
+<h4>Por protocolo (PP)</h4><ul><li>Analisa apenas quem seguiu o protocolo como planejado.</li><li>Exclui não aderentes, cruzamentos e violações.</li><li>Quebra a randomização: quem adere difere de quem não adere.</li><li>Pode enviesar o resultado em qualquer direção.</li><li>É relatada junto com a ITT, sobretudo em ensaios de não inferioridade.</li></ul>
+<h4>Eficácia × efetividade</h4><p><b>Eficácia</b> é o efeito da intervenção em condições ideais: pacientes selecionados, adesão monitorada, equipes treinadas (ensaio explanatório). <b>Efetividade</b> é o resultado no mundo real, com adesão, acesso, comorbidades e sistema de saúde (ensaio pragmático).</p>`],
+forest:["Revisão sistemática e metanálise",`<h4>Como ler um forest plot</h4><ul><li><b>Quadrado:</b> a estimativa de cada estudo. O tamanho indica o peso na análise.</li><li><b>Linha horizontal:</b> o intervalo de confiança de 95% daquele estudo.</li><li><b>Linha vertical:</b> a nulidade (RR = 1), nenhum efeito.</li><li><b>Losango:</b> a estimativa combinada. O centro é o efeito; as pontas, o IC de 95%.</li></ul>
+<p>O I² indica quanto da variação entre os estudos vai além do que o acaso explicaria. O modelo de efeito fixo supõe um único efeito verdadeiro; o de efeitos aleatórios admite que o efeito varie entre os estudos e produz um intervalo mais largo quando há heterogeneidade.</p>
+<h4>Revisão sistemática</h4><ul><li>É um método de pesquisa sobre pesquisas: não gera dados novos, mas é um estudo em si, com protocolo e métodos próprios.</li><li>Minimiza vieses e erros aleatórios pela busca exaustiva, seleção explícita e síntese estatística.</li><li>Sua qualidade depende dos estudos incluídos e do julgamento de quem decide o que é combinável.</li><li>Pode ou não ter metanálise.</li></ul>
+<h4>Tipos de revisão</h4><ul><li><b>Narrativa:</b> panorama e discussão conceitual; as fontes são escolhidas pelo autor.</li><li><b>Integrativa:</b> integra evidências de naturezas diferentes.</li><li><b>De escopo:</b> mapeia o que existe e identifica lacunas.</li><li><b>Sistemática:</b> responde a uma pergunta específica (PICO), com protocolo registrado, busca reprodutível em várias bases, dois revisores independentes, avaliação do risco de viés e certeza graduada pelo GRADE.</li></ul>
+<div class="trap"><h4>Importante</h4><p>Compilar estudos duvidosos gera uma metanálise igualmente duvidosa.</p></div>`]};
+
+/* ===================== navegação e início ===================== */
+const GRP_L={Reconhecer:"Reconhecer",Observacionais:"Observacionais",Experimentais:"Experimentais"};
+function renderNav(){const L=LABS.find(l=>l.id===cur);document.querySelectorAll(".blk").forEach(b=>b.classList.toggle("on",b.dataset.grp===L.grp));
+  $("subs").innerHTML=LABS.filter(l=>l.grp===L.grp).map((l,i)=>`<button class="sb ${l.id===cur?"on":""}" data-lab="${l.id}"><i>${i+1}</i>${l.name}</button>`).join("");
+  const i=LABS.indexOf(L),p=LABS[i-1],n=LABS[i+1];
+  $("labFoot").innerHTML=(p?`<button data-lab="${p.id}"><span>‹ Anterior${p.grp!==L.grp?" · "+GRP_L[p.grp]:""}</span><b>${p.name}</b></button>`:"")+(n?`<button class="nx" data-lab="${n.id}"><span>Próximo${n.grp!==L.grp?" · "+GRP_L[n.grp]:""} ›</span><b>${n.name}</b></button>`:"");}
+function go(id){if(typeof coStop==="function"&&cur==="coorte"&&id!=="coorte")coStop();cur=id;document.querySelectorAll(".lab").forEach(s=>s.hidden=s.id!=="lab-"+id);renderNav();R[id]&&R[id]();try{history.replaceState(null,"","#"+id)}catch(e){}}
+const navGo=id=>{go(id);window.scrollTo({top:0});};
+$("subs").addEventListener("click",e=>{const b=e.target.closest("[data-lab]");if(b)navGo(b.dataset.lab);});
+$("labFoot").addEventListener("click",e=>{const b=e.target.closest("[data-lab]");if(b)navGo(b.dataset.lab);});
+$("blocks").addEventListener("click",e=>{const b=e.target.closest("[data-grp]");if(!b)return;const L=LABS.find(l=>l.id===cur);if(L.grp===b.dataset.grp)return;navGo(LABS.find(l=>l.grp===b.dataset.grp).id);});
+document.querySelectorAll(".more-btn").forEach(b=>b.insertAdjacentHTML("afterbegin",`<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8" cy="8" r="6.3"/><path d="M8 7.2v4M8 4.9v.1" stroke-linecap="round"/></svg>`));
+document.addEventListener("click",e=>{const b=e.target.closest("[data-learn]");if(b){const L=LEARN[b.dataset.learn];if(L)openSheet(L[0],L[1]);}});
+$("howBtn").onclick=()=>openSheet("Como usar o STUDY LAB",`<p>O STUDY LAB é um laboratório para entender os tipos de estudos epidemiológicos mexendo neles. No topo, escolha o bloco e depois a tela. No fim de cada tela há atalhos para a anterior e a próxima.</p>
+<h4>Como ler as pessoas</h4><ul><li><b>A cor</b> mostra a exposição: laranja para expostos (ou tratados), azul para não expostos (ou controles).</li><li><b>Bolinha cheia</b> é quem teve o desfecho; <b>vazada</b>, quem não teve.</li><li><b>Cinza</b> é o que o estudo ainda não mediu.</li><li><b>Quadrado</b>, quando aparece, é um paciente grave.</li></ul>
+<h4>As telas</h4><p><b>Reconhecer:</b> ${LABS.filter(l=>l.grp==="Reconhecer").map(l=>l.name).join(", ")}.</p><p><b>Observacionais:</b> ${LABS.filter(l=>l.grp==="Observacionais").map(l=>l.name).join(", ")}.</p><p><b>Experimentais:</b> ${LABS.filter(l=>l.grp==="Experimentais").map(l=>l.name).join(", ")}.</p>
+<h4>Ligação com o 2×2 LAB</h4><p>Na Linha do tempo, cada desenho termina em uma tabela 2×2. O botão “Abrir esta tabela no 2×2 LAB” leva os mesmos números para lá, onde dá para explorar a tabela a fundo.</p>
+<h4>Sugestão para aula</h4><ol><li>Antes de mexer em um controle, peça para a turma prever o que vai acontecer.</li><li>Mostre no laboratório.</li><li>Discuta a diferença entre a previsão e o resultado.</li></ol>
+<p class="src">As populações são simuladas e os exemplos são fictícios. Cada painel tem um “Saiba mais” com o conteúdo das aulas.</p>`);
+let rt;window.addEventListener("resize",()=>{clearTimeout(rt);rt=setTimeout(()=>R[cur]&&R[cur](),150);});
+function fromHash(){const h=(location.hash||"").slice(1);go(LABS.some(l=>l.id===h)?h:"tres");}
+fromHash();window.addEventListener("hashchange",()=>{const h=(location.hash||"").slice(1);if(h!==cur){fromHash();window.scrollTo({top:0});}});
+
+(function(){let seen=false;try{seen=localStorage.getItem("studylab.intro")==="1";}catch(e){}const w=$("welcome");if(!seen)w.hidden=false;
+  const done=()=>{w.hidden=true;try{localStorage.setItem("studylab.intro","1")}catch(e){}};
+  $("wClose").onclick=done;$("wStart").onclick=()=>{done();navGo("tres");};})();
+
+/* instalar como aplicativo (padrão do BACCHI LAB) */
+function platform(){const u=navigator.userAgent||"";if(/iPhone|iPad|iPod/.test(u)||(/Macintosh/.test(u)&&navigator.maxTouchPoints>1))return"ios";if(/Android/.test(u))return"android";return"desktop";}
+const SC={ios:`<ol class="steps-l"><li>Abra esta página no <b>Safari</b>.</li><li>Toque em <b>Compartilhar</b> <kbd>⬆︎</kbd>.</li><li>Toque em <b>Adicionar à Tela de Início</b>.</li><li>Confirme o nome e toque em <b>Adicionar</b>.</li></ol>`,
+ android:`<ol class="steps-l"><li>Abra esta página no <b>Chrome</b>.</li><li>Toque no menu <kbd>⋮</kbd>.</li><li>Toque em <b>Adicionar à tela inicial</b> ou <b>Instalar app</b>.</li><li>Confirme. O ícone aparece junto dos seus apps.</li></ol>`,
+ desktop:`<ol class="steps-l"><li><b>Chrome ou Edge:</b> use o ícone de instalar na barra de endereço, ou o menu <kbd>⋮</kbd> → <b>Transmitir, salvar e compartilhar</b> → <b>Instalar página como app</b>.</li><li><b>Safari (Mac):</b> menu <b>Arquivo</b> → <b>Adicionar ao Dock</b>.</li><li><b>Qualquer navegador:</b> salve nos favoritos com <kbd>Ctrl</kbd>+<kbd>D</kbd>.</li></ol>`};
+/* Janela em que o app está rodando: "navegador" (aba comum), "propria" (instalado, na janela dele) ou "outra"
+   (aberto dentro de outro app instalado, como o BACCHI LAB). */
+function janelaApp(k){
+  if(!(matchMedia("(display-mode: standalone)").matches||navigator.standalone===true))return"navegador";
+  let fora=false,marca=false;
+  try{const r=document.referrer&&new URL(document.referrer);fora=!!r&&r.origin===location.origin&&!r.pathname.startsWith(new URL("./",location.href).pathname);}catch(e){}
+  try{if(!document.referrer)localStorage.setItem(k,"1");if(!fora)sessionStorage.setItem(k,"1");marca=localStorage.getItem(k)==="1"||sessionStorage.getItem(k)==="1";}catch(e){}
+  return !fora||marca?"propria":"outra";
+}
+function appInstalado(k){
+  if(!navigator.getInstalledRelatedApps)return Promise.resolve(false);
+  return navigator.getInstalledRelatedApps().then(l=>{if(l.length){try{localStorage.setItem(k,"1");}catch(e){}}return l.length>0;}).catch(()=>false);
+}
+const JAN_K="study-lab.instalado";let janela=janelaApp(JAN_K);if(janela==="outra")appInstalado(JAN_K).then(ok=>{if(ok)janela="propria";});
+let deferredInstall=null;window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferredInstall=e;});window.addEventListener("appinstalled",()=>{deferredInstall=null;try{localStorage.setItem(JAN_K,"1");}catch(e){}toast("STUDY LAB instalado");});
+/* QR code do app. O desenho é fixo: aponta para o endereço do app no ar.
+   Foi gerado com o qrcode.js do repositório bacchilab (nível M); se o endereço mudar, gere de novo. */
+const QR_URL="https://andrebacchi.github.io/study-lab/",QR_SVG="<svg viewBox=\"0 0 33 33\" shape-rendering=\"crispEdges\" role=\"img\" aria-label=\"QR code para andrebacchi.github.io/study-lab\"><rect width=\"33\" height=\"33\" fill=\"#fff\"/><path d=\"M2 2h7v1h-7zM10 2h1v1h-1zM12 2h1v1h-1zM15 2h1v1h-1zM18 2h1v1h-1zM21 2h2v1h-2zM24 2h7v1h-7zM2 3h1v1h-1zM8 3h1v1h-1zM10 3h3v1h-3zM18 3h3v1h-3zM24 3h1v1h-1zM30 3h1v1h-1zM2 4h1v1h-1zM4 4h3v1h-3zM8 4h1v1h-1zM11 4h2v1h-2zM15 4h1v1h-1zM21 4h1v1h-1zM24 4h1v1h-1zM26 4h3v1h-3zM30 4h1v1h-1zM2 5h1v1h-1zM4 5h3v1h-3zM8 5h1v1h-1zM10 5h4v1h-4zM15 5h2v1h-2zM19 5h1v1h-1zM21 5h1v1h-1zM24 5h1v1h-1zM26 5h3v1h-3zM30 5h1v1h-1zM2 6h1v1h-1zM4 6h3v1h-3zM8 6h1v1h-1zM14 6h1v1h-1zM16 6h2v1h-2zM21 6h1v1h-1zM24 6h1v1h-1zM26 6h3v1h-3zM30 6h1v1h-1zM2 7h1v1h-1zM8 7h1v1h-1zM11 7h1v1h-1zM13 7h1v1h-1zM15 7h1v1h-1zM21 7h2v1h-2zM24 7h1v1h-1zM30 7h1v1h-1zM2 8h7v1h-7zM10 8h1v1h-1zM12 8h1v1h-1zM14 8h1v1h-1zM16 8h1v1h-1zM18 8h1v1h-1zM20 8h1v1h-1zM22 8h1v1h-1zM24 8h7v1h-7zM10 9h4v1h-4zM19 9h1v1h-1zM21 9h1v1h-1zM2 10h1v1h-1zM4 10h2v1h-2zM7 10h3v1h-3zM11 10h3v1h-3zM16 10h2v1h-2zM19 10h3v1h-3zM24 10h1v1h-1zM27 10h1v1h-1zM29 10h2v1h-2zM3 11h5v1h-5zM9 11h3v1h-3zM18 11h1v1h-1zM21 11h6v1h-6zM30 11h1v1h-1zM6 12h1v1h-1zM8 12h1v1h-1zM10 12h1v1h-1zM12 12h2v1h-2zM15 12h2v1h-2zM19 12h2v1h-2zM22 12h2v1h-2zM25 12h2v1h-2zM28 12h2v1h-2zM3 13h5v1h-5zM10 13h1v1h-1zM12 13h4v1h-4zM20 13h1v1h-1zM22 13h3v1h-3zM30 13h1v1h-1zM3 14h2v1h-2zM7 14h4v1h-4zM13 14h1v1h-1zM15 14h1v1h-1zM17 14h1v1h-1zM19 14h1v1h-1zM21 14h1v1h-1zM25 14h1v1h-1zM27 14h2v1h-2zM4 15h2v1h-2zM10 15h3v1h-3zM15 15h5v1h-5zM21 15h2v1h-2zM24 15h1v1h-1zM28 15h3v1h-3zM4 16h1v1h-1zM8 16h1v1h-1zM12 16h1v1h-1zM14 16h1v1h-1zM16 16h1v1h-1zM19 16h1v1h-1zM21 16h2v1h-2zM24 16h1v1h-1zM28 16h3v1h-3zM2 17h3v1h-3zM6 17h2v1h-2zM9 17h2v1h-2zM12 17h1v1h-1zM14 17h1v1h-1zM16 17h3v1h-3zM20 17h1v1h-1zM23 17h4v1h-4zM29 17h1v1h-1zM2 18h1v1h-1zM5 18h1v1h-1zM8 18h1v1h-1zM12 18h1v1h-1zM14 18h1v1h-1zM16 18h1v1h-1zM18 18h1v1h-1zM21 18h3v1h-3zM25 18h3v1h-3zM29 18h1v1h-1zM4 19h1v1h-1zM6 19h2v1h-2zM11 19h2v1h-2zM17 19h1v1h-1zM19 19h1v1h-1zM22 19h1v1h-1zM25 19h1v1h-1zM27 19h3v1h-3zM2 20h1v1h-1zM4 20h2v1h-2zM7 20h5v1h-5zM13 20h5v1h-5zM19 20h1v1h-1zM23 20h1v1h-1zM28 20h1v1h-1zM4 21h2v1h-2zM7 21h1v1h-1zM10 21h4v1h-4zM15 21h2v1h-2zM18 21h2v1h-2zM22 21h2v1h-2zM26 21h1v1h-1zM28 21h1v1h-1zM3 22h2v1h-2zM6 22h4v1h-4zM11 22h1v1h-1zM15 22h2v1h-2zM19 22h2v1h-2zM22 22h7v1h-7zM10 23h2v1h-2zM18 23h3v1h-3zM22 23h1v1h-1zM26 23h5v1h-5zM2 24h7v1h-7zM10 24h1v1h-1zM12 24h3v1h-3zM16 24h1v1h-1zM18 24h2v1h-2zM21 24h2v1h-2zM24 24h1v1h-1zM26 24h2v1h-2zM29 24h1v1h-1zM2 25h1v1h-1zM8 25h1v1h-1zM10 25h2v1h-2zM14 25h5v1h-5zM20 25h1v1h-1zM22 25h1v1h-1zM26 25h2v1h-2zM30 25h1v1h-1zM2 26h1v1h-1zM4 26h3v1h-3zM8 26h1v1h-1zM12 26h1v1h-1zM17 26h3v1h-3zM22 26h5v1h-5zM28 26h3v1h-3zM2 27h1v1h-1zM4 27h3v1h-3zM8 27h1v1h-1zM10 27h2v1h-2zM15 27h1v1h-1zM17 27h2v1h-2zM21 27h1v1h-1zM23 27h1v1h-1zM25 27h3v1h-3zM30 27h1v1h-1zM2 28h1v1h-1zM4 28h3v1h-3zM8 28h1v1h-1zM10 28h2v1h-2zM14 28h3v1h-3zM19 28h3v1h-3zM25 28h1v1h-1zM28 28h1v1h-1zM30 28h1v1h-1zM2 29h1v1h-1zM8 29h1v1h-1zM12 29h3v1h-3zM18 29h1v1h-1zM22 29h2v1h-2zM25 29h3v1h-3zM29 29h1v1h-1zM2 30h7v1h-7zM10 30h1v1h-1zM17 30h1v1h-1zM21 30h5v1h-5zM29 30h1v1h-1z\" fill=\"#161a22\"/></svg>";
+function showQR(){
+  openSheet("QR code do STUDY LAB",`<div class="qr-wrap"><p>Aponte a câmera do celular para o código.</p><div class="qr-box">${QR_SVG}</div><p class="qr-url" id="qrUrl">andrebacchi.github.io/study-lab</p><div class="qr-acts"><button class="btn primary" id="qrCopy">Copiar link</button>${navigator.share?'<button class="btn" id="qrShare">Compartilhar</button>':''}</div><p class="qr-nota">QR Code é marca registrada da DENSO WAVE INCORPORATED.</p></div>`);
+  const g=id=>document.getElementById(id);
+  g("qrCopy").onclick=async e=>{const b=e.currentTarget;
+    try{await navigator.clipboard.writeText(QR_URL);b.textContent="Link copiado";}
+    catch(_){const r=document.createRange();r.selectNodeContents(g("qrUrl"));const s=getSelection();s.removeAllRanges();s.addRange(r);b.textContent="Selecionado: copie";}
+    setTimeout(()=>{if(b.isConnected)b.textContent="Copiar link";},2200);};
+  if(g("qrShare"))g("qrShare").onclick=()=>navigator.share({title:"STUDY LAB",url:QR_URL}).catch(()=>{});
+}
+$("qrBtn").onclick=showQR;
+$("instBtn").onclick=async()=>{if(deferredInstall){try{deferredInstall.prompt();const r=await deferredInstall.userChoice;deferredInstall=null;if(r&&r.outcome==="accepted")return;}catch(e){}}
+  openSheet("Instalar o STUDY LAB",`${janela==="outra"?`<p class="fora">Você abriu este app por dentro de outro, como o BACCHI LAB, e daqui não dá para instalar. Toque em <kbd>⋮</kbd> no alto da tela e em <b>Abrir no Chrome</b>; lá, toque de novo em <b>Instalar</b>.</p>`:""}<p>O STUDY LAB pode ficar na tela inicial como um aplicativo, abrir em tela cheia e funcionar sem internet depois da primeira visita.</p><div class="seg" id="platSeg" style="margin:6px 0 10px"><button data-p="ios">iPhone e iPad</button><button data-p="android">Android</button><button data-p="desktop">Computador</button></div><div id="platBody"></div>`);
+  const set=k=>{$("platBody").innerHTML=SC[k];document.querySelectorAll("#platSeg button").forEach(b=>b.classList.toggle("on",b.dataset.p===k));};$("platSeg").onclick=e=>{const b=e.target.closest("button");if(b)set(b.dataset.p);};set(platform());};
+
+</script>
+<script>if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));}</script>
+</body>
+</html>
