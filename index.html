@@ -1688,7 +1688,9 @@ function renderDFC(){$("dfC").innerHTML=DF_CASE.map((c,i)=>`<div class="case"><h
 const ME={rc:12,ri:8,lock:false,hr:.7,mode:"prop",t:3};
 const ME_PRE=[["12% × 8%",12,8],["Mesma redução relativa, risco baixo: 3% × 2%",3,2],["Mesma redução relativa, risco alto: 60% × 40%",60,40]];
 const ME_IMP=[["NNT menor que 25","Muito grande","Grande"],["NNT de 25 a 50","Grande","Moderado"],["NNT de 50 a 100","Moderado","Pequeno"]];
-const ME_L=.22;/* taxa de eventos por ano no controle */
+const ME_L=.22;
+/* ponte para o Nomo LAB (regra da família: números no endereço, tela depois do #, origem em "de") */
+const nomoTxUrl=(rc,ri)=>`https://andrebacchi.github.io/nomo-lab/?cer=${+rc.toFixed(4)}&eer=${+ri.toFixed(4)}&de=study-lab#tx`;/* taxa de eventos por ano no controle */
 const meSc=t=>Math.exp(-ME_L*t),meSi=t=>ME.mode==="prop"?Math.exp(-ME_L*ME.hr*t):Math.exp(-ME_L*(2.2*Math.min(t,1)+.45*Math.max(0,t-1)));
 LAB("medidas","Resultados","Medidas de efeito",`
 <div class="intro"><span class="eyebrow">Resultados · RR, RRR, RAR, NNT e HR</span><h2>O mesmo resultado, contado de quatro jeitos</h2><p>O risco relativo diz quanto o risco muda em proporção. A redução absoluta e o NNT dizem quantas pessoas de fato se beneficiam, e dependem do risco de quem é tratado.</p></div>
@@ -1702,6 +1704,7 @@ LAB("medidas","Resultados","Medidas de efeito",`
     <label class="toggle"><input type="checkbox" id="meL"> Manter a redução relativa ao mudar o risco do controle</label>
     <div class="tiles" id="meT"></div>
     <div class="f" id="meF"></div>
+    <div id="meNomoW"><a class="btn small" id="meNomo" target="_blank" rel="noopener">Individualizar no Nomo LAB ›</a><p class="note">Lá, o resultado do ensaio vira o NNT de um paciente com o risco que você escolher.</p></div>
    </div>
    <div><div class="grps" id="meG"></div><div class="key" id="meK"></div>
     <div class="sub" style="margin-top:14px">Impacto do tratamento conforme o NNT</div><div class="tw"><table class="imp" id="meImp"></table></div></div>
@@ -1732,6 +1735,7 @@ LAB("medidas","Resultados","Medidas de efeito",`
 function renderME(){const rc=ME.rc/100,ri=ME.ri/100,rr=div(ri,rc),rrr=1-rr,rar=rc-ri,nn=rar>1e-9?Math.ceil(1/rar-1e-9):rar<-1e-9?Math.ceil(1/-rar-1e-9):null,harm=rar<-1e-9;
   $("meCo").textContent=fmt(ME.rc,1)+"%";$("meIo").textContent=fmt(ME.ri,1)+"%";
   $("meT").innerHTML=tile("RR",rat(rr),"risco na intervenção ÷ no controle")+tile(harm?"Aumento relativo":"RRR",pct(Math.abs(rrr),0),harm?"RR − 1":"1 − RR")+tile(harm?"Aumento absoluto":"RAR",fmt(Math.abs(rar)*100,1)+" p.p.",harm?"intervenção − controle":"controle − intervenção")+tile(harm?"NNH":"NNT",nn==null?"—":fmt(nn,0),nn==null?"sem diferença de risco":harm?"tratados para causar 1 desfecho":"tratados para evitar 1 desfecho",harm?"bad":"acc");
+  $("meNomoW").hidden=!(rar>1e-9);if(rar>1e-9)$("meNomo").href=nomoTxUrl(rc,ri);
   $("meF").innerHTML=nn==null?"Sem diferença entre os grupos, não há NNT.":`${harm?"NNH":"NNT"} = 1 ÷ ${harm?"aumento absoluto":"RAR"} = 1 ÷ ${fmt(Math.abs(rar),3)} = <b>${fmt(nn,0)}</b>`;
   const kc=Math.round(rc*200),ki=Math.round(ri*200),av=Math.max(0,kc-ki),C=[],I=[];for(let j=0;j<200;j++){C.push({e:0,d:j<kc?1:0});I.push(j<ki?{e:1,d:1}:j<ki+av?{e:1,d:0,cl:"av"}:{e:1,d:0});}
   $("meG").innerHTML=grp("Controle",`${n1(kc,"evento","eventos")} em 200 pessoas`,dotSVG(C,20,{pitch:11,r:3.8,scale:1}))+grp("Intervenção",`${n1(ki,"evento","eventos")} em 200 pessoas${av?` · ${n1(av,"evitado","evitados")}`:""}`,dotSVG(I,20,{pitch:11,r:3.8,scale:1}));
