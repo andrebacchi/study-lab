@@ -1,5 +1,5 @@
 /* ===================== navegação e início ===================== */
-const GRP_L={Reconhecer:"Reconhecer",Observacionais:"Observacionais",Experimentais:"Experimentais"};
+const GRP_L={Reconhecer:"Reconhecer",Observacionais:"Observacionais",Experimentais:"Experimentais",Resultados:"Resultados"};
 function renderNav(){const L=LABS.find(l=>l.id===cur);document.querySelectorAll(".blk").forEach(b=>b.classList.toggle("on",b.dataset.grp===L.grp));
   $("subs").innerHTML=LABS.filter(l=>l.grp===L.grp).map((l,i)=>`<button class="sb ${l.id===cur?"on":""}" data-lab="${l.id}"><i>${i+1}</i>${l.name}</button>`).join("");
   const i=LABS.indexOf(L),p=LABS[i-1],n=LABS[i+1];
@@ -10,10 +10,10 @@ $("subs").addEventListener("click",e=>{const b=e.target.closest("[data-lab]");if
 $("labFoot").addEventListener("click",e=>{const b=e.target.closest("[data-lab]");if(b)navGo(b.dataset.lab);});
 $("blocks").addEventListener("click",e=>{const b=e.target.closest("[data-grp]");if(!b)return;const L=LABS.find(l=>l.id===cur);if(L.grp===b.dataset.grp)return;navGo(LABS.find(l=>l.grp===b.dataset.grp).id);});
 document.querySelectorAll(".more-btn").forEach(b=>b.insertAdjacentHTML("afterbegin",`<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8" cy="8" r="6.3"/><path d="M8 7.2v4M8 4.9v.1" stroke-linecap="round"/></svg>`));
-document.addEventListener("click",e=>{const b=e.target.closest("[data-learn]");if(b){const L=LEARN[b.dataset.learn];if(L)openSheet(L[0],L[1]);}});
+document.addEventListener("click",e=>{const g=e.target.closest("[data-go-lab]");if(g){navGo(g.dataset.goLab);return;}const b=e.target.closest("[data-learn]");if(b){const L=LEARN[b.dataset.learn];if(L)openSheet(L[0],L[1]);}});
 $("howBtn").onclick=()=>openSheet("Como usar o STUDY LAB",`<p>O STUDY LAB é um laboratório para entender os tipos de estudos epidemiológicos mexendo neles. No topo, escolha o bloco e depois a tela. No fim de cada tela há atalhos para a anterior e a próxima.</p>
-<h4>Como ler as pessoas</h4><ul><li><b>A cor</b> mostra a exposição: laranja para expostos (ou tratados), azul para não expostos (ou controles).</li><li><b>Bolinha cheia</b> é quem teve o desfecho; <b>vazada</b>, quem não teve.</li><li><b>Cinza</b> é o que o estudo ainda não mediu.</li><li><b>Quadrado</b>, quando aparece, é um paciente grave.</li></ul>
-<h4>As telas</h4><p><b>Reconhecer:</b> ${LABS.filter(l=>l.grp==="Reconhecer").map(l=>l.name).join(", ")}.</p><p><b>Observacionais:</b> ${LABS.filter(l=>l.grp==="Observacionais").map(l=>l.name).join(", ")}.</p><p><b>Experimentais:</b> ${LABS.filter(l=>l.grp==="Experimentais").map(l=>l.name).join(", ")}.</p>
+<h4>Como ler as pessoas</h4><ul><li><b>A cor</b> mostra a exposição: laranja para expostos (ou tratados), azul para não expostos (ou controles).</li><li><b>Bolinha cheia</b> é quem teve o desfecho; <b>vazada</b>, quem não teve.</li><li><b>Cinza</b> é o que o estudo ainda não mediu.</li><li><b>Quadrado</b>, quando aparece, é um paciente grave.</li><li><b>Bolinha de cor clara</b> é um evento que foi evitado ou que ocorreria de qualquer modo, conforme a legenda de cada tela.</li></ul>
+<h4>As telas</h4><p><b>Reconhecer:</b> ${LABS.filter(l=>l.grp==="Reconhecer").map(l=>l.name).join(", ")}.</p><p><b>Observacionais:</b> ${LABS.filter(l=>l.grp==="Observacionais").map(l=>l.name).join(", ")}.</p><p><b>Experimentais:</b> ${LABS.filter(l=>l.grp==="Experimentais").map(l=>l.name).join(", ")}.</p><p><b>Resultados:</b> ${LABS.filter(l=>l.grp==="Resultados").map(l=>l.name).join(", ")}.</p>
 <h4>Ligação com o 2×2 LAB</h4><p>Na Linha do tempo, cada desenho termina em uma tabela 2×2. O botão “Abrir esta tabela no 2×2 LAB” leva os mesmos números para lá, onde dá para explorar a tabela a fundo.</p>
 <h4>Sugestão para aula</h4><ol><li>Antes de mexer em um controle, peça para a turma prever o que vai acontecer.</li><li>Mostre no laboratório.</li><li>Discuta a diferença entre a previsão e o resultado.</li></ol>
 <p class="src">As populações são simuladas e os exemplos são fictícios. Cada painel tem um “Saiba mais” com o conteúdo das aulas.</p>`);

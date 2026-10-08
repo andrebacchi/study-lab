@@ -42,7 +42,7 @@ const rat=x=>!isFinite(x)?(x>0?"∞":"—"):fmt(x,2);
 
 /* grade de pessoas em SVG. Cada pessoa: {e:0|1|null, d:0|1|null, sq, off, lost, mis, nad} */
 function dotSVG(people,cols,o={}){const p=o.pitch||13,r=o.r||4.4,n=people.length,rows=Math.max(1,Math.ceil(n/cols)),W=cols*p,H=rows*p;let s="";
-  people.forEach((q,i)=>{const cx=(i%cols)*p+p/2,cy=Math.floor(i/cols)*p+p/2,cl=`p e${q.e==null?"u":q.e} d${q.d==null?"u":q.d}${q.off?" off":""}${q.lost?" lost":""}${q.mis?" mis":""}${q.nad?" nad":""}`;
+  people.forEach((q,i)=>{const cx=(i%cols)*p+p/2,cy=Math.floor(i/cols)*p+p/2,cl=`p e${q.e==null?"u":q.e} d${q.d==null?"u":q.d}${q.off?" off":""}${q.lost?" lost":""}${q.mis?" mis":""}${q.nad?" nad":""}${q.cl?" "+q.cl:""}`;
     s+=q.sq?`<rect class="${cl}" x="${cx-r+.3}" y="${cy-r+.3}" width="${2*r-.6}" height="${2*r-.6}" rx="1.2"/>`:`<circle class="${cl}" cx="${cx}" cy="${cy}" r="${r}"/>`;
     if(q.lost)s+=`<path class="xm" d="M${cx-2.6} ${cy-2.6}l5.2 5.2M${cx+2.6} ${cy-2.6}l-5.2 5.2"/>`;});
   return `<svg class="ppl" viewBox="0 0 ${W} ${H}" width="${Math.round(W*(o.scale||1.15))}" style="max-width:100%" aria-hidden="true">${s}</svg>`;}
@@ -65,3 +65,13 @@ function logAxis(el,marks,o={}){const H=o.h||(40+marks.length*26),W=box(el,H),L=
     s+=m.dia?`<rect x="${x-6}" y="${y-6}" width="12" height="12" transform="rotate(45 ${x} ${y})" fill="${m.c}"/>`:`<circle cx="${x}" cy="${y}" r="6.5" fill="${m.c}"/>`;
     s+=`<text x="${right?x+12:x-12}" y="${y+4}" text-anchor="${right?"start":"end"}" class="lbl" style="font-size:12.5px;fill:${m.c}">${m.t}</text>`;});
   const tk=(o.ticks||[0.25,0.5,1,2,4,8]).filter(t=>t>=lo&&t<=hi);s+=xAxis(X,tk,yA,numTxt,L,W-Rm);el.innerHTML=s;}
+/* jogo de classificar: um item por vez, botões com as categorias. items: [texto, categoria certa, comentário]; cats: [chave, rótulo]; S guarda o andamento */
+function sorter(el,S,items,cats){
+  if(!S.order){S.order=shuffle(items.map((_,i)=>i),rng(Date.now()%1e9));S.i=0;S.ans=null;S.ok=0;S.done=0;}
+  const n=items.length;
+  if(S.i>=n)el.innerHTML=`<p class="q" style="font-size:19px">Você acertou ${S.ok} de ${n}.</p><button class="btn small primary" data-sr="again">Jogar de novo</button>`;
+  else{const it=items[S.order[S.i]],a=S.ans;
+    el.innerHTML=`<div class="row" style="justify-content:space-between"><span class="eyebrow">${S.i+1} de ${n}</span><span class="score">${S.done?`${S.ok} de ${S.done} certas`:""}</span></div><p class="vig" style="margin:8px 0 0">${it[0]}</p><div class="quizopts">${cats.map(c=>`<button class="opt ${a==null?"":c[0]===it[1]?"right":c[0]===a?"wrong":""}" data-sr="${c[0]}" ${a==null?"":"disabled"}>${c[1]}</button>`).join("")}</div>${a!=null?`<div class="fb"><b class="${a===it[1]?"ok":"no"}">${a===it[1]?"Isso mesmo.":"Não é esse."}</b> ${it[2]}</div><div class="row" style="margin-top:10px"><button class="btn small primary" data-sr="next">${S.i===n-1?"Ver resultado":"Próximo ›"}</button></div>`:""}`;}
+  el.onclick=e=>{const b=e.target.closest("[data-sr]");if(!b)return;const k=b.dataset.sr;if(k==="again")S.order=null;else if(k==="next"){S.i++;S.ans=null;}else if(S.ans==null){S.ans=k;S.done++;if(k===items[S.order[S.i]][1])S.ok++;}else return;sorter(el,S,items,cats);};}
+/* barras empilhadas horizontais: rows = [rótulo, [[valor, cor], ...]] */
+const pairBar=(v,c)=>`<div class="bar"><i style="width:${clamp(has(v)?v*100:0,0,100)}%;background:${c}"></i></div>`;

@@ -1,18 +1,15 @@
 /* ===================== SORTEIO: quem decide a exposição? ===================== */
 /* 40% dos pacientes são graves (risco do desfecho 50%); os demais, leves (risco 10%). O tratamento não muda nada ou corta o risco pela metade. */
 const SO={n:100,mode:"vida",bias:-0.75,ef:0,seed:1,hist:[],P:[]};
-const SO_M=[["vida","A vida escolhe"],["simples","Sorteio simples"],["blocos","Sorteio em blocos"],["estrat","Sorteio estratificado"]];
+const SO_M=[["vida","A vida escolhe"],["simples","O sorteio escolhe"]];
 function soAlloc(seed){const n=SO.n,nG=Math.round(n*.4),r=rng(seed*101+n*7+3),P=[];for(let i=0;i<n;i++)P.push({g:i<nG?1:0});shuffle(P,r);
-  const blocks=list=>{for(let i=0;i<list.length;i+=4){const b=shuffle([1,1,0,0],r);list.slice(i,i+4).forEach((p,j)=>p.t=b[j]);}};
   if(SO.mode==="vida"){const pg=.5-.4*SO.bias,pl=.5+.4*SO.bias,G=P.filter(p=>p.g),Lv=P.filter(p=>!p.g);G.forEach((p,i)=>p.t=i<Math.round(G.length*pg)?1:0);Lv.forEach((p,i)=>p.t=i<Math.round(Lv.length*pl)?1:0);}
-  else if(SO.mode==="simples")P.forEach(p=>p.t=r()<.5?1:0);
-  else if(SO.mode==="blocos")blocks(P);
-  else{blocks(P.filter(p=>p.g));blocks(P.filter(p=>!p.g));}
+  else P.forEach(p=>p.t=r()<.5?1:0);
   const rrT=SO.ef?.5:1;[[1,1],[1,0],[0,1],[0,0]].forEach(([t,g])=>{const c=P.filter(p=>p.t===t&&p.g===g),k=Math.round(c.length*(g?.5:.1)*(t?rrT:1));c.forEach((p,i)=>p.d=i<k?1:0);});
   return P;}
 function soStats(P){const o={};[1,0].forEach(t=>{const c=P.filter(p=>p.t===t);o[t]={n:c.length,g:div(c.filter(p=>p.g).length,c.length),r:div(c.filter(p=>p.d).length,c.length),ev:c.filter(p=>p.d).length};});o.rr=div(o[1].r,o[0].r);o.dg=(o[1].g-o[0].g)*100;return o;}
 function soDraw(k){for(let i=0;i<k;i++){SO.seed++;SO.P=soAlloc(SO.seed);if(SO.mode!=="vida"){const s=soStats(SO.P);if(has(s.dg))SO.hist.push(s.dg);}}}
-LAB("sorteio","Experimentais","Sorteio",`
+LAB("sorteio","Experimentais","Por que sortear",`
 <div class="intro"><span class="eyebrow">Experimentais · randomização</span><h2>Na coorte, quem escolhe a exposição é a vida. No ensaio, é o sorteio</h2><p>Coortes e ensaios clínicos são longitudinais e medem incidência. A diferença está em quem decide quem recebe o tratamento, e é ela que permite concluir sobre causa.</p></div>
 <div class="grid"><div class="card"><div class="card-h"><h3>Os grupos eram comparáveis antes do tratamento?</h3><button class="more-btn" data-learn="sorteio">Saiba mais</button></div>
  <p class="lede">Entre os pacientes, 40% são graves e têm risco bem maior do desfecho, com ou sem tratamento. Veja em que grupo eles vão parar.</p>
@@ -20,7 +17,7 @@ LAB("sorteio","Experimentais","Sorteio",`
  <div class="cols2" style="margin-top:12px">
   <div class="stack">
    <div id="soBW"><div class="range"><label for="soB">Quem recebe o tratamento?</label><output id="soBo"></output><input type="range" id="soB" min="-100" max="100" step="5" value="-75"></div><p class="mini" style="margin:2px 0 0;display:flex;justify-content:space-between;gap:12px"><span>‹ os mais graves</span><span>os mais saudáveis ›</span></p></div>
-   <div class="row" id="soRW"><button class="btn small primary" id="so1">Sortear de novo</button><button class="btn small" id="so50">Sortear 50 vezes</button></div>
+   <div class="row" id="soRW"><button class="btn small primary" id="so1">Sortear de novo</button><button class="btn small" id="so50">Sortear 50 vezes</button><button class="btn small" data-go-lab="rand">As formas de sortear ›</button></div>
    <div class="range"><label for="soN">Participantes</label><output id="soNo"></output><input type="range" id="soN" min="20" max="200" step="20" value="100"></div>
    <div><div class="sub">Efeito verdadeiro do tratamento</div><div class="chips" id="soE"></div></div>
   </div>
@@ -53,6 +50,4 @@ function renderSO(){const P=SO.P,S=soStats(P),life=SO.mode==="vida",rrT=SO.ef?.5
   $("soTxt").innerHTML=life?(Math.abs(SO.bias)<.2?"Quando a gravidade não influencia quem é tratado, os grupos ficam parecidos. Na vida real isso é raro: o prognóstico costuma decidir a exposição."
     :SO.bias<0?`Os mais graves recebem mais tratamento: ${pct(S[1].g,0)} dos tratados são graves, contra ${pct(S[0].g,0)} dos não tratados. O tratamento parece ${S.rr>1?"aumentar o risco":"pior do que é"} (RR observado ${rat(S.rr)}, verdadeiro ${fmt(rrT,2)}). É o <b>confundimento por indicação</b>.`
     :`Quem adere ao tratamento já era mais saudável: só ${pct(S[1].g,0)} dos tratados são graves, contra ${pct(S[0].g,0)} dos não tratados. O tratamento parece proteger mais do que protege (RR observado ${rat(S.rr)}, verdadeiro ${fmt(rrT,2)}). É o <b>efeito do usuário saudável</b>.`)
-   :SO.mode==="simples"?`Sorteio simples é como jogar uma moeda: imprevisível, mas pode desbalancear estudos pequenos. Neste sorteio, a diferença de graves foi de ${fmt(Math.abs(dg),0)} pontos percentuais. ${SO.hist.length>=20?`Em ${SO.hist.length} sorteios, a diferença média foi de ${fmt(m,1)}: o sorteio equilibra <b>em média</b>, e melhor quanto maior o estudo.`:"Sorteie várias vezes e diminua o número de participantes para ver."}`
-   :SO.mode==="blocos"?`O sorteio em blocos (aqui, de 4) garante grupos do mesmo tamanho ao longo do recrutamento. A gravidade continua por conta do acaso: neste sorteio, a diferença foi de ${fmt(Math.abs(dg),0)} pontos percentuais.`
-   :"O sorteio estratificado faz um sorteio separado para graves e para leves. A gravidade fica igual nos dois grupos em todos os sorteios, e o RR observado reflete o efeito do tratamento.";}
+   :`O sorteio não conhece o prognóstico de ninguém. Neste sorteio, a diferença de graves foi de ${fmt(Math.abs(dg),0)} pontos percentuais. ${SO.hist.length>=20?`Em ${SO.hist.length} sorteios, a diferença média foi de ${fmt(m,1)}: o sorteio equilibra <b>em média</b>, inclusive o que ninguém mediu, e melhor quanto maior o estudo.`:"Sorteie várias vezes e diminua o número de participantes para ver."} Há formas de sortear que garantem mais equilíbrio: veja em Randomização.`;}

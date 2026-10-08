@@ -1,6 +1,6 @@
 /* ===================== COORTE ===================== */
 /* 100 expostos (32 adoecerão em 10 anos) e 100 não expostos (16 adoecerão): RR verdadeiro = 2,0 */
-const CO={T:10,L:0,mode:"acaso",P:[],timer:null,h:20};
+const CO={T:10,L:0,mode:"acaso",P:[],timer:null,h:20,i0:4,rr:5,pe:30};
 function coWorld(){const r=rng(52);CO.P=[];[[1,32],[0,16]].forEach(([e,nc])=>{const a=[];for(let i=0;i<100;i++)a.push({e,ev:null,lu:r(),lt:r()});shuffle(a.slice(),r).slice(0,nc).forEach(p=>p.ev=0.4+r()*9.6);CO.P.push(...a);});}
 /* marca quem se perde: ao acaso (na mesma proporção entre futuros casos e os demais) ou, entre os expostos, metade das perdas é de quem iria adoecer */
 function coLoss(){[1,0].forEach(e=>{const g=CO.P.filter(p=>p.e===e),cs=g.filter(p=>p.ev!=null).sort((x,y)=>x.lu-y.lu),nc=g.filter(p=>p.ev==null).sort((x,y)=>x.lu-y.lu),n=Math.round(100*CO.L);
@@ -20,6 +20,15 @@ LAB("coorte","Observacionais","Coorte",`
   <div class="cols2"><div class="range"><label for="coL">Perdas de seguimento</label><output id="coLo"></output><input type="range" id="coL" min="0" max="40" step="5" value="0"></div>
    <div><div class="seg" id="coM"><button data-v="acaso">Perdas ao acaso</button><button data-v="dif">Expostos que iriam adoecer saem mais</button></div></div></div>
   <div class="insight" id="coTxt"></div></div>
+ <div class="card wide"><div class="card-h"><h3>Risco atribuível: nos expostos e na população</h3><button class="more-btn" data-learn="ra">Saiba mais</button></div>
+  <p class="lede">O risco relativo mede a força da associação. O risco atribuível mede quantos casos se devem à exposição: entre os expostos (RA) e na população inteira (RAP). Uma população de 400 pessoas.</p>
+  <div class="cols2"><div class="stack">
+   <div class="range"><label for="raI">Incidência nos não expostos</label><output id="raIo"></output><input type="range" id="raI" min="1" max="20" step="1" value="4"></div>
+   <div class="range"><label for="raR">Risco relativo</label><output id="raRo"></output><input type="range" id="raR" min="1" max="8" step="0.5" value="5"></div>
+   <div class="range"><label for="raP">Expostos na população</label><output id="raPo"></output><input type="range" id="raP" min="5" max="90" step="5" value="30"></div>
+   <div class="tiles" id="raT"></div>
+  </div><div><div id="raG"></div><div class="key" id="raK"></div><div class="f" id="raF"></div></div></div>
+  <div class="insight" id="raTxt"></div></div>
  <div class="card wide"><div class="card-h"><h3>Prospectiva, retrospectiva ou ambidirecional?</h3><button class="more-btn" data-learn="prosp">Saiba mais</button></div>
   <p class="lede">O desenho é o mesmo: da exposição para o desfecho. O que muda é onde está o “hoje” em relação ao seguimento. Arraste e veja.</p>
   <div class="seg" id="prSeg"><button data-v="20">Prospectiva</button><button data-v="50">Ambidirecional</button><button data-v="80">Retrospectiva</button></div>
@@ -31,7 +40,18 @@ LAB("coorte","Observacionais","Coorte",`
   segBind($("coM"),CO.mode,v=>{CO.mode=v;if(!CO.L){CO.L=.2;$("coL").value=20;}renderCO();});
   $("coPlay").onclick=()=>{if(CO.timer){coStop();return;}if(CO.T>=10)CO.T=0;$("coPlay").textContent="❚❚ Pausar";CO.timer=setInterval(()=>{CO.T=Math.min(10,+(CO.T+.1).toFixed(1));$("coT").value=CO.T;renderCO();if(CO.T>=10)coStop();},70);};
   segBind($("prSeg"),"20",v=>{CO.h=+v;$("prH").value=v;renderPR();});$("prH").oninput=e=>{CO.h=+e.target.value;renderPR();};
-},()=>{renderCO();renderPR();});
+  [["raI","i0"],["raR","rr"],["raP","pe"]].forEach(([id,k])=>$(id).oninput=e=>{CO[k]=+e.target.value;renderRA();});
+},()=>{renderCO();renderRA();renderPR();});
+function renderRA(){if(CO.i0*CO.rr>90){CO.rr=Math.floor(90/CO.i0*2)/2;$("raR").value=CO.rr;}
+  const i0=CO.i0/100,i1=i0*CO.rr,pe=CO.pe/100,E=Math.round(400*pe),U=400-E,cE=Math.round(E*i1),bg=Math.min(cE,Math.round(E*i0)),at=cE-bg,cU=Math.round(U*i0),ra=i1-i0,ip=pe*i1+(1-pe)*i0,rap=ip-i0,fap=div(rap,ip),P=[];
+  $("raIo").textContent=CO.i0+" por 100";$("raRo").textContent=fmt(CO.rr,1);$("raPo").textContent=CO.pe+"%";
+  for(let j=0;j<E;j++)P.push(j<at?{e:1,d:1}:j<cE?{e:1,d:null}:{e:1,d:0});for(let j=0;j<U;j++)P.push({e:0,d:j<cU?1:0});
+  $("raG").innerHTML=dotSVG(P,25,{pitch:10,r:3.5,scale:1.1});
+  $("raK").innerHTML=keyDot({e:1,d:1},"caso atribuível à exposição")+keyDot({e:1,d:null},"caso em exposto que ocorreria de qualquer modo")+keyDot({e:0,d:1},"caso em não exposto")+keyDot({e:1,d:0},"exposto sem a doença")+keyDot({e:0,d:0},"não exposto sem a doença");
+  $("raT").innerHTML=tile("RR",fmt(CO.rr,1),`${fmt(i1*100,1)} ÷ ${fmt(i0*100,1)} por 100`)+tile("RA",fmt(ra*100,1),"casos em excesso por 100 expostos","alt")+tile("RAP",fmt(rap*100,1),"casos em excesso por 100 habitantes","acc")+tile("Fração atribuível na população",has(fap)?pct(fap,0):"—","dos casos da população");
+  $("raF").innerHTML=`RA = ${fmt(i1*100,1)} − ${fmt(i0*100,1)} = <b>${fmt(ra*100,1)}</b> por 100 expostos<br>RAP = ${fmt(ip*100,1)} − ${fmt(i0*100,1)} = <b>${fmt(rap*100,1)}</b> por 100 habitantes`;
+  $("raTxt").innerHTML=CO.rr===1?"Com RR igual a 1, expostos e não expostos adoecem na mesma proporção: nenhum caso é atribuível à exposição.":`O RA olha só para os expostos: dos ${fmt(i1*100,1)} casos por 100 expostos, ${fmt(ra*100,1)} se devem à exposição e ${fmt(i0*100,1)} ocorreriam mesmo sem ela. O RAP olha para toda a população: ${fmt(rap*100,1)} casos por 100 habitantes, ou ${pct(fap,0)} de todos os casos, seriam evitados se ninguém se expusesse. Mude a proporção de expostos: o RR e o RA ficam iguais, e o RAP muda. Uma exposição de risco modesto, mas muito comum, pode pesar mais na população do que uma exposição forte e rara.`;}
+
 function coStop(){clearInterval(CO.timer);CO.timer=null;const b=$("coPlay");if(b)b.textContent="▶ Acompanhar";}
 function renderCO(){coLoss();const T=CO.T,A=coAt(T),rr=div(A[1].inc,A[0].inc),rrT=div(A[1].incT,A[0].incT);
   $("coTo").textContent=fmt(T,1)+" anos";$("coLo").textContent=pct(CO.L,0);

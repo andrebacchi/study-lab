@@ -456,6 +456,83 @@ button.lnk{font:inherit;cursor:pointer;text-decoration:underline}
 #tpTxt{grid-area:txt}.tps{grid-area:stage;min-width:0}#tpNav{grid-area:nav;align-self:start}#tpRes{grid-area:res;min-width:0}
 @media (min-width:1000px){.tpw{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);grid-template-areas:"stage txt" "stage nav" "stage res";grid-template-rows:auto auto 1fr;column-gap:36px}}
 .seg{border-radius:20px}
+/* ---- versão 0.2 ---- */
+.blocks{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media (max-width:760px){.blocks{grid-template-columns:1fr 1fr}}
+/* sequência de alocações */
+.seqs{display:flex;flex-wrap:wrap;gap:4px;min-height:24px;align-items:center}
+.seqs i{width:22px;height:22px;border-radius:50%;font-style:normal;font-size:10.5px;font-weight:600;display:grid;place-items:center;border:1.8px solid var(--nex);color:var(--nex);background:var(--surface);flex:none}
+.seqs i.a1{border-color:var(--exp);background:var(--exp);color:var(--surface)}
+.seqs i.sq{border-radius:5px}
+.seqs i.brk{margin-left:9px}
+.seqs i.new{outline:2px solid var(--fg);outline-offset:1.5px}
+.seqs .q{width:22px;height:22px;border-radius:50%;border:1.8px dashed var(--tick);display:grid;place-items:center;font-size:11px;color:var(--muted);flex:none}
+/* equilíbrio entre os grupos */
+.bal{display:grid;gap:10px}
+.bal .r{display:grid;grid-template-columns:minmax(84px,130px) minmax(0,1fr) auto;gap:4px 10px;align-items:center;font-size:13px}
+.bal .pair{display:grid;gap:3px}
+.bal .bar{height:9px;border-radius:3px;background:var(--sunk);overflow:hidden}
+.bal .bar i{display:block;height:100%;border-radius:3px;transition:width .25s}
+.bal b{font-variant-numeric:tabular-nums;font-size:12.5px;text-align:right;line-height:1.3}
+.bal b small{display:block;font-weight:400;color:var(--muted);font-size:11.5px}
+/* quem está mascarado */
+.who{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+.wh{border:1.5px solid var(--line);border-radius:12px;background:var(--surface);padding:10px 12px;text-align:left;display:grid;gap:3px;min-height:112px;align-content:start}
+.wh svg{width:26px;height:26px}
+.wh b{font-size:14px;line-height:1.2}
+.wh span{font-size:12px;color:var(--muted);line-height:1.3}
+.wh em{font-style:normal;font-size:11px;letter-spacing:.06em;text-transform:uppercase;font-weight:600;color:var(--bad)}
+.wh.on{border-color:var(--accent);background:var(--accent-soft)}
+.wh.on em{color:var(--accent)}
+table.mx{border-collapse:separate;border-spacing:4px;font-size:13px;margin:-4px}
+table.mx th{font-size:11.5px;font-weight:600;color:var(--muted);padding:4px 8px;text-align:center}
+table.mx th.rh{text-align:left}
+table.mx td{background:var(--sunk);border-radius:8px;padding:9px 12px;text-align:center;font-weight:600;min-width:88px;color:var(--muted)}
+table.mx td.now{outline:2.5px solid var(--fg);outline-offset:-2.5px;color:var(--fg)}
+table.mx td.now.bad{background:var(--bad-soft);color:var(--bad)}table.mx td.now.mid{background:var(--warn-soft);color:var(--warn)}table.mx td.now.good{background:var(--good-soft);color:var(--good)}
+.axis2{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:0 12px;align-items:start;font-size:13px;margin-bottom:14px}
+.axis2 .mk{display:grid;justify-items:center;gap:4px;font-size:11px;letter-spacing:.09em;text-transform:uppercase;font-weight:600;color:var(--exp)}
+.axis2 .mk i{width:14px;height:14px;border-radius:50%;background:var(--exp);display:block}
+.axis2 b{display:block;font-family:var(--f-display);font-size:16px}
+.axis2 p{margin:2px 0 0;color:var(--muted);line-height:1.35}
+.axis2>div:first-child{text-align:right}
+/* casos históricos */
+.cases{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.case{border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:grid;gap:6px;align-content:start}
+.case h4{margin:0;font-family:var(--f-display);font-size:18px}
+.case p{margin:0;font-size:13px;color:var(--muted)}
+.case .ln{font-size:13.5px;display:flex;gap:8px;align-items:baseline}
+.case .ln b{flex:none;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);min-width:74px}
+.case .good{color:var(--good);font-weight:600}.case .badt{color:var(--bad);font-weight:600}
+.verd{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.vd{border-radius:10px;padding:8px 12px;font-size:13.5px;background:var(--sunk);display:grid;gap:1px;flex:1 1 150px}
+.vd b{font-size:14px}.vd span{font-size:12px;color:var(--muted)}
+.vd.yes{background:var(--good-soft)}.vd.yes b{color:var(--good)}
+.vd.no b{color:var(--muted)}
+table.imp{border-collapse:separate;border-spacing:3px;font-size:12.5px;margin:-3px}
+table.imp th{font-weight:600;color:var(--muted);font-size:11px;padding:3px 8px;text-align:center}
+table.imp td{background:var(--sunk);border-radius:6px;padding:6px 10px;text-align:center;color:var(--muted)}
+table.imp tr.now td{background:var(--accent-soft);color:var(--fg);font-weight:600}
+.phs{display:grid;gap:8px}
+.ph{display:grid;grid-template-columns:minmax(64px,auto) minmax(0,1fr) auto;gap:4px 10px;align-items:center;font-size:13.5px}
+.ph b small{display:block;font-weight:400;color:var(--muted);font-size:11.5px}
+.ph .bar{height:16px;border-radius:4px;background:var(--sunk);overflow:hidden}
+.ph .bar i{display:block;height:100%;border-radius:4px;background:var(--accent);transition:width .25s}
+.ph>span{font-variant-numeric:tabular-nums;font-weight:600;min-width:46px;text-align:right}
+/* bolinhas cheias por tratamento (desenhos de ensaio) */
+.p.fa{fill:var(--exp);stroke:var(--exp)}.p.fb{fill:var(--nex);stroke:var(--nex)}.p.fab{fill:var(--hi);stroke:var(--hi)}.p.f0{fill:var(--dot);stroke:var(--dot)}
+.dsg{display:grid;gap:10px}
+.xo{display:grid;grid-template-columns:auto minmax(0,1fr) auto minmax(0,1fr);gap:8px 10px;align-items:center;font-size:12.5px}
+.xo .h{font-size:11px;letter-spacing:.07em;text-transform:uppercase;font-weight:600;color:var(--muted)}
+.xo .ps{font-size:11px;color:var(--muted);writing-mode:vertical-rl;transform:rotate(180deg);justify-self:center}
+.fx{display:grid;grid-template-columns:auto 1fr 1fr;gap:6px;font-size:12.5px;max-width:420px}
+.fx .h{font-size:11px;letter-spacing:.07em;text-transform:uppercase;font-weight:600;color:var(--muted);align-self:center}
+.fx .c{border:1px solid var(--line);border-radius:10px;padding:8px 10px;display:grid;gap:4px}
+.fx .c b{font-size:12.5px}
+.cls{display:flex;flex-wrap:wrap;gap:8px}
+.cls .cl{border:1.5px solid var(--line);border-radius:10px;padding:6px 8px;display:grid;gap:3px;font-size:11.5px;color:var(--muted)}
+ul.facts{margin:10px 0 0;padding-left:18px;display:grid;gap:5px;font-size:14px;max-width:62ch}
+@media (max-width:620px){.axis2{grid-template-columns:minmax(0,1fr);gap:8px}.axis2>div:first-child{text-align:left}.axis2 .mk{grid-auto-flow:column;justify-content:start;align-items:center;justify-items:start;gap:8px}}
 </style>
 <div class="wrap">
 <header class="top">
@@ -466,7 +543,8 @@ button.lnk{font:inherit;cursor:pointer;text-decoration:underline}
   <div class="blocks" id="blocks">
     <button class="blk" data-grp="Reconhecer"><b>Reconhecer</b><span>Qual desenho é este e o que ele consegue responder</span></button>
     <button class="blk" data-grp="Observacionais"><b>Observacionais</b><span>Transversal, ecológico, coorte e caso-controle</span></button>
-    <button class="blk" data-grp="Experimentais"><b>Experimentais</b><span>Ensaios clínicos, quase-experimentos e revisões</span></button>
+    <button class="blk" data-grp="Experimentais"><b>Experimentais</b><span>Sortear, mascarar e controlar</span></button>
+    <button class="blk" data-grp="Resultados"><b>Resultados</b><span>Desfechos, medidas de efeito e síntese</span></button>
   </div>
   <div class="subs" id="subs"></div>
 </nav>
@@ -477,7 +555,7 @@ button.lnk{font:inherit;cursor:pointer;text-decoration:underline}
 </section>
 <main id="labs"></main>
 <div class="labfoot" id="labFoot"></div>
-<footer class="sitefoot"><p><b>STUDY LAB</b> · protótipo 0.1 · outubro de 2026</p><p>Ferramenta didática. As populações são simuladas e os exemplos são fictícios.</p><p>© André Demambre Bacchi</p></footer>
+<footer class="sitefoot"><p><b>STUDY LAB</b> · versão piloto 0.2 · outubro de 2026</p><p>Ferramenta didática. As populações são simuladas e os exemplos são fictícios.</p><p>© André Demambre Bacchi</p></footer>
 </div>
 <div id="sheetRoot"></div>
 <script>
@@ -525,7 +603,7 @@ const rat=x=>!isFinite(x)?(x>0?"∞":"—"):fmt(x,2);
 
 /* grade de pessoas em SVG. Cada pessoa: {e:0|1|null, d:0|1|null, sq, off, lost, mis, nad} */
 function dotSVG(people,cols,o={}){const p=o.pitch||13,r=o.r||4.4,n=people.length,rows=Math.max(1,Math.ceil(n/cols)),W=cols*p,H=rows*p;let s="";
-  people.forEach((q,i)=>{const cx=(i%cols)*p+p/2,cy=Math.floor(i/cols)*p+p/2,cl=`p e${q.e==null?"u":q.e} d${q.d==null?"u":q.d}${q.off?" off":""}${q.lost?" lost":""}${q.mis?" mis":""}${q.nad?" nad":""}`;
+  people.forEach((q,i)=>{const cx=(i%cols)*p+p/2,cy=Math.floor(i/cols)*p+p/2,cl=`p e${q.e==null?"u":q.e} d${q.d==null?"u":q.d}${q.off?" off":""}${q.lost?" lost":""}${q.mis?" mis":""}${q.nad?" nad":""}${q.cl?" "+q.cl:""}`;
     s+=q.sq?`<rect class="${cl}" x="${cx-r+.3}" y="${cy-r+.3}" width="${2*r-.6}" height="${2*r-.6}" rx="1.2"/>`:`<circle class="${cl}" cx="${cx}" cy="${cy}" r="${r}"/>`;
     if(q.lost)s+=`<path class="xm" d="M${cx-2.6} ${cy-2.6}l5.2 5.2M${cx+2.6} ${cy-2.6}l-5.2 5.2"/>`;});
   return `<svg class="ppl" viewBox="0 0 ${W} ${H}" width="${Math.round(W*(o.scale||1.15))}" style="max-width:100%" aria-hidden="true">${s}</svg>`;}
@@ -548,6 +626,16 @@ function logAxis(el,marks,o={}){const H=o.h||(40+marks.length*26),W=box(el,H),L=
     s+=m.dia?`<rect x="${x-6}" y="${y-6}" width="12" height="12" transform="rotate(45 ${x} ${y})" fill="${m.c}"/>`:`<circle cx="${x}" cy="${y}" r="6.5" fill="${m.c}"/>`;
     s+=`<text x="${right?x+12:x-12}" y="${y+4}" text-anchor="${right?"start":"end"}" class="lbl" style="font-size:12.5px;fill:${m.c}">${m.t}</text>`;});
   const tk=(o.ticks||[0.25,0.5,1,2,4,8]).filter(t=>t>=lo&&t<=hi);s+=xAxis(X,tk,yA,numTxt,L,W-Rm);el.innerHTML=s;}
+/* jogo de classificar: um item por vez, botões com as categorias. items: [texto, categoria certa, comentário]; cats: [chave, rótulo]; S guarda o andamento */
+function sorter(el,S,items,cats){
+  if(!S.order){S.order=shuffle(items.map((_,i)=>i),rng(Date.now()%1e9));S.i=0;S.ans=null;S.ok=0;S.done=0;}
+  const n=items.length;
+  if(S.i>=n)el.innerHTML=`<p class="q" style="font-size:19px">Você acertou ${S.ok} de ${n}.</p><button class="btn small primary" data-sr="again">Jogar de novo</button>`;
+  else{const it=items[S.order[S.i]],a=S.ans;
+    el.innerHTML=`<div class="row" style="justify-content:space-between"><span class="eyebrow">${S.i+1} de ${n}</span><span class="score">${S.done?`${S.ok} de ${S.done} certas`:""}</span></div><p class="vig" style="margin:8px 0 0">${it[0]}</p><div class="quizopts">${cats.map(c=>`<button class="opt ${a==null?"":c[0]===it[1]?"right":c[0]===a?"wrong":""}" data-sr="${c[0]}" ${a==null?"":"disabled"}>${c[1]}</button>`).join("")}</div>${a!=null?`<div class="fb"><b class="${a===it[1]?"ok":"no"}">${a===it[1]?"Isso mesmo.":"Não é esse."}</b> ${it[2]}</div><div class="row" style="margin-top:10px"><button class="btn small primary" data-sr="next">${S.i===n-1?"Ver resultado":"Próximo ›"}</button></div>`:""}`;}
+  el.onclick=e=>{const b=e.target.closest("[data-sr]");if(!b)return;const k=b.dataset.sr;if(k==="again")S.order=null;else if(k==="next"){S.i++;S.ans=null;}else if(S.ans==null){S.ans=k;S.done++;if(k===items[S.order[S.i]][1])S.ok++;}else return;sorter(el,S,items,cats);};}
+/* barras empilhadas horizontais: rows = [rótulo, [[valor, cor], ...]] */
+const pairBar=(v,c)=>`<div class="bar"><i style="width:${clamp(has(v)?v*100:0,0,100)}%;background:${c}"></i></div>`;
 
 /* ===================== TRÊS PERGUNTAS ===================== */
 /* Quadro-resumo dos desenhos (Aula 10, resumo comparativo; quase-experimentais da Aula 12) */
@@ -644,7 +732,7 @@ function tpSteps(){const P=TP.P,all=tpIds(()=>true),G=(label,sub,ids)=>({label,s
      {tab:"Tabela 2×2",title:"Conta os casos novos de cada grupo",text:tr?"Com a incidência nos dois braços, compara-se o risco de quem recebeu a intervenção com o do controle.":"Com a incidência em cada grupo, calcula-se o risco relativo.",
       rows:[[G(L1+", com desfecho","a = "+v.a,tpIds(p=>e(p)&&d(p))),G(L1+", sem desfecho","b = "+v.b,tpIds(p=>e(p)&&!d(p)))],[G(L0+", com desfecho","c = "+v.c,tpIds(p=>!e(p)&&d(p))),G(L0+", sem desfecho","d = "+v.d,tpIds(p=>!e(p)&&!d(p)))]],look:p=>({e:e(p),d:d(p)}),
       result:()=>{const rar=m.r0-m.r1;return `<div class="tiles">${tile(tr?"Risco na intervenção":"Incidência nos expostos",pct(m.r1,1),`${v.a} de ${v.a+v.b}`)}${tile(tr?"Risco no controle":"Incidência nos não expostos",pct(m.r0,1),`${v.c} de ${v.c+v.d}`)}${tile("Risco relativo (RR)",rat(m.rr),ciTxt(ciRR(v.a,v.b,v.c,v.d)),"acc")}${tr?tile("Redução absoluta (RAR)",fmt(rar*100,1)+" p.p.","risco no controle − na intervenção")+tile("NNT",rar>0?fmt(Math.ceil(1/rar-1e-9),0):"—",rar>0?"tratar para evitar 1 desfecho":"sem redução de risco"):tile("Risco atribuível (RA)",fmt(m.rd*100,1)+" p.p.","diferença entre as incidências")}</div>
-       <div class="insight">${tr?"Mesma direção da coorte: da exposição para o desfecho. A diferença é quem definiu a exposição.":"A coorte parte da exposição e chega ao desfecho. Por isso mede incidência e calcula o RR diretamente."}</div><div class="row" style="margin-top:10px">${lab22(v,tr?"ensaio":"coorte")}${deeper(tr?"sorteio":"coorte",tr?"Sorteio":"Coorte")}</div>`;}}];}
+       <div class="insight">${tr?"Mesma direção da coorte: da exposição para o desfecho. A diferença é quem definiu a exposição.":"A coorte parte da exposição e chega ao desfecho. Por isso mede incidência e calcula o RR diretamente."}</div><div class="row" style="margin-top:10px">${lab22(v,tr?"ensaio":"coorte")}${deeper(tr?"sorteio":"coorte",tr?"Por que sortear":"Coorte")}</div>`;}}];}
   if(TP.des==="cc"){const cs=tpIds(p=>p.cc==="caso"),ct=tpIds(p=>p.cc==="ctrl"),out=tpIds(p=>!p.cc),v={a:cnt(p=>p.cc==="caso"&&p.e),b:cnt(p=>p.cc==="ctrl"&&p.e),c:cnt(p=>p.cc==="caso"&&!p.e),d:cnt(p=>p.cc==="ctrl"&&!p.e)},m=t22(v.a,v.b,v.c,v.d),O=G("Fora do estudo",out.length+" pessoas",out),lk=(p,ex)=>({e:ex&&p.cc?p.e:null,d:p.d,off:!p.cc});
     return[
      {tab:"Desfecho",title:"O desfecho já aconteceu",text:"O estudo começa depois dos fatos. Na população de origem, algumas pessoas já adoeceram.",rows:[[G("População de origem",`${cs.length} pessoas com o desfecho`,all)]],look:p=>({e:null,d:p.d})},
@@ -682,7 +770,7 @@ function tpSteps(){const P=TP.P,all=tpIds(()=>true),G=(label,sub,ids)=>({label,s
    {tab:"Descrição",title:"Descreve cada caso em detalhe",text:`História, achados, tratamento, evolução. Na descrição aparece que ${k} dos 8 tinham a mesma exposição.`,rows:[[G("Casos atendidos",`${k} expostos, ${8-k} não`,S)],[O]],look:p=>p.sr?{e:p.e,d:1}:(TP.reveal?{e:p.e,d:p.d}:{e:null,d:null,off:true}),
     result:()=>`<div class="tiles">${tile("Expostos entre os casos",pct(k/8,0),`${k} de 8`,"acc")}${tile("Expostos na população",TP.reveal?"40%":"?",TP.reveal?"48 de 120":"ninguém mediu",TP.reveal?"":"muted")}</div>
      <div class="insight warn">${k} em 8 é muito? Sem grupo de comparação, não dá para saber. O relato levanta a hipótese; são os outros desenhos que a testam. Aqui não há tabela 2×2 nem medida de associação.</div>
-     <div class="row" style="margin-top:10px"><button class="btn small" id="tpRev">${TP.reveal?"Esconder a população":"Revelar a população (o estudo não vê isto)"}</button></div>`}];}
+     <div class="row" style="margin-top:10px"><button class="btn small" id="tpRev">${TP.reveal?"Esconder a população":"Revelar a população (o estudo não vê isto)"}</button><button class="btn small" data-learn="relatos">Relatos que mudaram a medicina</button></div>`}];}
 /* esquema Exposição → Desfecho: onde o estudo começa e para onde olha */
 function tpDiagram(){const el=$("tpDia"),H=92,W=box(el,H),bw=Math.min(118,(W-70)/2),bh=32,x1=W/2-bw-28,x2=W/2+28,y=8,cy=y+bh/2,d=TP.des,grp=d==="ecologico";let s="";
   const bx=(x,t,on,dash)=>`<rect x="${x}" y="${y}" width="${bw}" height="${bh}" rx="7" fill="${on?"var(--ink)":"var(--surface)"}" stroke="${on?"var(--ink)":"var(--tick)"}" stroke-width="1.5" ${dash?'stroke-dasharray="4 3"':""}/><text x="${x+bw/2}" y="${cy+4.5}" text-anchor="middle" style="font-size:12.5px;font-weight:600;fill:${on?"var(--on-ink)":"var(--muted)"}">${t}</text>`;
@@ -867,8 +955,19 @@ function renderRV(){const Wd=RVW[TV.world],el=$("rvS"),n=12,rh=20,T=18,H=T+n*rh+
 
 /* ===================== ECOLÓGICO ===================== */
 /* cinco municípios de 40 pessoas: expostos e casos de cada um. As taxas nunca mudam; o que muda é QUEM adoece dentro do município. */
-const EC={th:1,open:false,E:[4,10,16,22,28],C:[4,6,8,10,12]};
+const EC={srt:{},th:1,open:false,E:[4,10,16,22,28],C:[4,6,8,10,12]};
 function ecK(g){const c=EC.C[g],k0=c*EC.E[g]/40;return Math.round(EC.th>=0?k0+EC.th*(c-k0):k0*(1+EC.th));}
+const EC_IT=[
+ ["Taxa de mortalidade infantil de cada município","agr","Resume em um número do grupo o que aconteceu com os indivíduos (os óbitos)."],
+ ["Proporção de fumantes em cada estado","agr","É obtida a partir de dados individuais dos membros do grupo e resumida em uma proporção."],
+ ["Incidência de sífilis congênita em cada região de saúde","agr","Casos individuais somados e divididos pela população do grupo."],
+ ["Intensidade da poluição do ar em cada cidade","amb","É uma característica física do lugar. Tem um equivalente individual (a exposição de cada pessoa), que pode variar dentro do grupo."],
+ ["Nível de flúor na água de abastecimento","amb","Característica física do local de interesse."],
+ ["Temperatura média anual de cada município","amb","Característica física do ambiente do grupo."],
+ ["Tipo de sistema de saúde de cada país","glo","É um atributo do grupo como um todo e não tem análogo individual: nenhuma pessoa “tem” um sistema de saúde."],
+ ["Existência de lei que proíbe fumar em locais fechados","glo","A legislação vale para todos os membros do grupo e não existe em nível individual."],
+ ["Densidade demográfica de cada cidade","glo","Só faz sentido para o grupo: uma pessoa não tem densidade demográfica."],
+ ["PIB per capita de cada país","glo","Descreve a economia do país como um todo. É diferente da renda de cada pessoa."]];
 const RT={oa:"84",pa:"350.000",ob:"45",pb:"250.000",per:100000};
 LAB("eco","Observacionais","Ecológico",`
 <div class="intro"><span class="eyebrow">Observacionais · ecológico</span><h2>O que vale para o grupo pode não valer para as pessoas</h2><p>No estudo ecológico, a unidade de análise é o grupo. As medidas de exposição e de desfecho chegam agregadas por município, estado ou país.</p></div>
@@ -886,6 +985,9 @@ LAB("eco","Observacionais","Ecológico",`
   <div class="grps" id="ecG" style="margin-top:14px"></div>
   <div class="key" id="ecK"></div>
   <div class="insight" id="ecTxt"></div></div>
+ <div class="card wide"><div class="card-h"><h3>Que tipo de medida é esta?</h3><button class="more-btn" data-learn="falacia">Saiba mais</button></div>
+  <p class="lede">As medidas de um estudo ecológico podem ser agregadas (resumem os indivíduos), ambientais (descrevem o lugar) ou globais (só existem para o grupo).</p>
+  <div id="ecSrt" style="max-width:760px"></div></div>
  <div class="card wide"><div class="card-h"><h3>Comparar taxas de dois lugares</h3><button class="more-btn" data-learn="taxas">Saiba mais</button></div>
   <p class="lede">A comparação mais simples entre grupos é a razão de taxas. Use o exemplo ou digite os seus números.</p>
   <div class="cols2"><div class="stack">
@@ -899,7 +1001,7 @@ LAB("eco","Observacionais","Ecológico",`
   $("ecT").oninput=e=>{EC.th=+e.target.value/100;chipOn($("ecC"),[1,0,-1].indexOf(EC.th));renderEC();};$("ecO").onchange=e=>{EC.open=e.target.checked;renderEC();};
   [["rtOa","oa"],["rtPa","pa"],["rtOb","ob"],["rtPb","pb"]].forEach(([id,k])=>{$(id).value=RT[k];$(id).oninput=e=>{RT[k]=e.target.value;renderRT();};});
   segBind($("rtPer"),String(RT.per),v=>{RT.per=+v;renderRT();});
-},()=>{renderEC();renderRT();});
+},()=>{renderEC();renderRT();sorter($("ecSrt"),EC.srt,EC_IT,[["agr","Agregada"],["amb","Ambiental"],["glo","Global"]]);});
 function renderEC(){const el=$("ecS"),H=208,W=box(el,H),L=40,Rm=14,T=24,ih=H-T-34,iw=W-L-Rm,X=v=>L+v*iw,Y=v=>T+ih-v/.4*ih,nm="ABCDE";
   let s=yGrid(Y,[0,.1,.2,.3,.4],L,W-Rm,v=>fmt(v*100,0))+xAxis(X,[0,.25,.5,.75,1],T+ih,v=>pct(v,0),L,W-Rm);
   s+=`<line x1="${X(.02)}" y1="${Y(.02/3+.0667)}" x2="${X(.8)}" y2="${Y(.8/3+.0667)}" stroke="var(--alt)" stroke-width="2" stroke-dasharray="6 4"/>`;
@@ -924,7 +1026,7 @@ function renderRT(){const oa=parse(RT.oa),pa=parse(RT.pa),ob=parse(RT.ob),pb=par
 
 /* ===================== COORTE ===================== */
 /* 100 expostos (32 adoecerão em 10 anos) e 100 não expostos (16 adoecerão): RR verdadeiro = 2,0 */
-const CO={T:10,L:0,mode:"acaso",P:[],timer:null,h:20};
+const CO={T:10,L:0,mode:"acaso",P:[],timer:null,h:20,i0:4,rr:5,pe:30};
 function coWorld(){const r=rng(52);CO.P=[];[[1,32],[0,16]].forEach(([e,nc])=>{const a=[];for(let i=0;i<100;i++)a.push({e,ev:null,lu:r(),lt:r()});shuffle(a.slice(),r).slice(0,nc).forEach(p=>p.ev=0.4+r()*9.6);CO.P.push(...a);});}
 /* marca quem se perde: ao acaso (na mesma proporção entre futuros casos e os demais) ou, entre os expostos, metade das perdas é de quem iria adoecer */
 function coLoss(){[1,0].forEach(e=>{const g=CO.P.filter(p=>p.e===e),cs=g.filter(p=>p.ev!=null).sort((x,y)=>x.lu-y.lu),nc=g.filter(p=>p.ev==null).sort((x,y)=>x.lu-y.lu),n=Math.round(100*CO.L);
@@ -944,6 +1046,15 @@ LAB("coorte","Observacionais","Coorte",`
   <div class="cols2"><div class="range"><label for="coL">Perdas de seguimento</label><output id="coLo"></output><input type="range" id="coL" min="0" max="40" step="5" value="0"></div>
    <div><div class="seg" id="coM"><button data-v="acaso">Perdas ao acaso</button><button data-v="dif">Expostos que iriam adoecer saem mais</button></div></div></div>
   <div class="insight" id="coTxt"></div></div>
+ <div class="card wide"><div class="card-h"><h3>Risco atribuível: nos expostos e na população</h3><button class="more-btn" data-learn="ra">Saiba mais</button></div>
+  <p class="lede">O risco relativo mede a força da associação. O risco atribuível mede quantos casos se devem à exposição: entre os expostos (RA) e na população inteira (RAP). Uma população de 400 pessoas.</p>
+  <div class="cols2"><div class="stack">
+   <div class="range"><label for="raI">Incidência nos não expostos</label><output id="raIo"></output><input type="range" id="raI" min="1" max="20" step="1" value="4"></div>
+   <div class="range"><label for="raR">Risco relativo</label><output id="raRo"></output><input type="range" id="raR" min="1" max="8" step="0.5" value="5"></div>
+   <div class="range"><label for="raP">Expostos na população</label><output id="raPo"></output><input type="range" id="raP" min="5" max="90" step="5" value="30"></div>
+   <div class="tiles" id="raT"></div>
+  </div><div><div id="raG"></div><div class="key" id="raK"></div><div class="f" id="raF"></div></div></div>
+  <div class="insight" id="raTxt"></div></div>
  <div class="card wide"><div class="card-h"><h3>Prospectiva, retrospectiva ou ambidirecional?</h3><button class="more-btn" data-learn="prosp">Saiba mais</button></div>
   <p class="lede">O desenho é o mesmo: da exposição para o desfecho. O que muda é onde está o “hoje” em relação ao seguimento. Arraste e veja.</p>
   <div class="seg" id="prSeg"><button data-v="20">Prospectiva</button><button data-v="50">Ambidirecional</button><button data-v="80">Retrospectiva</button></div>
@@ -955,7 +1066,18 @@ LAB("coorte","Observacionais","Coorte",`
   segBind($("coM"),CO.mode,v=>{CO.mode=v;if(!CO.L){CO.L=.2;$("coL").value=20;}renderCO();});
   $("coPlay").onclick=()=>{if(CO.timer){coStop();return;}if(CO.T>=10)CO.T=0;$("coPlay").textContent="❚❚ Pausar";CO.timer=setInterval(()=>{CO.T=Math.min(10,+(CO.T+.1).toFixed(1));$("coT").value=CO.T;renderCO();if(CO.T>=10)coStop();},70);};
   segBind($("prSeg"),"20",v=>{CO.h=+v;$("prH").value=v;renderPR();});$("prH").oninput=e=>{CO.h=+e.target.value;renderPR();};
-},()=>{renderCO();renderPR();});
+  [["raI","i0"],["raR","rr"],["raP","pe"]].forEach(([id,k])=>$(id).oninput=e=>{CO[k]=+e.target.value;renderRA();});
+},()=>{renderCO();renderRA();renderPR();});
+function renderRA(){if(CO.i0*CO.rr>90){CO.rr=Math.floor(90/CO.i0*2)/2;$("raR").value=CO.rr;}
+  const i0=CO.i0/100,i1=i0*CO.rr,pe=CO.pe/100,E=Math.round(400*pe),U=400-E,cE=Math.round(E*i1),bg=Math.min(cE,Math.round(E*i0)),at=cE-bg,cU=Math.round(U*i0),ra=i1-i0,ip=pe*i1+(1-pe)*i0,rap=ip-i0,fap=div(rap,ip),P=[];
+  $("raIo").textContent=CO.i0+" por 100";$("raRo").textContent=fmt(CO.rr,1);$("raPo").textContent=CO.pe+"%";
+  for(let j=0;j<E;j++)P.push(j<at?{e:1,d:1}:j<cE?{e:1,d:null}:{e:1,d:0});for(let j=0;j<U;j++)P.push({e:0,d:j<cU?1:0});
+  $("raG").innerHTML=dotSVG(P,25,{pitch:10,r:3.5,scale:1.1});
+  $("raK").innerHTML=keyDot({e:1,d:1},"caso atribuível à exposição")+keyDot({e:1,d:null},"caso em exposto que ocorreria de qualquer modo")+keyDot({e:0,d:1},"caso em não exposto")+keyDot({e:1,d:0},"exposto sem a doença")+keyDot({e:0,d:0},"não exposto sem a doença");
+  $("raT").innerHTML=tile("RR",fmt(CO.rr,1),`${fmt(i1*100,1)} ÷ ${fmt(i0*100,1)} por 100`)+tile("RA",fmt(ra*100,1),"casos em excesso por 100 expostos","alt")+tile("RAP",fmt(rap*100,1),"casos em excesso por 100 habitantes","acc")+tile("Fração atribuível na população",has(fap)?pct(fap,0):"—","dos casos da população");
+  $("raF").innerHTML=`RA = ${fmt(i1*100,1)} − ${fmt(i0*100,1)} = <b>${fmt(ra*100,1)}</b> por 100 expostos<br>RAP = ${fmt(ip*100,1)} − ${fmt(i0*100,1)} = <b>${fmt(rap*100,1)}</b> por 100 habitantes`;
+  $("raTxt").innerHTML=CO.rr===1?"Com RR igual a 1, expostos e não expostos adoecem na mesma proporção: nenhum caso é atribuível à exposição.":`O RA olha só para os expostos: dos ${fmt(i1*100,1)} casos por 100 expostos, ${fmt(ra*100,1)} se devem à exposição e ${fmt(i0*100,1)} ocorreriam mesmo sem ela. O RAP olha para toda a população: ${fmt(rap*100,1)} casos por 100 habitantes, ou ${pct(fap,0)} de todos os casos, seriam evitados se ninguém se expusesse. Mude a proporção de expostos: o RR e o RA ficam iguais, e o RAP muda. Uma exposição de risco modesto, mas muito comum, pode pesar mais na população do que uma exposição forte e rara.`;}
+
 function coStop(){clearInterval(CO.timer);CO.timer=null;const b=$("coPlay");if(b)b.textContent="▶ Acompanhar";}
 function renderCO(){coLoss();const T=CO.T,A=coAt(T),rr=div(A[1].inc,A[0].inc),rrT=div(A[1].incT,A[0].incT);
   $("coTo").textContent=fmt(T,1)+" anos";$("coLo").textContent=pct(CO.L,0);
@@ -1059,18 +1181,15 @@ function renderSC(){const S=CC_SRC[CC.src],b=S[1],v={a:30,b,c:20,d:50-b},m=t22(v
 /* ===================== SORTEIO: quem decide a exposição? ===================== */
 /* 40% dos pacientes são graves (risco do desfecho 50%); os demais, leves (risco 10%). O tratamento não muda nada ou corta o risco pela metade. */
 const SO={n:100,mode:"vida",bias:-0.75,ef:0,seed:1,hist:[],P:[]};
-const SO_M=[["vida","A vida escolhe"],["simples","Sorteio simples"],["blocos","Sorteio em blocos"],["estrat","Sorteio estratificado"]];
+const SO_M=[["vida","A vida escolhe"],["simples","O sorteio escolhe"]];
 function soAlloc(seed){const n=SO.n,nG=Math.round(n*.4),r=rng(seed*101+n*7+3),P=[];for(let i=0;i<n;i++)P.push({g:i<nG?1:0});shuffle(P,r);
-  const blocks=list=>{for(let i=0;i<list.length;i+=4){const b=shuffle([1,1,0,0],r);list.slice(i,i+4).forEach((p,j)=>p.t=b[j]);}};
   if(SO.mode==="vida"){const pg=.5-.4*SO.bias,pl=.5+.4*SO.bias,G=P.filter(p=>p.g),Lv=P.filter(p=>!p.g);G.forEach((p,i)=>p.t=i<Math.round(G.length*pg)?1:0);Lv.forEach((p,i)=>p.t=i<Math.round(Lv.length*pl)?1:0);}
-  else if(SO.mode==="simples")P.forEach(p=>p.t=r()<.5?1:0);
-  else if(SO.mode==="blocos")blocks(P);
-  else{blocks(P.filter(p=>p.g));blocks(P.filter(p=>!p.g));}
+  else P.forEach(p=>p.t=r()<.5?1:0);
   const rrT=SO.ef?.5:1;[[1,1],[1,0],[0,1],[0,0]].forEach(([t,g])=>{const c=P.filter(p=>p.t===t&&p.g===g),k=Math.round(c.length*(g?.5:.1)*(t?rrT:1));c.forEach((p,i)=>p.d=i<k?1:0);});
   return P;}
 function soStats(P){const o={};[1,0].forEach(t=>{const c=P.filter(p=>p.t===t);o[t]={n:c.length,g:div(c.filter(p=>p.g).length,c.length),r:div(c.filter(p=>p.d).length,c.length),ev:c.filter(p=>p.d).length};});o.rr=div(o[1].r,o[0].r);o.dg=(o[1].g-o[0].g)*100;return o;}
 function soDraw(k){for(let i=0;i<k;i++){SO.seed++;SO.P=soAlloc(SO.seed);if(SO.mode!=="vida"){const s=soStats(SO.P);if(has(s.dg))SO.hist.push(s.dg);}}}
-LAB("sorteio","Experimentais","Sorteio",`
+LAB("sorteio","Experimentais","Por que sortear",`
 <div class="intro"><span class="eyebrow">Experimentais · randomização</span><h2>Na coorte, quem escolhe a exposição é a vida. No ensaio, é o sorteio</h2><p>Coortes e ensaios clínicos são longitudinais e medem incidência. A diferença está em quem decide quem recebe o tratamento, e é ela que permite concluir sobre causa.</p></div>
 <div class="grid"><div class="card"><div class="card-h"><h3>Os grupos eram comparáveis antes do tratamento?</h3><button class="more-btn" data-learn="sorteio">Saiba mais</button></div>
  <p class="lede">Entre os pacientes, 40% são graves e têm risco bem maior do desfecho, com ou sem tratamento. Veja em que grupo eles vão parar.</p>
@@ -1078,7 +1197,7 @@ LAB("sorteio","Experimentais","Sorteio",`
  <div class="cols2" style="margin-top:12px">
   <div class="stack">
    <div id="soBW"><div class="range"><label for="soB">Quem recebe o tratamento?</label><output id="soBo"></output><input type="range" id="soB" min="-100" max="100" step="5" value="-75"></div><p class="mini" style="margin:2px 0 0;display:flex;justify-content:space-between;gap:12px"><span>‹ os mais graves</span><span>os mais saudáveis ›</span></p></div>
-   <div class="row" id="soRW"><button class="btn small primary" id="so1">Sortear de novo</button><button class="btn small" id="so50">Sortear 50 vezes</button></div>
+   <div class="row" id="soRW"><button class="btn small primary" id="so1">Sortear de novo</button><button class="btn small" id="so50">Sortear 50 vezes</button><button class="btn small" data-go-lab="rand">As formas de sortear ›</button></div>
    <div class="range"><label for="soN">Participantes</label><output id="soNo"></output><input type="range" id="soN" min="20" max="200" step="20" value="100"></div>
    <div><div class="sub">Efeito verdadeiro do tratamento</div><div class="chips" id="soE"></div></div>
   </div>
@@ -1111,9 +1230,191 @@ function renderSO(){const P=SO.P,S=soStats(P),life=SO.mode==="vida",rrT=SO.ef?.5
   $("soTxt").innerHTML=life?(Math.abs(SO.bias)<.2?"Quando a gravidade não influencia quem é tratado, os grupos ficam parecidos. Na vida real isso é raro: o prognóstico costuma decidir a exposição."
     :SO.bias<0?`Os mais graves recebem mais tratamento: ${pct(S[1].g,0)} dos tratados são graves, contra ${pct(S[0].g,0)} dos não tratados. O tratamento parece ${S.rr>1?"aumentar o risco":"pior do que é"} (RR observado ${rat(S.rr)}, verdadeiro ${fmt(rrT,2)}). É o <b>confundimento por indicação</b>.`
     :`Quem adere ao tratamento já era mais saudável: só ${pct(S[1].g,0)} dos tratados são graves, contra ${pct(S[0].g,0)} dos não tratados. O tratamento parece proteger mais do que protege (RR observado ${rat(S.rr)}, verdadeiro ${fmt(rrT,2)}). É o <b>efeito do usuário saudável</b>.`)
-   :SO.mode==="simples"?`Sorteio simples é como jogar uma moeda: imprevisível, mas pode desbalancear estudos pequenos. Neste sorteio, a diferença de graves foi de ${fmt(Math.abs(dg),0)} pontos percentuais. ${SO.hist.length>=20?`Em ${SO.hist.length} sorteios, a diferença média foi de ${fmt(m,1)}: o sorteio equilibra <b>em média</b>, e melhor quanto maior o estudo.`:"Sorteie várias vezes e diminua o número de participantes para ver."}`
-   :SO.mode==="blocos"?`O sorteio em blocos (aqui, de 4) garante grupos do mesmo tamanho ao longo do recrutamento. A gravidade continua por conta do acaso: neste sorteio, a diferença foi de ${fmt(Math.abs(dg),0)} pontos percentuais.`
-   :"O sorteio estratificado faz um sorteio separado para graves e para leves. A gravidade fica igual nos dois grupos em todos os sorteios, e o RR observado reflete o efeito do tratamento.";}
+   :`O sorteio não conhece o prognóstico de ninguém. Neste sorteio, a diferença de graves foi de ${fmt(Math.abs(dg),0)} pontos percentuais. ${SO.hist.length>=20?`Em ${SO.hist.length} sorteios, a diferença média foi de ${fmt(m,1)}: o sorteio equilibra <b>em média</b>, inclusive o que ninguém mediu, e melhor quanto maior o estudo.`:"Sorteie várias vezes e diminua o número de participantes para ver."} Há formas de sortear que garantem mais equilíbrio: veja em Randomização.`;}
+
+/* ===================== RANDOMIZAÇÃO: as formas de sortear, paciente a paciente ===================== */
+const RD={m:"simples",blk:"4",n:60,k:24,seed:3,P:[],arm:[],bid:[],bet:{ok:0,n:0},simN:60,sim:null,q:30,dir:"bem",acc:{}};
+const RD_M=[["simples","Simples"],["blocos","Em blocos"],["estrat","Estratificada"],["minim","Minimização"],["congl","Por conglomerados"]];
+const RD_F=[["g","Graves"],["i","65 anos ou mais"],["d","Com diabetes"]];
+const RD_TXT={simples:"Como jogar uma moeda a cada paciente. Imprevisível, mas pode desbalancear estudos pequenos, no tamanho dos grupos e nos fatores prognósticos.",
+ blocos:"Dentro de cada bloco, metade vai para cada grupo: os tamanhos ficam semelhantes durante todo o recrutamento. Com bloco de tamanho fixo e conhecido, o fim de cada bloco fica previsível. Por isso se usam blocos de tamanho variável e oculto.",
+ estrat:"Um sorteio separado, em blocos, dentro de cada estrato prognóstico. Aqui os estratos combinam gravidade e idade; o diabetes continua por conta do acaso.",
+ minim:"Cada paciente vai para o grupo que deixa os fatores mais equilibrados, com um componente aleatório (aqui, em 80% das vezes). Equilibra vários fatores ao mesmo tempo, mesmo em estudos pequenos.",
+ congl:"O sorteio é de grupos inteiros: aqui, UBS com 10 pacientes cada. Serve quando a intervenção é coletiva. Com poucas unidades sorteadas, os grupos podem sair bem diferentes, e na unidade todos sabem o que ela recebeu."};
+/* pacientes chegam em sequência; cada UBS (10 pacientes seguidos) tem a sua própria proporção de graves */
+function rdPatients(n,r){const P=[];let pg=.3;for(let k=0;k<n;k++){if(k%10===0)pg=.08+.44*r();P.push({g:r()<pg?1:0,i:r()<.4?1:0,d:r()<.25?1:0});}return P;}
+function rdAlloc(m,P,r,blk){const n=P.length,arm=new Array(n),bid=new Array(n).fill(0);
+  const block=sz=>{const b=sz==="var"?[2,4,6][Math.floor(r()*3)]:+sz,a=[];for(let i=0;i<b;i++)a.push(i<b/2?1:0);return shuffle(a,r);};
+  if(m==="simples")for(let k=0;k<n;k++)arm[k]=r()<.5?1:0;
+  else if(m==="blocos"){let cur=[],b=0;for(let k=0;k<n;k++){if(!cur.length){cur=block(blk);b++;}arm[k]=cur.pop();bid[k]=b;}}
+  else if(m==="estrat"){const S={};for(let k=0;k<n;k++){const key=P[k].g*2+P[k].i;if(!S[key]||!S[key].length)S[key]=block(4);arm[k]=S[key].pop();}}
+  else if(m==="minim"){const c=[{g:[0,0],i:[0,0],d:[0,0]},{g:[0,0],i:[0,0],d:[0,0]}];
+    for(let k=0;k<n;k++){const p=P[k],sc=a=>["g","i","d"].reduce((t,f)=>t+Math.abs(c[a][f][p[f]]+1-c[1-a][f][p[f]]),0),s1=sc(1),s0=sc(0);
+      const best=s1<s0?1:s0<s1?0:(r()<.5?1:0),a=s1===s0?best:(r()<.8?best:1-best);arm[k]=a;["g","i","d"].forEach(f=>c[a][f][p[f]]++);}}
+  else{const nc=Math.ceil(n/10),ca=[];for(let j=0;j<nc;j++)ca.push(j<Math.floor(nc/2)?1:0);if(nc%2)ca[nc-1]=r()<.5?1:0;shuffle(ca,r);for(let k=0;k<n;k++){arm[k]=ca[Math.floor(k/10)];bid[k]=Math.floor(k/10)+1;}}
+  return{arm,bid};}
+function rdStats(P,arm,k){const o={n:[0,0],g:[0,0],i:[0,0],d:[0,0]};for(let j=0;j<k;j++){const a=arm[j];o.n[a]++;o.g[a]+=P[j].g;o.i[a]+=P[j].i;o.d[a]+=P[j].d;}return o;}
+/* Para quem vê a sequência (estudo aberto): [acerto de quem aposta sempre no grupo que está atrás, proporção de alocações que eram uma certeza] */
+function rdAcc(m,blk){const key=m+blk;if(RD.acc[key])return RD.acc[key];if(m==="simples")return RD.acc[key]=[.5,0];
+  const r=rng(991),n=6000,P=rdPatients(n,r),{arm,bid}=rdAlloc(m,P,r,blk);let ok=0,sure=0;const T={},fix=m==="blocos"&&blk!=="var";
+  for(let k=0;k<n;k++){const key2=fix?"b"+bid[k]:m==="estrat"?"s"+(P[k].g*2+P[k].i):m==="congl"?"c"+bid[k]:"t",t=T[key2]||(T[key2]=[0,0]);
+    if(m==="congl"){const seen=t[0]+t[1]>0;ok+=seen?1:.5;if(seen)sure++;}
+    else{ok+=t[1]===t[0]?.5:(t[1]<t[0]?1:0)===arm[k]?1:0;
+      /* certeza: no bloco de tamanho conhecido, quando um grupo já completou a sua metade; com tamanho oculto (2, 4 ou 6), só depois de três seguidas para o mesmo lado */
+      const d=Math.abs(t[1]-t[0]),half=fix?+blk/2:2,inb=fix?Math.max(t[0],t[1]):0;
+      if(fix?inb===half:m==="estrat"?((t[0]+t[1])%4>=2&&d===(4-(t[0]+t[1])%4)):m==="blocos"?d===3:false)sure++;}
+    t[arm[k]]++;}
+  return RD.acc[key]=[ok/n,sure/n];}
+function rdMake(){RD.P=rdPatients(200,rng(RD.seed*7717+11));const a=rdAlloc(RD.m,RD.P.slice(0,RD.n),rng(RD.seed*31+7),RD.blk);RD.arm=a.arm;RD.bid=a.bid;RD.k=Math.min(RD.k,RD.n);}
+function rdSim(){const N=RD.simN,T=1000,out=[];RD_M.forEach(([m,name],mi)=>{const r=rng(4242+mi*17+N),h=new Array(21).fill(0);let sa=0,big=0,sz=0;
+    for(let t=0;t<T;t++){const P=rdPatients(N,r),{arm}=rdAlloc(m,P,r,"4"),s=rdStats(P,arm,N),d=s.n[1]&&s.n[0]?(s.g[1]/s.n[1]-s.g[0]/s.n[0])*100:100;
+      sa+=Math.abs(d);if(Math.abs(d)>10)big++;sz+=Math.abs(s.n[1]-s.n[0]);h[clamp(Math.round(d/5)+10,0,20)]++;}
+    out.push({name,h,mean:sa/T,big:big/T,sz:sz/T});});RD.sim={N,out};}
+LAB("rand","Experimentais","Randomização",`
+<div class="intro"><span class="eyebrow">Experimentais · formas de randomizar</span><h2>Sortear bem é mais do que jogar uma moeda</h2><p>O sorteio precisa ser imprevisível e deixar os grupos comparáveis. Recrute os pacientes um a um, troque o método e veja o que cada um garante.</p></div>
+<div class="grid two">
+ <div class="card wide"><div class="card-h"><h3>Recrute paciente por paciente</h3><button class="more-btn" data-learn="rand">Saiba mais</button></div>
+  <div class="chips" id="rdM"></div>
+  <div id="rdBW" style="margin-top:8px"><div class="seg" id="rdB"><button data-v="4">Blocos de 4</button><button data-v="6">Blocos de 6</button><button data-v="var">Tamanho variável e oculto</button></div></div>
+  <p class="lede" id="rdTxt" style="margin-top:10px"></p>
+  <div class="row"><button class="btn small primary" id="rd1">+1 paciente</button><button class="btn small" id="rd10">+10</button><button class="btn small" id="rdAll">Completar</button><button class="btn small" id="rd0">Recomeçar</button><button class="btn small" id="rdNew">Outros pacientes</button></div>
+  <div class="range" style="max-width:420px;margin-top:8px"><label for="rdN">Tamanho do ensaio</label><output id="rdNo"></output><input type="range" id="rdN" min="20" max="200" step="20" value="60"></div>
+  <div class="sub">Sequência de alocação</div>
+  <div class="seqs" id="rdSeq" aria-live="polite"></div>
+  <div class="key" id="rdKey"></div>
+  <div class="cols2" style="margin-top:14px">
+   <div><div class="sub">Quem está na frente durante o recrutamento</div><svg class="ch" id="rdRun" role="img" aria-label="Diferença de tamanho entre os grupos ao longo do recrutamento"></svg></div>
+   <div><div class="sub">Os grupos ficaram parecidos?</div><div class="bal" id="rdBal"></div></div>
+  </div>
+  <div class="sub" style="margin-top:16px">Dá para adivinhar a próxima alocação?</div>
+  <p class="lede">Em um estudo aberto, quem recruta vê para onde foi cada paciente. Tente adivinhar para onde vai o próximo.</p>
+  <div class="row"><button class="btn small" id="rdG1">Aposto em Intervenção</button><button class="btn small" id="rdG0">Aposto em Controle</button><span class="score" id="rdGs"></span></div>
+  <div class="tiles" id="rdTiles" style="margin-top:12px"></div><div class="insight" id="rdIns"></div></div>
+ <div class="card wide"><div class="card-h"><h3>E se quem recruta souber a próxima alocação?</h3><button class="more-btn" data-learn="sigilo">Saiba mais</button></div>
+  <p class="lede">O sorteio pode ser perfeito e o ensaio sair enviesado, se a sequência não estiver escondida. Aqui o tratamento não tem efeito algum, e 40% dos pacientes são graves.</p>
+  <div class="cols2"><div class="stack">
+   <div class="range"><label for="rdQ">Alocações que o recrutador consegue prever</label><output id="rdQo"></output><input type="range" id="rdQ" min="0" max="100" step="5" value="30"></div>
+   <div><div class="sub">Quando ele sabe a próxima, o que faz?</div><div class="seg" id="rdDir"><button data-v="bem">Guarda a vaga do tratamento novo para os leves</button><button data-v="grave">Guarda para os mais graves</button></div></div>
+   <div class="tiles" id="rdQT"></div>
+  </div><div><div class="grps" id="rdQG"></div><div class="key" id="rdQK"></div></div></div>
+  <div class="insight" id="rdQI"></div></div>
+ <div class="card wide"><div class="card-h"><h3>Mil ensaios com cada método</h3><button class="more-btn" data-learn="rand">Saiba mais</button></div>
+  <p class="lede">Um sorteio só não mostra o que o método garante. Aqui cada método sorteia mil ensaios do mesmo tamanho. O gráfico mostra a diferença na proporção de graves entre os grupos.</p>
+  <div class="playrow"><div class="range" style="max-width:420px"><label for="rdSN">Participantes em cada ensaio</label><output id="rdSNo"></output><input type="range" id="rdSN" min="20" max="400" step="20" value="60"></div><button class="btn small primary" id="rdSGo">Simular de novo</button></div>
+  <svg class="ch" id="rdSim" style="margin-top:10px" role="img" aria-label="Distribuição da diferença de graves entre os grupos em mil ensaios, por método"></svg>
+  <div class="insight" id="rdSI"></div></div>
+</div>`,()=>{rdMake();
+  chips($("rdM"),RD_M.map(m=>m[1]),i=>{RD.m=RD_M[i][0];RD.bet={ok:0,n:0};rdMake();renderRD();},0);
+  segBind($("rdB"),RD.blk,v=>{RD.blk=v;RD.bet={ok:0,n:0};rdMake();renderRD();});
+  const add=k=>{RD.k=Math.min(RD.n,RD.k+k);renderRD();};$("rd1").onclick=()=>add(1);$("rd10").onclick=()=>add(10);$("rdAll").onclick=()=>add(RD.n);
+  $("rd0").onclick=()=>{RD.k=0;RD.bet={ok:0,n:0};renderRD();};$("rdNew").onclick=()=>{RD.seed++;RD.bet={ok:0,n:0};rdMake();renderRD();};
+  $("rdN").oninput=e=>{RD.n=+e.target.value;rdMake();renderRD();};
+  const bet=a=>{if(RD.k>=RD.n)return;RD.bet.n++;if(RD.arm[RD.k]===a)RD.bet.ok++;RD.k++;renderRD();};$("rdG1").onclick=()=>bet(1);$("rdG0").onclick=()=>bet(0);
+  $("rdQ").oninput=e=>{RD.q=+e.target.value;renderRDQ();};segBind($("rdDir"),RD.dir,v=>{RD.dir=v;renderRDQ();});
+  $("rdSN").oninput=e=>{RD.simN=+e.target.value;$("rdSNo").textContent=RD.simN;};$("rdSN").onchange=()=>{rdSim();renderRDS();};$("rdSGo").onclick=()=>{rdSim();renderRDS();};
+  rdSim();
+},()=>{renderRD();renderRDQ();renderRDS();});
+function renderRD(){const {P,arm,bid,k,n,m}=RD,s=rdStats(P,arm,k),clu=m==="congl",blo=m==="blocos";
+  $("rdBW").hidden=!blo;$("rdTxt").textContent=RD_TXT[m];$("rdNo").textContent=n+" pacientes";
+  let h="";for(let j=0;j<k;j++)h+=`<i class="a${arm[j]}${P[j].g?" sq":""}${j&&(blo||clu)&&bid[j]!==bid[j-1]&&!(blo&&RD.blk==="var")?" brk":""}${j===k-1?" new":""}">${arm[j]?"I":"C"}</i>`;
+  if(k<n)h+=`<span class="q">?</span>`;$("rdSeq").innerHTML=h||`<span class="mini">Nenhum paciente ainda.</span>`;
+  const sk=(cls,t)=>`<span><span class="seqs" style="display:inline-flex;min-height:0"><i class="${cls}" style="width:14px;height:14px"></i></span>${t}</span>`;
+  $("rdKey").innerHTML=sk("a1","intervenção")+sk("","controle")+sk("sq","paciente grave")+(blo&&RD.blk!=="var"?"<span>espaço: novo bloco</span>":clu?"<span>espaço: outra UBS</span>":"");
+  // quem está na frente
+  const el=$("rdRun"),H=130,W=box(el,H),L=30,Rm=10,T=10,ih=H-T-28,iw=W-L-Rm;let run=[0],mx=4;for(let j=0;j<k;j++){run.push(run[j]+(arm[j]?1:-1));mx=Math.max(mx,Math.abs(run[j+1]));}
+  const X=v=>L+v/n*iw,Y=v=>T+ih/2-v/mx*(ih/2);let sv=yGrid(Y,[-mx,0,mx],L,W-Rm,v=>(v>0?"+":"")+v)+`<line x1="${L}" x2="${W-Rm}" y1="${Y(0)}" y2="${Y(0)}" stroke="var(--tick)"/>`;
+  if(k)sv+=`<path d="${run.map((v,j)=>(j?"L":"M")+X(j).toFixed(1)+","+Y(v).toFixed(1)).join("")}" fill="none" stroke="var(--accent)" stroke-width="2"/><circle cx="${X(k)}" cy="${Y(run[k])}" r="4" fill="var(--accent)"/>`;
+  sv+=xAxis(X,[0,n/2,n],T+ih,v=>v,L,W-Rm)+`<text x="${L+4}" y="${T+9}" style="font-size:10.5px">intervenção à frente</text><text x="${L+4}" y="${T+ih-4}" style="font-size:10.5px">controle à frente</text>`;el.innerHTML=sv;
+  // equilíbrio
+  const pr=(a,f)=>s.n[a]?s[f][a]/s.n[a]:NaN,tot=Math.max(1,s.n[0],s.n[1]);
+  $("rdBal").innerHTML=`<div class="r"><span>Tamanho</span><div class="pair">${pairBar(s.n[1]/tot,"var(--exp)")}${pairBar(s.n[0]/tot,"var(--nex)")}</div><b>${s.n[1]} × ${s.n[0]}</b></div>`+RD_F.map(([f,name])=>{const a=pr(1,f),b=pr(0,f);return `<div class="r"><span>${name}</span><div class="pair">${pairBar(a,"var(--exp)")}${pairBar(b,"var(--nex)")}</div><b>${has(a)?pct(a,0):"—"} × ${has(b)?pct(b,0):"—"}<small>${has(a)&&has(b)?fmt(Math.abs(a-b)*100,0)+" p.p. de diferença":""}</small></b></div>`;}).join("");
+  const worst=Math.max(...RD_F.map(([f])=>{const a=pr(1,f),b=pr(0,f);return has(a)&&has(b)?Math.abs(a-b)*100:0;})),[acc,sure]=rdAcc(m,RD.blk);
+  $("rdGs").textContent=RD.bet.n?`Seus palpites: ${RD.bet.ok} de ${RD.bet.n} certos`:"";$("rdG1").disabled=$("rdG0").disabled=k>=n;
+  $("rdTiles").innerHTML=tile("Intervenção × controle",`${s.n[1]} × ${s.n[0]}`,`${k} de ${n} recrutados`)+tile("Maior diferença entre os grupos",k?fmt(worst,0)+" p.p.":"—","entre os três fatores",worst>15?"bad":"")+tile("Alocações que eram uma certeza",pct(sure,0),"para quem vê a sequência",sure>.1?"bad":"good")+tile("Quem aposta no grupo que está atrás acerta",pct(acc,0),"em uma sequência longa",acc>.6?"alt":"good");
+  $("rdIns").className="insight"+(sure>.1?" warn":"");
+  $("rdIns").innerHTML=m==="simples"?"No sorteio simples, nenhuma estratégia de palpite passa de 50%: é o método mais imprevisível. O preço é o risco de grupos desiguais, que você vê nas barras, sobretudo com poucos pacientes."
+   :blo?(RD.blk==="var"?`Com blocos de tamanho variável e oculto, os grupos seguem equilibrados no tamanho e quase nenhuma alocação é uma certeza (${pct(sure,0)}, contra um terço nos blocos fixos de 4). Quem observa a contagem ainda acerta mais que a moeda: por isso, além de variar o bloco, a sequência precisa ficar escondida de quem recruta.`:`Com blocos de ${RD.blk} conhecidos, a última alocação de cada bloco é uma certeza, e às vezes as anteriores também: ${pct(sure,0)} das alocações podem ser deduzidas por quem vê a sequência. Experimente o tamanho variável e oculto.`)
+   :m==="estrat"?"Graves e idosos ficam divididos quase meio a meio em qualquer tamanho de ensaio. O diabetes, que não entrou nos estratos, continua oscilando. Dentro de cada estrato o sorteio é em blocos, com a mesma previsibilidade."
+   :m==="minim"?"Os três fatores ficam equilibrados ao mesmo tempo, o que a estratificação não consegue com muitos fatores. O componente aleatório existe para que a próxima alocação não seja uma certeza."
+   :"Depois do primeiro paciente de cada UBS, todos os outros são previsíveis: a unidade inteira recebe a mesma coisa. E como cada UBS tem um perfil próprio, sortear poucas unidades pode deixar os grupos bem diferentes.";}
+function renderRDQ(){const q=RD.q/100,base=40*(1-q),gI=Math.round(RD.dir==="bem"?base:base+100*q),gC=Math.round(RD.dir==="bem"?base+100*q:base),ev=g=>Math.round(g*.5+(100-g)*.1),eI=ev(gI),eC=ev(gC),rr=eI/eC;
+  $("rdQo").textContent=RD.q+"%";
+  const mk=(g,e,a)=>{const eg=Math.round(g*.5),P=[];for(let j=0;j<g;j++)P.push({e:a,d:j<eg?1:0,sq:true});for(let j=0;j<100-g;j++)P.push({e:a,d:j<e-eg?1:0});return P;};
+  $("rdQG").innerHTML=grp("Intervenção",`${gI}% graves · ${eI} desfechos`,dotSVG(mk(gI,eI,1),10))+grp("Controle",`${gC}% graves · ${eC} desfechos`,dotSVG(mk(gC,eC,0),10));
+  $("rdQK").innerHTML=keyDot({e:1,d:0,sq:true},"grave")+keyDot({e:1,d:0},"leve")+keyDot({e:1,d:1},"teve o desfecho");
+  $("rdQT").innerHTML=tile("Graves na intervenção",gI+"%")+tile("Graves no controle",gC+"%")+tile("RR observado",rat(rr),"",Math.abs(rr-1)>.12?"bad":"acc")+tile("RR verdadeiro","1,00","o tratamento não faz nada");
+  $("rdQI").className="insight"+(Math.abs(rr-1)>.12?" warn":"");
+  $("rdQI").innerHTML=!RD.q?"Com a sequência escondida, quem recruta não tem como escolher o paciente de cada vaga. Os grupos saem comparáveis e o RR fica em 1,00. O sigilo de alocação é sempre possível: central telefônica, sistema web ou envelopes opacos, selados e numerados."
+   :RD.dir==="bem"?`Sabendo que a próxima vaga é do tratamento novo, o recrutador chama um paciente leve; se é do controle, um grave. Com ${RD.q}% das alocações previstas, um tratamento inútil parece reduzir o risco em ${fmt((1-rr)*100,0)}%. É <b>viés de seleção</b>, e nenhum mascaramento posterior conserta. Para comparar: em estudo aberto, blocos fixos de 4 deixam cerca de um terço das alocações previsíveis.`
+   :`Por compaixão, o recrutador guarda as vagas do tratamento novo para os mais graves. O grupo intervenção fica com pior prognóstico e um tratamento inútil parece <b>aumentar</b> o risco em ${fmt((rr-1)*100,0)}%. O viés de seleção pode ir para qualquer lado.`;}
+function renderRDS(){const S=RD.sim;if(!S)return;$("rdSNo").textContent=RD.simN;const el=$("rdSim"),rh=64,T=4,H=T+S.out.length*rh+30,W=box(el,H),L=10,Rm=10,iw=W-L-Rm,X=v=>L+(v+52.5)/105*iw,bw=iw/21,mxh=Math.max(...S.out.flatMap(o=>o.h));let s="";
+  s+=`<line x1="${X(0)}" x2="${X(0)}" y1="${T+16}" y2="${T+S.out.length*rh}" stroke="var(--tick)" stroke-dasharray="4 3"/>`;
+  S.out.forEach((o,i)=>{const y0=T+i*rh,yb=y0+rh-6;s+=`<text x="${L}" y="${y0+12}" class="lbl" style="font-size:12.5px">${o.name}</text><text x="${W-Rm}" y="${y0+12}" text-anchor="end" style="font-size:11.5px">média ${fmt(o.mean,1)} p.p. · acima de 10: ${pct(o.big,0)}</text><line class="gr" x1="${L}" x2="${W-Rm}" y1="${yb}" y2="${yb}"/>`;
+    o.h.forEach((c,b)=>{if(!c)return;const hh=c/mxh*(rh-26);s+=`<rect x="${L+b*bw+.5}" y="${yb-hh}" width="${Math.max(1,bw-1)}" height="${hh}" fill="${Math.abs(b-10)>2?"var(--alt)":"var(--accent)"}"/>`;});});
+  s+=xAxis(X,[-50,-25,0,25,50],T+S.out.length*rh,v=>(v>0?"+":"")+v,L,W-Rm)+`<text x="${W-Rm}" y="${H-1}" text-anchor="end" style="font-size:11px">diferença de graves: intervenção − controle (p.p.)</text>`;el.innerHTML=s;
+  const sp=S.out[0],st=S.out[2],cl=S.out[4];
+  $("rdSI").innerHTML=`Todos os métodos acertam <b>em média</b>: as distribuições ficam centradas no zero. O que muda é a largura. Com ${S.N} participantes, o sorteio simples erra em média ${fmt(sp.mean,1)} p.p. na proporção de graves; os blocos igualam o tamanho dos grupos, mas não a gravidade (${fmt(S.out[1].mean,1)}); a estratificação por gravidade erra ${fmt(st.mean,1)}; o sorteio por conglomerados, ${fmt(cl.mean,1)}, porque são só ${Math.ceil(S.N/10)} unidades sorteadas. Aumente o tamanho do ensaio e veja o sorteio simples se resolver sozinho.`;}
+
+/* ===================== CEGAMENTO: quem está mascarado e o que isso muda ===================== */
+/* tamanho de cada viés em pontos de efeito (valores ilustrativos): [desfecho subjetivo, desfecho objetivo] */
+const CG_W=[["p","Participante","Se sabe o grupo, a expectativa muda o que sente e relata, e ele pode buscar outros tratamentos ou abandonar o estudo.","expectativa e relato","var(--g4)",[8,1]],
+ ["e","Equipe que trata","Se sabe o grupo, pode dar mais atenção, ajustar doses ou acrescentar outros cuidados a um dos grupos.","cuidados diferentes","var(--g5)",[4,2]],
+ ["a","Avaliador do desfecho","Se sabe o grupo, tende a medir ou interpretar o desfecho a favor do que espera.","viés de aferição","var(--g1)",[6,0]],
+ ["n","Analista de dados","Se sabe o grupo, pode escolher exclusões, cortes e análises que favorecem um lado.","escolhas de análise","var(--g3)",[2,1]]];
+const CG={p:false,e:false,a:false,n:false,out:0,srt:{}};
+const CG_PRE=[["Aberto",{}],["Simples-cego",{p:1}],["Duplo-cego",{p:1,e:1,a:1}],["Triplo-cego",{p:1,e:1,a:1,n:1}]];
+const CG_OUT=[["Subjetivo: intensidade da ansiedade","a intensidade da ansiedade"],["Objetivo: óbito","o óbito"]];
+const EYE=on=>on?`<svg viewBox="0 0 26 26" fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 13c2.6-4.3 6-6.4 10-6.4s7.4 2.1 10 6.4c-2.6 4.3-6 6.4-10 6.4S5.600 17.300 3 13z"/><path d="M4.500 4.500l17 17"/></svg>`:`<svg viewBox="0 0 26 26" fill="none" stroke="var(--bad)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 13c2.6-4.3 6-6.4 10-6.4s7.4 2.1 10 6.4c-2.6 4.3-6 6.4-10 6.4S5.600 17.300 3 13z"/><circle cx="13" cy="13" r="3.2" fill="var(--bad)"/></svg>`;
+const CG_IT=[
+ ["A sequência do sorteio fica em uma central telefônica. Quem recruta só descobre o grupo depois de registrar o paciente.","sig","Atua antes da designação: quem recruta não sabe qual é o próximo grupo. Previne viés de seleção."],
+ ["O placebo tem a mesma cor, o mesmo gosto e a mesma embalagem do medicamento.","mas","Atua depois da designação: nem o participante nem a equipe sabem qual tratamento está em uso. Previne vieses de performance e de aferição."],
+ ["As alocações ficam em envelopes opacos, selados e numerados, abertos só depois da inclusão do paciente.","sig","É uma das formas clássicas de esconder a sequência de quem recruta. O sigilo de alocação é sempre possível."],
+ ["O radiologista que lê os exames de seguimento não sabe a que grupo o paciente pertence.","mas","É o avaliador do desfecho que está mascarado. Previne viés de aferição."],
+ ["A lista do sorteio fica afixada na parede do ambulatório, e o médico escolhe em que dia chamar cada paciente.","sig","É uma falha de sigilo de alocação: quem recruta sabe o próximo grupo e pode escolher quem entra. O resultado é viés de seleção."],
+ ["O ensaio compara cirurgia com fisioterapia. Não há como esconder do paciente, mas quem mede a dor e a função não sabe o grupo.","mas","Mascarar nem sempre é possível, mas o avaliador do desfecho quase sempre pode ser cegado."],
+ ["O estatístico recebe os grupos identificados apenas como A e B.","mas","É o analista de dados que está mascarado: o último passo para um ensaio triplo-cego."],
+ ["Um sistema na internet só libera o grupo depois que os critérios de inclusão foram conferidos e o paciente foi registrado.","sig","A designação só é revelada quando a decisão de incluir já não pode mudar. Previne viés de seleção."]];
+LAB("cego","Experimentais","Cegamento",`
+<div class="intro"><span class="eyebrow">Experimentais · mascaramento</span><h2>Quem sabe o grupo de cada paciente, e o que isso faz com o resultado</h2><p>O sorteio deixa os grupos iguais no início. O mascaramento impede que eles passem a ser tratados, medidos e analisados de forma diferente depois.</p></div>
+<div class="grid two">
+ <div class="card wide"><div class="card-h"><h3>Quem está mascarado?</h3><button class="more-btn" data-learn="cego">Saiba mais</button></div>
+  <p class="lede">Toque em cada pessoa para mascarar ou revelar. O tratamento tem um efeito verdadeiro de 10 pontos; veja quanto o ensaio enxerga.</p>
+  <div class="row" style="justify-content:space-between"><div class="chips" id="cgP"></div></div>
+  <div style="margin:10px 0"><div class="sub">O desfecho do ensaio</div><div class="seg" id="cgO"><button data-v="0">${CG_OUT[0][0]}</button><button data-v="1">${CG_OUT[1][0]}</button></div></div>
+  <div class="who" id="cgW"></div>
+  <svg class="ch" id="cgS" style="margin-top:16px" role="img" aria-label="Efeito verdadeiro e vieses somados ao efeito observado"></svg>
+  <div class="legend" id="cgLg"></div>
+  <div class="cols2" style="margin-top:12px"><div><div class="tiles" id="cgT"></div><div class="insight" id="cgI"></div></div>
+   <div><div class="sub">Mascaramento × objetividade do desfecho</div><div class="tw"><table class="mx" id="cgMx"></table></div><p class="note">Os tamanhos dos vieses são ilustrativos. O que importa é a ordem: quanto mais subjetivo o desfecho, mais o mascaramento pesa.</p></div></div></div>
+ <div class="card wide"><div class="card-h"><h3>Sigilo de alocação ou mascaramento?</h3><button class="more-btn" data-learn="sigilo">Saiba mais</button></div>
+  <div class="axis2"><div><b>Sigilo de alocação</b><p>Atua até a designação: quem recruta não sabe o próximo grupo. Previne viés de seleção. Sempre possível.</p></div><div class="mk"><i></i>alocação</div><div><b>Mascaramento</b><p>Atua depois da designação: esconde qual tratamento cada um recebe. Previne vieses de performance e de aferição. Nem sempre possível.</p></div></div>
+  <div id="cgSrt" style="max-width:760px"></div></div>
+</div>`,()=>{
+  chips($("cgP"),CG_PRE.map(p=>p[0]),i=>{CG_W.forEach(w=>CG[w[0]]=!!CG_PRE[i][1][w[0]]);renderCG();},0);
+  segBind($("cgO"),"0",v=>{CG.out=+v;renderCG();});
+  $("cgW").addEventListener("click",e=>{const b=e.target.closest("[data-w]");if(b){CG[b.dataset.w]=!CG[b.dataset.w];renderCG();}});
+},()=>{renderCG();sorter($("cgSrt"),CG.srt,CG_IT,[["sig","Sigilo de alocação"],["mas","Mascaramento"]]);});
+function cgLabel(){const {p,e,a,n}=CG;return p&&(e||a)&&n?"Triplo-cego":p&&(e||a)?"Duplo-cego":p||a||e?"Simples-cego":n?"Só o analista mascarado":"Aberto";}
+function renderCG(){const o=CG.out,parts=CG_W.filter(w=>!CG[w[0]]&&w[5][o]>0),bias=parts.reduce((t,w)=>t+w[5][o],0),obs=10+bias,lab=cgLabel();
+  chipOn($("cgP"),CG_PRE.findIndex(pr=>CG_W.every(w=>!!pr[1][w[0]]===CG[w[0]])));
+  $("cgW").innerHTML=CG_W.map(w=>`<button class="wh ${CG[w[0]]?"on":""}" data-w="${w[0]}" aria-pressed="${CG[w[0]]}">${EYE(CG[w[0]])}<b>${w[1]}</b><em>${CG[w[0]]?"mascarado":"sabe o grupo"}</em><span>${w[2]}</span></button>`).join("");
+  const el=$("cgS"),H=92,W=box(el,H),L=10,Rm=10,iw=W-L-Rm,mx=32,X=v=>L+v/mx*iw;let x=0,s="";
+  const seg=(v,c,t)=>{const w=X(x+v)-X(x);s+=`<rect x="${X(x)+.5}" y="8" width="${Math.max(0,w-1)}" height="34" rx="3" fill="${c}"/>${w>22?`<text x="${X(x)+w/2}" y="30" text-anchor="middle" style="fill:var(--surface);font-size:12.5px;font-weight:600">${t}</text>`:""}`;x+=v;};
+  seg(10,"var(--exp)","10");parts.forEach(w=>seg(w[5][o],w[4],"+"+w[5][o]));
+  s+=`<path d="M${X(0)} 50v7H${X(10)}v-7" fill="none" stroke="var(--fg)" stroke-width="1.4"/><text x="${X(0)}" y="71" style="font-size:11.5px;fill:var(--fg)">efeito verdadeiro</text>`;
+  if(bias)s+=`<path d="M${X(10)+3} 50v7H${X(obs)}v-7" fill="none" stroke="var(--bad)" stroke-width="1.4"/><text x="${X(obs)}" y="71" text-anchor="end" style="font-size:11.5px;fill:var(--bad)">vieses: +${bias}</text>`;
+  s+=xAxis(X,[0,10,20,30],76,v=>v,L,W-Rm);el.setAttribute("viewBox",`0 0 ${W} 98`);el.innerHTML=s;
+  $("cgLg").innerHTML=`<span><i style="background:var(--exp);height:10px;width:10px;border-radius:2px"></i>Efeito do tratamento</span>`+CG_W.map(w=>`<span><i style="background:${w[4]};height:10px;width:10px;border-radius:2px"></i>${w[1]}: ${w[3]}</span>`).join("");
+  $("cgT").innerHTML=tile("Tipo de estudo",lab)+tile("Efeito observado",obs+" pontos","",bias>4?"bad":bias?"alt":"acc")+tile("Efeito verdadeiro","10 pontos",bias?`exagero de ${fmt(bias/10*100,0)}%`:"medido sem exagero");
+  const blind=CG.p&&CG.a,open=!CG.p&&!CG.e&&!CG.a,cells=[["Inaceitável","bad"],["Possível","mid"],["Possível","mid"],["Ideal","good"]],cur=open?o:blind?2+o:-1;
+  $("cgMx").innerHTML=`<tr><th></th><th>Desfecho subjetivo</th><th>Desfecho objetivo</th></tr>`+[0,1].map(r=>`<tr><th class="rh">${r?"Cego":"Aberto"}</th>${[0,1].map(c=>{const i=r*2+c;return `<td class="${i===cur?"now "+cells[i][1]:""}">${cells[i][0]}</td>`;}).join("")}</tr>`).join("");
+  $("cgI").className="insight"+(bias>4?" warn":"");
+  $("cgI").innerHTML=(o===0?(bias===0?"Com todos mascarados, o efeito observado é o verdadeiro, mesmo com um desfecho subjetivo."
+    :bias>=14?`Com ${CG_OUT[0][1]} como desfecho, quase tudo depende de quem sente, de quem cuida e de quem mede. Sem mascaramento, o efeito observado é ${fmt(obs/10,1)} vezes o verdadeiro.`
+    :`Ainda entram ${bias} pontos de viés. Com desfecho subjetivo, cada pessoa que sabe o grupo acrescenta a sua parte.`)
+   :(bias===0?"Com todos mascarados, o efeito observado é o verdadeiro."
+    :`Com ${CG_OUT[1][1]} como desfecho, a expectativa do paciente e o olhar do avaliador quase não mudam o resultado. Restam ${bias} pontos, vindos de cuidados diferentes entre os grupos e de escolhas de análise. Por isso um estudo aberto com desfecho objetivo é aceitável, e com desfecho subjetivo não.`))
+   +(cur<0&&!open?" <br>Mascaramento parcial: os rótulos “simples”, “duplo” e “triplo” não dizem quem estava mascarado. Ao ler um artigo, procure essa informação.":"");}
 
 /* ===================== O QUE PARECE EFEITO ===================== */
 const EF_C=[["hn","História natural da doença","var(--g3)"],["rm","Regressão à média","var(--g1)"],["eh","Efeito Hawthorne","var(--g5)"],["ep","Efeito placebo","var(--g4)"],["et","Efeito do tratamento","var(--exp)"]];
@@ -1173,14 +1474,296 @@ function renderRM(){const P=RM.P.map(p=>({m1:p.v+RM.noise*p.z1,m2:p.v+RM.noise*p
   $("rmTxt").className="insight"+(n&&a1-a2>2?" warn":"");
   $("rmTxt").innerHTML=!n?"Ninguém passou do corte. Diminua o corte.":RM.noise===0?"Sem variação entre as medidas, cada pessoa repete o mesmo valor e não há regressão à média.":`Ninguém foi tratado e a pressão “caiu” ${fmt(a1-a2,1)} mmHg. Quem foi selecionado por um valor extremo estava, em parte, em um dia ruim; na medida seguinte, tende a ficar mais perto da própria média. Um estudo antes e depois chamaria essa queda de efeito do tratamento.`;}
 
+/* ===================== QUASE-EXPERIMENTOS: intervenção sem sorteio ===================== */
+/* Internações por 10 mil habitantes, mês a mês. A intervenção começa no mês 0. Há uma tendência que já existia,
+   um possível evento concomitante no mesmo mês (que atinge todo mundo) e o efeito verdadeiro da intervenção. */
+const QE={des:0,tr:-.5,ef:-5,sh:0,seed:2,T:[],C:[],Hh:[]};
+const QE_D=[["Antes e depois","Mede o desfecho uma vez antes e uma vez depois da intervenção, no mesmo grupo. Não há comparação."],
+ ["Série temporal interrompida","Muitas medidas antes e muitas depois, no mesmo grupo. Avalia a mudança de nível e de tendência."],
+ ["Controle não equivalente","Um grupo recebe a intervenção e outro não, sem sorteio. Os dois são comparados antes e depois."],
+ ["Controles históricos","Compara quem recebeu a intervenção com pacientes de outra época, que não a receberam."]];
+function qeData(){const r=rng(QE.seed*53+9),nz=()=>1.2*gauss(r);QE.T=[];QE.C=[];QE.Hh=[];
+  for(let t=-12;t<12;t++){QE.T.push({t,y:60+QE.tr*t+(t>=0?QE.ef+QE.sh:0)+nz()});QE.C.push({t,y:47+QE.tr*t+(t>=0?QE.sh:0)+nz()});}
+  for(let t=-36;t<-24;t++)QE.Hh.push({t,y:60+QE.tr*t+nz()});}
+const qeMean=a=>a.reduce((s,p)=>s+p.y,0)/a.length;
+function qeEst(){const T=QE.T,pre=T.filter(p=>p.t<0),post=T.filter(p=>p.t>=0),C=QE.C;
+  if(QE.des===0)return{est:T[23].y-T[11].y};
+  if(QE.des===1){const n=pre.length,mx=pre.reduce((s,p)=>s+p.t,0)/n,my=qeMean(pre),b=pre.reduce((s,p)=>s+(p.t-mx)*(p.y-my),0)/pre.reduce((s,p)=>s+(p.t-mx)**2,0),a=my-b*mx;return{est:post.reduce((s,p)=>s+p.y-(a+b*p.t),0)/post.length,a,b};}
+  if(QE.des===2){const dT=qeMean(post)-qeMean(pre),dC=qeMean(C.filter(p=>p.t>=0))-qeMean(C.filter(p=>p.t<0));return{est:dT-dC,dT,dC};}
+  return{est:qeMean(post)-qeMean(QE.Hh)};}
+LAB("quase","Experimentais","Quase-experimentos",`
+<div class="intro"><span class="eyebrow">Experimentais · intervenção sem sorteio</span><h2>Quando não dá para sortear, o que cada desenho consegue separar?</h2><p>No estudo quase-experimental o pesquisador controla a intervenção, mas a alocação não é aleatória. O desafio é separar o efeito da intervenção do que teria acontecido de qualquer modo.</p></div>
+<div class="grid"><div class="card"><div class="card-h"><h3>Uma intervenção, quatro desenhos</h3><button class="more-btn" data-learn="quase">Saiba mais</button></div>
+ <p class="lede">Um município implanta um programa no mês 0. O desfecho são as internações por 10 mil habitantes. Os mesmos dados, lidos por quatro desenhos.</p>
+ <div class="chips" id="qeD"></div>
+ <p class="lede" id="qeDt" style="margin-top:10px"></p>
+ <svg class="ch" id="qeS" role="img" aria-label="Internações por mês antes e depois da intervenção"></svg>
+ <div class="legend" id="qeLg"></div>
+ <div class="cols2" style="margin-top:12px"><div class="stack">
+  <div class="range"><label for="qeTr">Tendência que já existia</label><output id="qeTro"></output><input type="range" id="qeTr" min="-1" max="1" step="0.1" value="-0.5"></div>
+  <div class="range"><label for="qeEf">Efeito verdadeiro da intervenção</label><output id="qeEfo"></output><input type="range" id="qeEf" min="-15" max="0" step="1" value="-5"></div>
+  <div class="range"><label for="qeSh">Outro evento no mesmo mês, que atinge toda a região</label><output id="qeSho"></output><input type="range" id="qeSh" min="-10" max="10" step="1" value="0"></div>
+  <div class="row"><button class="btn small" id="qeNew">Outros dados</button></div>
+ </div><div><div class="tiles" id="qeT"></div><div class="insight" id="qeI"></div></div></div>
+</div></div>`,()=>{qeData();
+  chips($("qeD"),QE_D.map(d=>d[0]),i=>{QE.des=i;renderQE();},0);
+  [["qeTr","tr"],["qeEf","ef"],["qeSh","sh"]].forEach(([id,k])=>$(id).oninput=e=>{QE[k]=+e.target.value;qeData();renderQE();});
+  $("qeNew").onclick=()=>{QE.seed++;qeData();renderQE();};
+},()=>renderQE());
+function renderQE(){const d=QE.des,E=qeEst(),T=QE.T,C=QE.C,Hh=QE.Hh,pre=T.filter(p=>p.t<0),post=T.filter(p=>p.t>=0);
+  $("qeDt").textContent=QE_D[d][1];$("qeTro").textContent=QE.tr===0?"estável":`${QE.tr<0?"cai":"sobe"} ${fmt(Math.abs(QE.tr),1)} por mês`;$("qeEfo").textContent=QE.ef===0?"nenhum":`${fmt(QE.ef,0)} internações`;$("qeSho").textContent=QE.sh===0?"nenhum":`${QE.sh>0?"+":""}${fmt(QE.sh,0)} internações`;
+  const all=T.concat(d===2?C:[],d===3?Hh:[]),x0=d===3?-37:-13,x1=12,ylo=Math.min(...all.map(p=>p.y))-4,yhi=Math.max(...all.map(p=>p.y))+5;
+  const el=$("qeS"),H=270,W=box(el,H),L=36,Rm=12,Tp=14,ih=H-Tp-34,iw=W-L-Rm,X=t=>L+(t-x0)/(x1-x0)*iw,Y=v=>Tp+ih-(v-ylo)/(yhi-ylo)*ih;let s="";
+  const yt=[];for(let v=Math.ceil(ylo/10)*10;v<=yhi;v+=10)yt.push(v);s+=yGrid(Y,yt,L,W-Rm,v=>v)+xAxis(X,(d===3?[-36,-24,-12,0,11]:[-12,-6,0,6,11]),Tp+ih,v=>v,L,W-Rm);
+  s+=`<line x1="${X(-.5)}" x2="${X(-.5)}" y1="${Tp-6}" y2="${Tp+ih}" stroke="var(--bad)" stroke-width="1.6" stroke-dasharray="5 4"/><text x="${X(-.5)+5}" y="${Tp+4}" style="font-size:11px;fill:var(--bad)">intervenção</text>`;
+  const dots=(a,c,on,hollow)=>a.map(p=>`<circle cx="${X(p.t)}" cy="${Y(p.y)}" r="${on(p)?4.4:3}" fill="${hollow?"var(--surface)":c}" stroke="${c}" stroke-width="1.6" opacity="${on(p)?1:.22}"/>`).join("");
+  const seg=(t0,t1,y0,y1,c,dash)=>`<line x1="${X(t0)}" y1="${Y(y0)}" x2="${X(t1)}" y2="${Y(y1)}" stroke="${c}" stroke-width="2" ${dash?'stroke-dasharray="6 4"':""}/>`;
+  if(d===0){s+=dots(T,"var(--exp)",p=>p.t===-1||p.t===11)+seg(-1,11,T[11].y,T[23].y,"var(--exp)");}
+  else if(d===1){s+=dots(T,"var(--exp)",()=>true)+seg(-12,-1,E.a+E.b*-12,E.a-E.b,"var(--exp)")+seg(-1,11,E.a-E.b,E.a+E.b*11,"var(--exp)",true)+seg(0,11,qeMean(post)+E.b*-5.5,qeMean(post)+E.b*5.5,"var(--exp)");}
+  else if(d===2){const cp=C.filter(p=>p.t<0),cq=C.filter(p=>p.t>=0);s+=dots(T,"var(--exp)",()=>true)+dots(C,"var(--nex)",()=>true)+seg(-12,-1,qeMean(pre),qeMean(pre),"var(--exp)")+seg(0,11,qeMean(post),qeMean(post),"var(--exp)")+seg(-12,-1,qeMean(cp),qeMean(cp),"var(--nex)")+seg(0,11,qeMean(cq),qeMean(cq),"var(--nex)");}
+  else{s+=dots(T,"var(--exp)",p=>p.t>=0)+dots(Hh,"var(--fg)",()=>true,true)+seg(-36,-25,qeMean(Hh),qeMean(Hh),"var(--fg)")+seg(0,11,qeMean(post),qeMean(post),"var(--exp)")+`<text x="${X(-30.5)}" y="${Y(qeMean(Hh))-12}" text-anchor="middle" style="font-size:11px;fill:var(--fg)">pacientes de três anos antes</text>`;}
+  s+=`<text x="${W-Rm}" y="${H-1}" text-anchor="end" style="font-size:11px">meses (a intervenção começa no mês 0)</text><text x="${L}" y="${Tp-3}" style="font-size:11px">internações por 10 mil</text>`;el.innerHTML=s;
+  const lg=(c,t,dash)=>`<span><i style="background:${dash?"none":c};${dash?`border-top:2px dashed ${c};height:0`:""}"></i>${t}</span>`;
+  $("qeLg").innerHTML=lg("var(--exp)","município com o programa")+(d===2?lg("var(--nex)","município vizinho, sem o programa"):"")+(d===1?lg("var(--exp)","para onde a tendência levaria",true):"")+(d===0?"<span>apagado: o que o estudo não mediu</span>":"");
+  const err=E.est-QE.ef,ok=Math.abs(err)<1.5;
+  $("qeT").innerHTML=tile("Efeito estimado",fmt(E.est,1),"internações por 10 mil",ok?"acc":"bad")+tile("Efeito verdadeiro",fmt(QE.ef,1),"")+tile("Erro da estimativa",(err>0?"+":"")+fmt(err,1),ok?"dentro do ruído dos dados":err<0?"benefício exagerado":"benefício subestimado",ok?"":"bad");
+  const trTxt=QE.tr?`a tendência que já existia (${fmt(QE.tr*12,0)} em um ano)`:"",shTxt=QE.sh?`o outro evento do mesmo mês (${QE.sh>0?"+":""}${QE.sh})`:"",both=[trTxt,shTxt].filter(Boolean).join(" e ");
+  $("qeI").className="insight"+(ok?"":" warn");
+  $("qeI").innerHTML=d===0?(both?`Com duas medidas e nenhuma comparação, tudo o que mudou no período entra na conta do programa: ${both}. O efeito parece ${Math.abs(E.est)>Math.abs(QE.ef)?"maior":"diferente"} do que é.`:"Sem tendência e sem outros eventos, antes e depois até acerta. O problema é que o estudo não tem como saber se esse era o caso. Mexa na tendência.")
+   :d===1?(QE.sh?`A série desconta a tendência: compara o que aconteceu com o que a linha tracejada previa. Mas ${shTxt} aconteceu junto com o programa, e sem grupo de comparação os dois não se separam.`:"Com muitas medidas antes, dá para ver a tendência e projetá-la (linha tracejada). O efeito é a distância entre o que se esperava e o que aconteceu. A tendência secular deixa de enganar. Experimente agora um outro evento no mesmo mês.")
+   :d===2?"O município vizinho passa pela mesma tendência e pelo mesmo evento. Subtraindo a mudança dele da mudança do município com o programa, sobra o efeito. Funciona enquanto os dois evoluiriam do mesmo jeito sem o programa; como não houve sorteio, isso é uma suposição, e os grupos já partem de níveis diferentes."
+   :(QE.tr?`Entre os pacientes antigos e os atuais passaram-se três anos da tendência que já existia. Toda essa mudança (${fmt(QE.tr*36,0)}) é atribuída ao programa. Controles históricos costumam ${QE.tr<0?"favorecer":"prejudicar"} o tratamento novo.`:"Sem nenhuma mudança ao longo dos anos, o controle histórico acertaria. Na prática, diagnóstico, cuidados e registros mudam com o tempo. Mexa na tendência.");}
+
+/* ===================== TIPOS DE ENSAIO: hipótese, desenho e fases ===================== */
+const TI={d:-4,w:2.5,m:3,des:0,fq:5};
+const TI_PRE=[["Superior",-4,2.5],["Não inferior",-1,3],["Equivalente",0,2],["Inconclusivo",1,4.5],["Inferior",6,2]];
+const TI_DES=[["Paralelo",["Cada participante recebe um único tratamento, do começo ao fim.","É o desenho mais comum e serve para qualquer condição.","Como as pessoas diferem entre si, precisa de mais participantes que o cruzado."]],
+ ["Cruzado (crossover)",["Cada participante recebe os dois tratamentos, em ordem sorteada, e é o seu próprio controle.","Precisa de menos gente, mas só serve para condições crônicas e estáveis, com tratamentos de efeito reversível.","Exige uma pausa entre os períodos, para o efeito do primeiro tratamento não invadir o segundo."]],
+ ["Fatorial",["Testa dois tratamentos no mesmo ensaio: metade recebe A, metade recebe B.","Responde a duas perguntas com quase a mesma amostra.","Funciona quando um tratamento não muda o efeito do outro (sem interação)."]],
+ ["Por conglomerados",["O sorteio é de grupos inteiros: escolas, UBS, hospitais.","Usado quando a intervenção é coletiva ou quando vizinhos “contaminariam” uns aos outros.","Pessoas da mesma unidade se parecem: a amostra precisa ser maior e a análise deve considerar o agrupamento."]]];
+const TI_PH=[["Fase I","Segurança",60,"20 a 100 participantes, em geral voluntários saudáveis. Tolerabilidade, farmacocinética e dose máxima tolerada."],["Fase II","Prova de conceito",300,"Dezenas a algumas centenas de pacientes. Eficácia preliminar e relação dose-resposta."],["Fase III","Confirmação",3000,"Centenas a milhares de pacientes, em geral multicêntrica. Eficácia e segurança contra placebo ou padrão: é o ensaio que embasa o registro."],["Fase IV","Pós-comercialização",300000,"População real, muito ampla. Eventos adversos raros e de longo prazo, efetividade e farmacovigilância."]];
+const TI_FQ=[10,30,100,300,1000,3000,10000,30000,100000];
+const tiPpl=(n,cl)=>dotSVG(Array.from({length:n},()=>({e:null,d:0,cl})),6,{scale:1});
+LAB("tipos","Experimentais","Tipos de ensaio",`
+<div class="intro"><span class="eyebrow">Experimentais · como classificar um ensaio clínico</span><h2>Que pergunta o ensaio faz, e como ele foi montado para responder</h2><p>Um ensaio se classifica pela hipótese (o novo é melhor, não é pior, é igual?), pelo desenho (quem recebe o quê, e quando) e pela fase do desenvolvimento em que está.</p></div>
+<div class="grid two">
+ <div class="card wide"><div class="card-h"><h3>Superioridade, não inferioridade ou equivalência?</h3><button class="more-btn" data-learn="hipotese">Saiba mais</button></div>
+  <p class="lede">O resultado é a diferença de risco entre o tratamento novo e o padrão, com o seu intervalo de confiança. A conclusão depende de onde o intervalo inteiro cai em relação ao zero e à margem. A faixa sombreada, entre as margens, é a zona de equivalência. Arraste o intervalo.</p>
+  <div class="chips" id="tiP"></div>
+  <svg class="ch" id="tiS" style="margin-top:12px;touch-action:pan-y;cursor:ew-resize" role="img" aria-label="Intervalo de confiança da diferença de risco em relação ao zero e às margens"></svg>
+  <div class="cols2" style="margin-top:6px"><div class="stack">
+   <div class="range"><label for="tiD">Diferença estimada (novo − padrão)</label><output id="tiDo"></output><input type="range" id="tiD" min="-10" max="10" step="0.5" value="-4"></div>
+   <div class="range"><label for="tiW">Precisão: meia-largura do IC 95%</label><output id="tiWo"></output><input type="range" id="tiW" min="0.5" max="8" step="0.5" value="2.5"></div>
+   <div class="range"><label for="tiM">Margem definida antes do estudo</label><output id="tiMo"></output><input type="range" id="tiM" min="1" max="6" step="0.5" value="3"></div>
+  </div><div><div class="verd" id="tiV" style="margin-top:0"></div><div class="insight" id="tiI"></div></div></div></div>
+ <div class="card"><div class="card-h"><h3>Quem recebe o quê, e quando</h3><button class="more-btn" data-learn="desenhos">Saiba mais</button></div>
+  <div class="chips" id="tiDs"></div>
+  <div class="dsg" id="tiDg" style="margin-top:12px"></div>
+  <div class="key" id="tiK"></div>
+  <ul class="facts" id="tiF"></ul></div>
+ <div class="card"><div class="card-h"><h3>As fases e os eventos raros</h3><button class="more-btn" data-learn="fases">Saiba mais</button></div>
+  <p class="lede">Um evento adverso só aparece se houver gente suficiente para ele acontecer. Escolha a frequência do evento e veja em que fase ele seria visto ao menos uma vez.</p>
+  <div class="range"><label for="tiQ">O evento adverso acontece em</label><output id="tiQo"></output><input type="range" id="tiQ" min="0" max="8" step="1" value="5"></div>
+  <div class="phs" id="tiPh" style="margin-top:12px"></div>
+  <div class="insight" id="tiPI"></div></div>
+</div>`,()=>{
+  const sync=()=>{$("tiD").value=TI.d;$("tiW").value=TI.w;};
+  chips($("tiP"),TI_PRE.map(p=>p[0]),i=>{TI.d=TI_PRE[i][1];TI.w=TI_PRE[i][2];TI.m=3;$("tiM").value=3;sync();renderTI();},0);
+  [["tiD","d"],["tiW","w"],["tiM","m"]].forEach(([id,k])=>$(id).oninput=e=>{TI[k]=+e.target.value;chipOn($("tiP"),-1);renderTI();});
+  const sv=$("tiS");let drag=false;const mv=e=>{const p=svgPt(sv,e),W=sv.viewBox.baseVal.width;TI.d=clamp(Math.round(((p.x-12)/(W-24)*26-13)*2)/2,-10,10);sync();chipOn($("tiP"),-1);renderTI();};
+  sv.addEventListener("pointerdown",e=>{drag=true;sv.setPointerCapture(e.pointerId);mv(e);});sv.addEventListener("pointermove",e=>{if(drag)mv(e);});["pointerup","pointercancel"].forEach(t=>sv.addEventListener(t,()=>drag=false));
+  chips($("tiDs"),TI_DES.map(d=>d[0]),i=>{TI.des=i;renderTID();},0);
+  $("tiQ").oninput=e=>{TI.fq=+e.target.value;renderTIP();};
+},()=>{renderTI();renderTID();renderTIP();});
+function renderTI(){const {d,w,m}=TI,lo=d-w,hi=d+w,sup=hi<0,ni=hi<m,eq=lo>-m&&hi<m,inf=lo>0,pp=v=>(v>0?"+":"")+fmt(v,1);
+  $("tiDo").textContent=pp(d)+" p.p.";$("tiWo").textContent="± "+fmt(w,1)+" p.p.";$("tiMo").textContent=fmt(m,1)+" p.p.";
+  const el=$("tiS"),H=132,W=box(el,H),L=12,X=v=>L+(clamp(v,-13,13)+13)/26*(W-24),y=62;let s="";
+  s+=`<rect x="${X(-m)}" y="22" width="${X(m)-X(-m)}" height="74" fill="var(--good)" opacity=".1"/><text x="${X(0)}" y="110" text-anchor="middle" style="font-size:11px;fill:var(--good)"></text>`;
+  s+=`<line x1="${X(0)}" x2="${X(0)}" y1="22" y2="96" stroke="var(--fg)" stroke-width="1.5"/><line x1="${X(m)}" x2="${X(m)}" y1="22" y2="96" stroke="var(--bad)" stroke-width="1.5" stroke-dasharray="5 4"/><line x1="${X(-m)}" x2="${X(-m)}" y1="22" y2="96" stroke="var(--tick)" stroke-width="1.2" stroke-dasharray="5 4"/>`;
+  s+=`<line x1="${X(lo)}" x2="${X(hi)}" y1="${y}" y2="${y}" stroke="var(--accent)" stroke-width="5" stroke-linecap="round"/><line x1="${X(lo)}" x2="${X(lo)}" y1="${y-9}" y2="${y+9}" stroke="var(--accent)" stroke-width="3"/><line x1="${X(hi)}" x2="${X(hi)}" y1="${y-9}" y2="${y+9}" stroke="var(--accent)" stroke-width="3"/><circle cx="${X(d)}" cy="${y}" r="8" fill="var(--accent)" stroke="var(--surface)" stroke-width="2"/>`;
+  s+=`<text x="${clamp(X(d),60,W-60)}" y="${y-18}" text-anchor="middle" class="lbl" style="font-size:12px;fill:var(--accent)">${pp(d)} (${pp(lo)} a ${pp(hi)})</text>`;
+  s+=xAxis(X,[-12,-8,-4,0,4,8,12].concat([]),98,v=>(v>0?"+":"")+v,L,W-12)+`<text x="${L}" y="${H-2}" style="font-size:11px">‹ menos eventos com o novo</text><text x="${W-12}" y="${H-2}" text-anchor="end" style="font-size:11px">mais eventos com o novo ›</text><text x="${clamp(X(m),40,W-40)}" y="16" text-anchor="middle" style="font-size:11px;fill:var(--bad)">margem +${fmt(m,1)}</text><text x="${clamp(X(-m),40,W-40)}" y="16" text-anchor="middle" style="font-size:11px">−${fmt(m,1)}</text>`;el.innerHTML=s;
+  const vd=(ok,t,r)=>`<div class="vd ${ok?"yes":"no"}"><b>${t}: ${ok?"demonstrada":"não demonstrada"}</b><span>${r}</span></div>`;
+  $("tiV").innerHTML=vd(sup,"Superioridade","o IC inteiro fica abaixo de zero")+vd(ni,"Não inferioridade",`o limite superior do IC fica abaixo de +${fmt(m,1)}`)+vd(eq,"Equivalência",`o IC inteiro fica entre −${fmt(m,1)} e +${fmt(m,1)}`);
+  $("tiI").className="insight"+(inf||(!sup&&!ni)?" warn":"");
+  $("tiI").innerHTML=sup&&eq?"O novo é estatisticamente melhor, mas a diferença inteira cabe na zona de equivalência: superior no teste, equivalente na prática. Significância estatística não é relevância clínica.":sup?"O intervalo inteiro está do lado do tratamento novo: superioridade demonstrada.":inf&&lo>m?"O intervalo inteiro passou da margem: o novo é pior do que o padrão, além do que se aceitaria.":inf?"O novo teve mais eventos, e o intervalo inteiro está acima de zero: ele é pior que o padrão.":eq?"O intervalo inteiro cabe entre as margens: as diferenças compatíveis com os dados são pequenas demais para importar. Isso é equivalência, e exige um estudo preciso.":ni?"Não dá para dizer que o novo é melhor, mas os dados excluem que ele seja pior além da margem. Vale quando o novo tem outra vantagem: é mais barato, mais seguro ou mais fácil de usar.":"O intervalo é largo demais: os dados são compatíveis com o novo ser melhor, igual ou pior além da margem. “Não houve diferença significativa” não quer dizer que são equivalentes.";}
+function renderTID(){const D=TI_DES[TI.des],g=(l,sv2)=>`<div class="grp"><div class="grp-h"><b>${l}</b></div>${sv2}</div>`;let h="";
+  if(TI.des===0)h=`<div class="grps">${g("Grupo 1: tratamento novo",tiPpl(12,"fa"))}${g("Grupo 2: controle",tiPpl(12,"fb"))}</div>`;
+  else if(TI.des===1)h=`<div class="xo"><span></span><span class="h">Período 1</span><span></span><span class="h">Período 2</span>
+   <b>Sequência 1</b>${tiPpl(6,"fa")}<span class="ps">pausa</span>${tiPpl(6,"fb")}<b>Sequência 2</b>${tiPpl(6,"fb")}<span class="ps">pausa</span>${tiPpl(6,"fa")}</div>`;
+  else if(TI.des===2)h=`<div class="fx"><span></span><span class="h">Recebe B</span><span class="h">Não recebe B</span>
+   <span class="h">Recebe A</span><div class="c"><b>A + B</b>${tiPpl(6,"fab")}</div><div class="c"><b>Só A</b>${tiPpl(6,"fa")}</div>
+   <span class="h">Não recebe A</span><div class="c"><b>Só B</b>${tiPpl(6,"fb")}</div><div class="c"><b>Nenhum</b>${tiPpl(6,"f0")}</div></div>`;
+  else h=`<div class="cls">${["fa","fb","fb","fa","fa","fb"].map((c,i)=>`<div class="cl">UBS ${i+1}${dotSVG(Array.from({length:4},()=>({e:null,d:0,cl:c})),2,{scale:1})}</div>`).join("")}</div>`;
+  $("tiDg").innerHTML=h;const kd=(cl,t)=>`<span><svg viewBox="0 0 13 13"><circle class="p eu d0 ${cl}" cx="6.5" cy="6.5" r="5"/></svg>${t}</span>`;
+  $("tiK").innerHTML=TI.des===2?kd("fab","A + B")+kd("fa","só A")+kd("fb","só B")+kd("f0","nenhum"):kd("fa","tratamento novo")+kd("fb","controle");
+  $("tiF").innerHTML=D[1].map(t=>`<li>${t}</li>`).join("");}
+function renderTIP(){const n=TI_FQ[TI.fq],p=1/n;$("tiQo").textContent="1 em cada "+fmt(n,0)+" pessoas";
+  $("tiPh").innerHTML=TI_PH.map(f=>{const pr=1-Math.pow(1-p,f[2]);return `<div class="ph"><b>${f[0]}<small>${fmt(f[2],0)} pessoas</small></b><div class="bar"><i style="width:${pr*100}%"></i></div><span>${pr>.995?"> 99%":pr<.005?"< 1%":pct(pr,0)}</span></div>`;}).join("");
+  const first=TI_PH.find(f=>1-Math.pow(1-p,f[2])>=.95);
+  $("tiPI").innerHTML=`As barras mostram a probabilidade de observar o evento pelo menos uma vez. Para ter 95% de probabilidade de ver um evento que ocorre em 1 a cada ${fmt(n,0)}, é preciso acompanhar cerca de ${fmt(3*n,0)} pessoas (a “regra de três”). ${first?`Aqui isso só acontece a partir da <b>${first[0]}</b>${first[0]==="Fase IV"?": um evento assim passa despercebido pelos ensaios de registro e só aparece na farmacovigilância":""}.`:"Nem a pós-comercialização deste exemplo o garantiria."} Os tamanhos de cada fase são exemplos.`;}
+
+/* ===================== DESFECHOS: substituto × clinicamente relevante ===================== */
+/* risco do desfecho clínico no controle: 20%. RR = (1 − melhora do marcador × validade × 0,75) × (1 + outros efeitos) */
+const DF={m:40,v:90,h:0,srt:{},open:{}};
+const DF_PRE=[["Marcador confiável",40,90,0],["Marcador melhora, desfecho não muda",40,0,0],["Marcador melhora, desfecho piora",40,20,60]];
+const dfRR=()=>(1-DF.m/100*DF.v/100*.75)*(1+DF.h/100);
+/* pares do quadro da aula: [desfecho, tipo, condição, o par correspondente] */
+const DF_IT=[
+ ["Pressão arterial","sub","Na hipertensão, a pressão é o marcador. O que importa ao paciente: infarto, AVC, morte."],
+ ["LDL-colesterol","sub","Na dislipidemia, o perfil lipídico é o marcador. O que importa: infarto, AVC, morte."],
+ ["Hemoglobina glicada","sub","No diabetes tipo 2, glicemia e hemoglobina glicada são marcadores. O que importa: infarto, AVC, amputação, morte."],
+ ["Amputação","cli","É um desfecho que o paciente sente. No diabetes tipo 2, o marcador correspondente é a hemoglobina glicada."],
+ ["Resposta tumoral","sub","No câncer, a redução do tumor é um marcador. O que importa: sobrevida global e qualidade de vida."],
+ ["Sobrevida livre de progressão","sub","Parece clínico, mas é substituto: mede o tempo até o tumor crescer no exame, não quanto nem como a pessoa vive."],
+ ["Sobrevida global","cli","Viver mais é o desfecho que importa em oncologia, junto com a qualidade de vida."],
+ ["Placa amiloide no PET","sub","Na doença de Alzheimer, a placa no exame é um marcador. O que importa: cognição, funcionalidade, institucionalização."],
+ ["Institucionalização","cli","Precisar ou não de uma instituição de longa permanência é algo que a pessoa e a família vivem diretamente."],
+ ["Resposta de anticorpos","sub","Em vacinas, os anticorpos são o marcador. O que importa: doença, hospitalização, morte."],
+ ["Hospitalização","cli","É um evento na vida do paciente, não um resultado de exame."],
+ ["Albuminúria","sub","Na doença renal crônica, creatinina, TFG e albuminúria são marcadores. O que importa: diálise, transplante, morte."],
+ ["Diálise","cli","Entrar em diálise muda a vida do paciente. Os marcadores correspondentes são creatinina, TFG e albuminúria."],
+ ["Densidade mineral óssea","sub","Na osteoporose, a densitometria é o marcador. O que importa é a fratura."],
+ ["Fratura","cli","É o desfecho que a densidade mineral óssea tenta prever."],
+ ["Qualidade de vida","cli","É um desfecho relatado pelo próprio paciente, e clinicamente relevante por definição."]];
+const DF_CASE=[["Clofibrato","Pacientes com hipercolesterolemia","Redução de colesterol","Aumento de mortalidade"],["Flecainida","Extrassístoles ventriculares após infarto","Redução de extrassístoles","Aumento de mortalidade"],["Rosiglitazona","Pacientes com diabetes tipo 2","Redução de hemoglobina glicada","Aumento de infarto"]];
+LAB("desfecho","Resultados","Desfechos",`
+<div class="intro"><span class="eyebrow">Resultados · o que o ensaio mediu</span><h2>Melhorar o exame não é o mesmo que melhorar a vida do paciente</h2><p>Desfecho substituto é um marcador que se espera que preveja o evento clínico. Ele aparece mais cedo e exige ensaios menores, mas só vale o quanto consegue prever.</p></div>
+<div class="grid two">
+ <div class="card wide"><div class="card-h"><h3>Do marcador ao desfecho clínico</h3><button class="more-btn" data-learn="desfecho">Saiba mais</button></div>
+  <p class="lede">Um tratamento melhora o marcador. Se isso chega ou não ao paciente depende de quanto da doença passa pelo marcador e do que mais o tratamento faz.</p>
+  <div class="chips" id="dfP"></div>
+  <div class="cols2" style="margin-top:12px">
+   <div><svg class="ch" id="dfD" role="img" aria-label="Caminho causal da doença, do marcador e do desfecho clínico"></svg>
+    <div class="stack" style="margin-top:8px">
+     <div class="range"><label for="dfM">O tratamento melhora o marcador em</label><output id="dfMo"></output><input type="range" id="dfM" min="0" max="60" step="5" value="40"></div>
+     <div class="range"><label for="dfV">Quanto do caminho até o desfecho passa pelo marcador</label><output id="dfVo"></output><input type="range" id="dfV" min="0" max="100" step="5" value="90"></div>
+     <div class="range"><label for="dfH">Outros efeitos do tratamento sobre o desfecho</label><output id="dfHo"></output><input type="range" id="dfH" min="-20" max="100" step="5" value="0"></div>
+    </div></div>
+   <div><div class="sub">No marcador</div><div class="cmp" id="dfB" style="margin-top:0"></div>
+    <div class="sub" style="margin-top:14px">No desfecho clínico, em 100 pacientes de cada grupo</div><div class="grps" id="dfG"></div>
+    <div class="tiles" id="dfT" style="margin-top:12px"></div></div>
+  </div>
+  <div class="insight" id="dfI"></div></div>
+ <div class="card"><div class="card-h"><h3>Substituto ou clinicamente relevante?</h3><button class="more-btn" data-learn="desfecho">Saiba mais</button></div>
+  <p class="lede">A pergunta que separa os dois: o paciente sente ou vive isso, ou é um número de exame?</p>
+  <div id="dfS"></div></div>
+ <div class="card"><div class="card-h"><h3>Quando o marcador enganou</h3><button class="more-btn" data-learn="desfecho">Saiba mais</button></div>
+  <p class="lede">Três tratamentos que melhoraram o marcador. Abra cada um para ver o que o ensaio clínico encontrou no desfecho que importa.</p>
+  <div class="cases" id="dfC"></div>
+  <div class="insight warn">Regra prática: desconfie de benefícios demonstrados apenas em marcadores.</div></div>
+</div>`,()=>{
+  chips($("dfP"),DF_PRE.map(p=>p[0]),i=>{DF.m=DF_PRE[i][1];DF.v=DF_PRE[i][2];DF.h=DF_PRE[i][3];$("dfM").value=DF.m;$("dfV").value=DF.v;$("dfH").value=DF.h;renderDF();},0);
+  [["dfM","m"],["dfV","v"],["dfH","h"]].forEach(([id,k])=>$(id).oninput=e=>{DF[k]=+e.target.value;chipOn($("dfP"),DF_PRE.findIndex(p=>p[1]===DF.m&&p[2]===DF.v&&p[3]===DF.h));renderDF();});
+  $("dfC").addEventListener("click",e=>{const b=e.target.closest("[data-c]");if(b){DF.open[b.dataset.c]=true;renderDFC();}});
+},()=>{renderDF();renderDFC();sorter($("dfS"),DF.srt,DF_IT,[["sub","Substituto"],["cli","Clinicamente relevante"]]);});
+function renderDF(){const rr=dfRR(),ev=Math.round(20*rr),v=DF.v/100,h=DF.h/100;
+  $("dfMo").textContent=DF.m+"%";$("dfVo").textContent=DF.v===0?"nada":DF.v===100?"tudo":DF.v+"%";$("dfHo").textContent=DF.h===0?"nenhum":DF.h>0?`aumentam o risco em ${DF.h}%`:`reduzem o risco em ${-DF.h}%`;
+  // diagrama: Doença → Via causal → Progressão → Desfecho clínico; o tratamento age na via causal; o marcador sai dela
+  const el=$("dfD"),H=232,W=box(el,H),bw=Math.min(96,(W-36)/4),gap=(W-4*bw)/3,bh=38,y=84,xs=[0,1,2,3].map(i=>i*(bw+gap)),cx=i=>xs[i]+bw/2;let s="";
+  const bx=(x,yy,t1,t2,fill,fg,st)=>`<rect x="${x}" y="${yy}" width="${bw}" height="${bh}" rx="8" fill="${fill}" stroke="${st||fill}" stroke-width="1.5"/><text x="${x+bw/2}" y="${yy+(t2?16:23)}" text-anchor="middle" style="font-size:11.5px;font-weight:600;fill:${fg}">${t1}</text>${t2?`<text x="${x+bw/2}" y="${yy+29}" text-anchor="middle" style="font-size:11.5px;font-weight:600;fill:${fg}">${t2}</text>`:""}`;
+  const ar=(x1,x2,yy,c="var(--fg)",w=2)=>`<path d="M${x1} ${yy}H${x2-6}" stroke="${c}" stroke-width="${w}" fill="none"/><path d="M${x2} ${yy}l-8 -4.500v9z" fill="${c}"/>`;
+  [0,1,2].forEach(i=>s+=ar(xs[i]+bw+2,xs[i+1]-2,y+bh/2));
+  s+=bx(xs[0],y,"Doença",null,"var(--ink)","var(--on-ink)")+bx(xs[1],y,"Via causal","da doença","var(--ink)","var(--on-ink)")+bx(xs[2],y,"Progressão",null,"var(--ink)","var(--on-ink)")+bx(xs[3],y,"Desfecho","clínico","var(--accent)","var(--on-accent)");
+  s+=bx(xs[1],8,"Tratamento",null,"var(--surface)","var(--fg)","var(--fg)")+`<path d="M${cx(1)} ${8+bh+2}V${y-8}" stroke="var(--fg)" stroke-width="2"/><path d="M${cx(1)} ${y-2}l-4.500 -8h9z" fill="var(--fg)"/>`;
+  s+=bx(xs[1],y+bh+34,"Marcador","(substituto)","var(--nex)","var(--surface)")+`<path d="M${cx(1)} ${y+bh+2}v24" stroke="var(--nex)" stroke-width="2"/><path d="M${cx(1)} ${y+bh+32}l-4.500 -8h9z" fill="var(--nex)"/>`;
+  // validade: o quanto o marcador prevê o desfecho
+  const my=y+bh+34+bh/2;s+=`<path d="M${xs[1]+bw+3} ${my}H${cx(3)}V${y+bh+10}" fill="none" stroke="var(--nex)" stroke-width="${1+v*4}" stroke-dasharray="${v<.05?"2 5":"6 4"}" opacity="${.25+v*.75}"/><path d="M${cx(3)} ${y+bh+3}l-5 9h10z" fill="var(--nex)" opacity="${.25+v*.75}"/><text x="${W-2}" y="${y+bh+34+bh+16}" text-anchor="end" style="font-size:11px;fill:var(--nex)">validade: o marcador prevê o evento clínico?</text>`;
+  // outros efeitos do tratamento
+  if(DF.h){const c=DF.h>0?"var(--bad)":"var(--good)";s+=`<path d="M${xs[1]+bw+3} ${8+bh/2}H${cx(3)}V${y-10}" fill="none" stroke="${c}" stroke-width="${1.5+Math.abs(h)*4}"/><path d="M${cx(3)} ${y-3}l-5 -9h10z" fill="${c}"/><text x="${(xs[1]+bw+cx(3))/2}" y="${8+bh/2-7}" text-anchor="middle" style="font-size:11px;fill:${c}">outros efeitos</text>`;}
+  el.innerHTML=s;
+  $("dfB").innerHTML=[["Controle",100,"var(--tick)"],["Tratados",100-DF.m,"var(--nex)"]].map(([n,x,c])=>`<div class="rowb"><span>${n}</span><div class="bar"><i style="width:${x}%;background:${c}"></i></div><b>${x}</b></div>`).join("");
+  const mk=(k,a)=>{const P=[];for(let i=0;i<100;i++)P.push({e:a,d:i<k?1:0});return P;};
+  $("dfG").innerHTML=grp("Controle","20 eventos",dotSVG(mk(20,0),10))+grp("Tratados",n1(ev,"evento","eventos"),dotSVG(mk(ev,1),10));
+  $("dfT").innerHTML=tile("Marcador",DF.m?"−"+DF.m+"%":"igual","melhora com o tratamento",DF.m?"good":"")+tile("RR do desfecho clínico",fmt(ev/20,2),`${ev} × 20 eventos`,ev>20?"bad":ev<20?"good":"");
+  $("dfI").className="insight"+(ev>=20&&DF.m?" warn":"");
+  $("dfI").innerHTML=!DF.m?"Sem efeito no marcador, o que sobra são os outros efeitos do tratamento.":ev<18?"O marcador está no caminho entre a doença e o evento, e o tratamento não faz mais nada de relevante: a melhora do exame se traduz em menos eventos. É o que se espera de um desfecho substituto <b>validado</b>."
+   :ev<=20?"O exame melhorou e os pacientes continuam tendo eventos quase na mesma proporção. O marcador acompanha a doença, mas não está no caminho que leva ao desfecho: tratá-lo é tratar o número.":"O exame melhorou e os pacientes pioraram. O tratamento age no marcador, mas também faz outras coisas, e são elas que chegam ao paciente. Um ensaio que só medisse o marcador teria aprovado este tratamento.";}
+function renderDFC(){$("dfC").innerHTML=DF_CASE.map((c,i)=>`<div class="case"><h4>${c[0]}</h4><p>${c[1]}</p><div class="ln"><b>Marcador</b><span class="good">${c[2]}</span></div>${DF.open[i]?`<div class="ln"><b>No ensaio</b><span class="badt">${c[3]}</span></div>`:`<button class="btn small" data-c="${i}">Ver o desfecho clínico</button>`}</div>`).join("");}
+
+/* ===================== MEDIDAS DE EFEITO: RR, RRR, RAR, NNT e HR ===================== */
+const ME={rc:12,ri:8,lock:false,hr:.7,mode:"prop",t:3};
+const ME_PRE=[["12% × 8%",12,8],["Mesma redução relativa, risco baixo: 3% × 2%",3,2],["Mesma redução relativa, risco alto: 60% × 40%",60,40]];
+const ME_IMP=[["NNT menor que 25","Muito grande","Grande"],["NNT de 25 a 50","Grande","Moderado"],["NNT de 50 a 100","Moderado","Pequeno"]];
+const ME_L=.22;/* taxa de eventos por ano no controle */
+const meSc=t=>Math.exp(-ME_L*t),meSi=t=>ME.mode==="prop"?Math.exp(-ME_L*ME.hr*t):Math.exp(-ME_L*(2.2*Math.min(t,1)+.45*Math.max(0,t-1)));
+LAB("medidas","Resultados","Medidas de efeito",`
+<div class="intro"><span class="eyebrow">Resultados · RR, RRR, RAR, NNT e HR</span><h2>O mesmo resultado, contado de quatro jeitos</h2><p>O risco relativo diz quanto o risco muda em proporção. A redução absoluta e o NNT dizem quantas pessoas de fato se beneficiam, e dependem do risco de quem é tratado.</p></div>
+<div class="grid two">
+ <div class="card wide"><div class="card-h"><h3>RRR, RAR e NNT</h3><button class="more-btn" data-learn="medidas">Saiba mais</button></div>
+  <div class="chips" id="meP"></div>
+  <div class="cols2" style="margin-top:12px">
+   <div class="stack">
+    <div class="range"><label for="meC">Risco no grupo controle</label><output id="meCo"></output><input type="range" id="meC" min="1" max="60" step="0.5" value="12"></div>
+    <div class="range"><label for="meI">Risco no grupo intervenção</label><output id="meIo"></output><input type="range" id="meI" min="0" max="60" step="0.5" value="8"></div>
+    <label class="toggle"><input type="checkbox" id="meL"> Manter a redução relativa ao mudar o risco do controle</label>
+    <div class="tiles" id="meT"></div>
+    <div class="f" id="meF"></div>
+   </div>
+   <div><div class="grps" id="meG"></div><div class="key" id="meK"></div>
+    <div class="sub" style="margin-top:14px">Impacto do tratamento conforme o NNT</div><div class="tw"><table class="imp" id="meImp"></table></div></div>
+  </div>
+  <div class="cols2" style="margin-top:14px"><div><div class="sub">NNT conforme o risco de quem é tratado</div><svg class="ch" id="meS" role="img" aria-label="NNT conforme o risco basal, para a redução relativa atual"></svg></div><div class="insight" id="meTxt" style="align-self:center"></div></div></div>
+ <div class="card wide"><div class="card-h"><h3>Lendo um HR</h3><button class="more-btn" data-learn="hr">Saiba mais</button></div>
+  <p class="lede">Quando o ensaio acompanha o tempo até o evento, a medida é o hazard ratio: a razão entre as velocidades com que os eventos acontecem. Mova o HR e o tempo de leitura.</p>
+  <div class="seg" id="meM"><button data-v="prop">Riscos proporcionais</button><button data-v="cruz">Curvas que se cruzam</button></div>
+  <div class="cols2" style="margin-top:12px">
+   <div><svg class="ch" id="meK2" style="touch-action:pan-y;cursor:ew-resize" role="img" aria-label="Curvas de pessoas livres do evento ao longo do tempo"></svg>
+    <div class="legend"><span><i style="background:var(--nex)"></i>controle</span><span><i style="background:var(--exp)"></i>intervenção</span><span><i style="background:var(--bad)"></i>momento da leitura</span></div></div>
+   <div class="stack">
+    <div class="range" id="meHW"><label for="meH">Hazard ratio</label><output id="meHo"></output><input type="range" id="meH" min="0.3" max="1.5" step="0.05" value="0.7"></div>
+    <div class="range"><label for="meTm">Ler o resultado em</label><output id="meTo"></output><input type="range" id="meTm" min="0.5" max="6" step="0.5" value="3"></div>
+    <div class="tiles" id="meHT"></div>
+   </div>
+  </div>
+  <div class="insight" id="meHI"></div></div>
+</div>`,()=>{
+  const sync=()=>{$("meC").value=ME.rc;$("meI").value=ME.ri;};
+  chips($("meP"),ME_PRE.map(p=>p[0]),i=>{ME.rc=ME_PRE[i][1];ME.ri=ME_PRE[i][2];sync();renderME();},0);
+  $("meC").oninput=e=>{const v=+e.target.value;if(ME.lock&&ME.rc>0){ME.ri=ME.ri/ME.rc*v;}ME.rc=v;sync();chipOn($("meP"),-1);renderME();};
+  $("meI").oninput=e=>{ME.ri=+e.target.value;chipOn($("meP"),-1);renderME();};$("meL").onchange=e=>{ME.lock=e.target.checked;};
+  segBind($("meM"),ME.mode,v=>{ME.mode=v;renderHR();});$("meH").oninput=e=>{ME.hr=+e.target.value;renderHR();};$("meTm").oninput=e=>{ME.t=+e.target.value;renderHR();};
+  const sv=$("meK2");let drag=false;const mv=e=>{const p=svgPt(sv,e),W=sv.viewBox.baseVal.width;ME.t=clamp(Math.round((p.x-40)/(W-52)*12)/2,.5,6);$("meTm").value=ME.t;renderHR();};
+  sv.addEventListener("pointerdown",e=>{drag=true;sv.setPointerCapture(e.pointerId);mv(e);});sv.addEventListener("pointermove",e=>{if(drag)mv(e);});["pointerup","pointercancel"].forEach(t=>sv.addEventListener(t,()=>drag=false));
+},()=>{renderME();renderHR();});
+function renderME(){const rc=ME.rc/100,ri=ME.ri/100,rr=div(ri,rc),rrr=1-rr,rar=rc-ri,nn=rar>1e-9?Math.ceil(1/rar-1e-9):rar<-1e-9?Math.ceil(1/-rar-1e-9):null,harm=rar<-1e-9;
+  $("meCo").textContent=fmt(ME.rc,1)+"%";$("meIo").textContent=fmt(ME.ri,1)+"%";
+  $("meT").innerHTML=tile("RR",rat(rr),"risco na intervenção ÷ no controle")+tile(harm?"Aumento relativo":"RRR",pct(Math.abs(rrr),0),harm?"RR − 1":"1 − RR")+tile(harm?"Aumento absoluto":"RAR",fmt(Math.abs(rar)*100,1)+" p.p.",harm?"intervenção − controle":"controle − intervenção")+tile(harm?"NNH":"NNT",nn==null?"—":fmt(nn,0),nn==null?"sem diferença de risco":harm?"tratados para causar 1 desfecho":"tratados para evitar 1 desfecho",harm?"bad":"acc");
+  $("meF").innerHTML=nn==null?"Sem diferença entre os grupos, não há NNT.":`${harm?"NNH":"NNT"} = 1 ÷ ${harm?"aumento absoluto":"RAR"} = 1 ÷ ${fmt(Math.abs(rar),3)} = <b>${fmt(nn,0)}</b>`;
+  const kc=Math.round(rc*200),ki=Math.round(ri*200),av=Math.max(0,kc-ki),C=[],I=[];for(let j=0;j<200;j++){C.push({e:0,d:j<kc?1:0});I.push(j<ki?{e:1,d:1}:j<ki+av?{e:1,d:null}:{e:1,d:0});}
+  $("meG").innerHTML=grp("Controle",`${n1(kc,"evento","eventos")} em 200 pessoas`,dotSVG(C,20,{pitch:11,r:3.8,scale:1}))+grp("Intervenção",`${n1(ki,"evento","eventos")} em 200 pessoas${av?` · ${n1(av,"evitado","evitados")}`:""}`,dotSVG(I,20,{pitch:11,r:3.8,scale:1}));
+  $("meK").innerHTML=keyDot({e:0,d:1},"evento no controle")+keyDot({e:1,d:1},"evento na intervenção")+keyDot({e:1,d:null},"evento evitado");
+  const row=nn==null||harm?-1:nn<25?0:nn<=50?1:nn<=100?2:-1;
+  $("meImp").innerHTML=`<tr><th></th><th>Óbito</th><th>Eventos não fatais</th></tr>`+ME_IMP.map((r,i)=>`<tr class="${i===row?"now":""}"><td style="text-align:left">${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td></tr>`).join("");
+  const el=$("meS"),H=190,W=box(el,H),L=40,Rm=12,T=10,ih=H-T-32,iw=W-L-Rm,X=v=>L+v/60*iw,Y=v=>T+ih-Math.log10(clamp(v,1,1000))/3*ih;let s=yGrid(Y,[1,10,100,1000],L,W-Rm,v=>fmt(v,0))+xAxis(X,[0,10,20,30,40,50,60],T+ih,v=>v+"%",L,W-Rm);
+  if(rrr>0.005){let d="";for(let x=.5;x<=60;x+=.5)d+=(d?"L":"M")+X(x).toFixed(1)+","+Y(1/(x/100*rrr)).toFixed(1);s+=`<path d="${d}" fill="none" stroke="var(--accent)" stroke-width="2.2"/><circle cx="${X(ME.rc)}" cy="${Y(1/rar)}" r="6" fill="var(--accent)"/><text x="${clamp(X(ME.rc)+10,L+50,W-Rm-70)}" y="${Y(1/rar)-9}" class="lbl" style="fill:var(--accent);font-size:12px">NNT ${fmt(nn,0)}</text>`;}
+  else s+=`<text x="${(L+W-Rm)/2}" y="${T+ih/2}" text-anchor="middle" style="font-style:italic">sem redução de risco, não há curva</text>`;
+  s+=`<text x="${W-Rm}" y="${H-1}" text-anchor="end" style="font-size:11px">risco no grupo controle</text><text x="${W-Rm}" y="${T+2}" text-anchor="end" style="font-size:11px">NNT (escala logarítmica)</text>`;el.innerHTML=s;
+  $("meTxt").className="insight"+(harm?" warn":"");
+  $("meTxt").innerHTML=nn==null?"Os dois grupos têm o mesmo risco: RR 1, RAR zero.":harm?`A intervenção aumentou o risco. A cada ${fmt(nn,0)} pessoas tratadas, uma tem o desfecho por causa do tratamento (NNH, número necessário para causar dano).`
+   :`A intervenção remove ${pct(rrr,0)} do risco de quem é tratado. Em quem tem risco de ${fmt(ME.rc,1)}%, isso são ${fmt(rar*100,1)} pontos percentuais: é preciso tratar ${fmt(nn,0)} pessoas para evitar um desfecho. A mesma redução relativa em gente de risco menor evita menos eventos e pede um NNT maior. Marque “manter a redução relativa” e arraste o risco do controle. O NNT vale sempre para um tempo definido de tratamento.`;}
+function renderHR(){const t=ME.t,ta=fmt(t,t%1?1:0)+(t===1?" ano":" anos"),sc=meSc(t),si=meSi(t),prop=ME.mode==="prop",rr=div(1-si,1-sc);$("meHW").hidden=!prop;$("meHo").textContent=fmt(ME.hr,2);$("meTo").textContent=ta;
+  const el=$("meK2"),H=260,W=box(el,H),L=40,Rm=12,T=10,ih=H-T-78,iw=W-L-Rm,X=v=>L+v/6*iw,Y=v=>T+ih-v*ih;let s=yGrid(Y,[0,.25,.5,.75,1],L,W-Rm,v=>pct(v,0))+xAxis(X,[0,1,2,3,4,5,6],T+ih,v=>v,L,W-Rm);
+  const path=f=>{let d="";for(let x=0;x<=6.001;x+=.1)d+=(d?"L":"M")+X(x).toFixed(1)+","+Y(f(x)).toFixed(1);return d;};
+  s+=`<path d="${path(meSc)}" fill="none" stroke="var(--nex)" stroke-width="2.4"/><path d="${path(meSi)}" fill="none" stroke="var(--exp)" stroke-width="2.4"/>`;
+  s+=`<line x1="${X(t)}" x2="${X(t)}" y1="${T}" y2="${T+ih}" stroke="var(--bad)" stroke-width="2"/><circle cx="${X(t)}" cy="${Y(sc)}" r="4.500" fill="var(--nex)"/><circle cx="${X(t)}" cy="${Y(si)}" r="4.500" fill="var(--exp)"/>`;
+  s+=`<text x="${W-Rm}" y="${T+ih+32}" text-anchor="end" style="font-size:11px">anos desde o sorteio</text><text x="${L}" y="${T+ih+50}" style="font-size:11px;fill:var(--fg)">Pessoas em risco (de 1.000 no início)</text>`;
+  [0,1,2,3,4,5,6].forEach(x=>{s+=`<text x="${X(x)}" y="${T+ih+64}" text-anchor="middle" style="font-size:10.5px;fill:var(--nex)">${Math.round(1000*meSc(x))}</text><text x="${X(x)}" y="${T+ih+77}" text-anchor="middle" style="font-size:10.5px;fill:var(--exp)">${Math.round(1000*meSi(x))}</text>`;});
+  s+=`<text x="${W-Rm}" y="${T+2}" text-anchor="end" style="font-size:11px">pessoas livres do evento</text>`;el.innerHTML=s;
+  $("meHT").innerHTML=tile("Livres do evento: controle",pct(sc,0),"em "+ta)+tile("Livres do evento: intervenção",pct(si,0),"em "+ta)+tile("RR do evento até aqui",rat(rr),"risco acumulado",rr>1.02?"bad":"")+tile("HR",prop?fmt(ME.hr,2):t<=1?"2,20":"0,45",prop?"igual em todo o seguimento":t<=1?"no 1º ano":"depois do 1º ano",prop?"acc":"alt");
+  const rr1=div(1-meSi(1),1-meSc(1)),rr6=div(1-meSi(6),1-meSc(6));
+  $("meHI").className="insight"+(prop?"":" warn");
+  $("meHI").innerHTML=prop?(Math.abs(ME.hr-1)<.001?"Com HR igual a 1, as duas curvas coincidem: os eventos acontecem na mesma velocidade.":`O HR de ${fmt(ME.hr,2)} vale para todo o seguimento: os eventos acontecem a ${pct(ME.hr,0)} da velocidade do controle. Isso não é uma probabilidade. Em ${ta}, ${pct(1-sc,0)} do controle e ${pct(1-si,0)} da intervenção tiveram o evento, um RR de ${rat(rr)}, que vai de ${rat(rr1)} no primeiro ano a ${rat(rr6)} aos seis: com tempo suficiente, quase todos têm o evento nos dois grupos. Por isso se olham as curvas e os números em risco, e não só o HR.`)
+   :"Aqui a intervenção faz mal no começo e bem depois, como uma cirurgia com risco operatório. As curvas se cruzam perto do terceiro ano. Um HR único para todo o seguimento ficaria perto de 1 e esconderia as duas coisas: o HR supõe que a razão entre as velocidades é constante no tempo, e aqui não é.";}
+
 /* ===================== INTENÇÃO DE TRATAR × POR PROTOCOLO ===================== */
 /* cada braço: 100 sorteados, 30 graves (risco 40%) e 70 leves (risco 10%). No controle: 12 + 7 = 19 desfechos. */
 const IT={na:30,w:100,ef:0};
 function itCalc(){const rr=IT.ef?.5:1,n=IT.na,nG=Math.min(30,Math.round(n*(.3+.7*IT.w/100))),nL=n-nG,aG=30-nG,aL=70-nL;
   const ev={aG:Math.round(aG*.4*rr),aL:Math.round(aL*.1*rr),nG:Math.round(nG*.4),nL:Math.round(nL*.1)},evA=ev.aG+ev.aL,evN=ev.nG+ev.nL,ad=100-n;
   return{rr,n,nG,nL,aG,aL,ev,evA,evN,ad,itt:div((evA+evN)/100,.19),pp:div(div(evA,ad),.19),rI:(evA+evN)/100,rP:div(evA,ad)};}
-LAB("itt","Experimentais","Intenção de tratar",`
-<div class="intro"><span class="eyebrow">Experimentais · análise</span><h2>Quem abandona o tratamento sai da análise?</h2><p>Nem todo sorteado segue o protocolo. A análise por intenção de tratar mantém cada pessoa no grupo em que foi sorteada; a análise por protocolo fica só com quem seguiu o tratamento.</p></div>
+LAB("itt","Resultados","Intenção de tratar",`
+<div class="intro"><span class="eyebrow">Resultados · análise</span><h2>Quem abandona o tratamento sai da análise?</h2><p>Nem todo sorteado segue o protocolo. A análise por intenção de tratar mantém cada pessoa no grupo em que foi sorteada; a análise por protocolo fica só com quem seguiu o tratamento.</p></div>
 <div class="grid"><div class="card"><div class="card-h"><h3>Duas análises do mesmo ensaio</h3><button class="more-btn" data-learn="itt">Saiba mais</button></div>
  <p class="lede">Cem pessoas em cada braço, com a mesma proporção de graves, porque foram sorteadas. Depois, parte do grupo intervenção abandona o tratamento.</p>
  <div class="cols2">
@@ -1211,6 +1794,50 @@ function renderIT(){const c=itCalc(),P=[],C=[],push=(arr,k,ev,o)=>{for(let i=0;i
    ib?"O abandono foi ao acaso, e a análise por protocolo fica perto do efeito verdadeiro. A intenção de tratar aparece <b>diluída em direção a 1</b>, porque conta como tratados os que não tomaram o remédio. Ela estima o efeito de oferecer o tratamento, que é o que acontece na prática.":
    "Aqui as duas análises ficam perto do efeito verdadeiro. A análise por protocolo só é confiável quando quem abandona não difere de quem fica, e isso raramente se sabe.";}
 
+/* ===================== SUBGRUPOS: quanto mais fatias, mais achados pelo acaso ===================== */
+/* ensaio com 1.200 pessoas por braço e 20% de eventos no controle. O efeito é o mesmo em todos os subgrupos (RR 0,80) ou nenhum. */
+const SB_G=[["Sexo",["Mulheres","Homens"]],["Faixa etária",["Menos de 50 anos","50 a 59 anos","60 a 69 anos","70 anos ou mais"]],["Signo",["Áries","Touro","Gêmeos","Câncer","Leão","Virgem","Libra","Escorpião","Sagitário","Capricórnio","Aquário","Peixes"]],["Centro",Array.from({length:20},(_,i)=>"Centro "+(i+1))]];
+const SB={g:2,ef:1,seed:8,res:null,rep:null};
+function sbBin(n,p,r){let k=0;for(let i=0;i<n;i++)if(r()<p)k++;return k;}
+function sbTrial(r){const names=SB_G[SB.g][1],k=names.length,n=Math.round(1200/k),rr=SB.ef?.8:1,rows=[];let A=0,C=0;
+  names.forEach(nm=>{const a=sbBin(n,.2*rr,r),c=sbBin(n,.2,r),ci=ciRR(a,n-a,c,n-c);A+=a;C+=c;rows.push({nm,a,c,n,rr:a&&c?(a/n)/(c/n):NaN,ci,flag:SB.ef?(a>=c):(!!ci&&(ci[0]>1||ci[1]<1))});});
+  const N=n*k;return{rows,all:{a:A,c:C,n:N,rr:(A/N)/(C/N),ci:ciRR(A,N-A,C,N-C)},nf:rows.filter(x=>x.flag).length};}
+function sbRun(){SB.res=sbTrial(rng(SB.seed*131+SB.g*7+SB.ef));}
+function sbRep(){const r=rng(777+SB.g*13+SB.ef),T=400;let any=0;for(let i=0;i<T;i++)if(sbTrial(r).nf)any++;SB.rep=any/T;}
+LAB("sub","Resultados","Subgrupos",`
+<div class="intro"><span class="eyebrow">Resultados · desfechos secundários e subgrupos</span><h2>Quem procura em muitas fatias sempre encontra alguma coisa</h2><p>O ensaio foi dimensionado para responder ao desfecho primário na amostra inteira. Cada subgrupo é um ensaio pequeno, e com muitos deles o acaso produz achados.</p></div>
+<div class="grid"><div class="card"><div class="card-h"><h3>O ensaio fatiado</h3><button class="more-btn" data-learn="subgrupos">Saiba mais</button></div>
+ <p class="lede">São 2.400 participantes. O efeito do tratamento é rigorosamente o mesmo em todo mundo. Escolha como fatiar e refaça o ensaio algumas vezes.</p>
+ <div class="row"><div><div class="sub">Fatiar por</div><div class="chips" id="sbG"></div></div></div>
+ <div style="margin-top:10px"><div class="sub">Efeito verdadeiro, igual em todos</div><div class="chips" id="sbE"></div></div>
+ <div class="row" style="margin-top:12px"><button class="btn small primary" id="sbGo">Refazer o ensaio</button></div>
+ <svg class="ch" id="sbS" style="margin-top:10px" role="img" aria-label="Forest plot dos subgrupos e do resultado geral"></svg>
+ <div class="cols2" style="margin-top:12px"><div><div class="tiles" id="sbT"></div></div>
+  <div><div class="sub">Sem efeito algum: probabilidade de pelo menos um subgrupo “significativo”</div><svg class="ch" id="sbC" role="img" aria-label="Probabilidade de ao menos um falso positivo conforme o número de comparações"></svg></div></div>
+ <div class="insight" id="sbI"></div>
+</div></div>`,()=>{
+  chips($("sbG"),SB_G.map(g=>`${g[0]} <small style="color:var(--muted)">${g[1].length}</small>`),i=>{SB.g=i;sbRun();sbRep();renderSB();},SB.g);
+  chips($("sbE"),["Reduz o risco em 20% (RR 0,80)","Nenhum (RR 1,00)"],i=>{SB.ef=i?0:1;sbRun();sbRep();renderSB();},0);
+  $("sbGo").onclick=()=>{SB.seed++;sbRun();renderSB();};sbRun();sbRep();
+},()=>renderSB());
+function renderSB(){const R=SB.res,rows=R.rows,k=rows.length,el=$("sbS"),rh=k>12?20:24,T=8,H=T+k*rh+62,W=box(el,H),wide=W>=560,L=wide?150:112,Rn=wide?130:8,iw=W-L-Rn,lo=.25,hi=4,X=v=>L+(Math.log(clamp(v,lo,hi))-Math.log(lo))/(Math.log(hi)-Math.log(lo))*iw;let s="";
+  s+=`<line x1="${X(1)}" x2="${X(1)}" y1="${T-2}" y2="${T+k*rh+26}" stroke="var(--tick)" stroke-dasharray="4 3"/>`;
+  rows.forEach((r,i)=>{const y=T+i*rh+rh/2,c=r.flag?"var(--bad)":"var(--fg)";s+=`<text x="4" y="${y+4}" style="font-size:12px;fill:${c};${r.flag?"font-weight:600":""}">${r.nm}</text>`;
+    if(r.ci)s+=`<line x1="${X(r.ci[0])}" x2="${X(r.ci[1])}" y1="${y}" y2="${y}" stroke="${c}" stroke-width="1.5"/>`;if(has(r.rr))s+=`<rect x="${X(r.rr)-4}" y="${y-4}" width="8" height="8" fill="${c}"/>`;
+    if(wide)s+=`<text x="${W-4}" y="${y+4}" text-anchor="end" style="font-size:11px;fill:${c};font-variant-numeric:tabular-nums">${has(r.rr)?fmt(r.rr,2):"—"}${r.ci?` (${fmt(r.ci[0],2)}–${fmt(r.ci[1],2)})`:""}</text>`;});
+  const yd=T+k*rh+12,A=R.all;s+=`<path d="M${X(A.ci[0])} ${yd}L${X(A.rr)} ${yd-8}L${X(A.ci[1])} ${yd}L${X(A.rr)} ${yd+8}Z" fill="var(--accent)"/><text x="4" y="${yd+4}" class="lbl" style="font-size:12.5px;fill:var(--accent)">Todos</text>`;
+  if(wide)s+=`<text x="${W-4}" y="${yd+4}" text-anchor="end" class="lbl" style="font-size:11px;fill:var(--accent)">${fmt(A.rr,2)} (${fmt(A.ci[0],2)}–${fmt(A.ci[1],2)})</text>`;
+  s+=xAxis(X,[.25,.5,1,2,4],yd+16,numTxt,L,L+iw)+`<text x="${X(1)-8}" y="${H-2}" text-anchor="end" style="font-size:11px">‹ favorece o tratamento</text><text x="${X(1)+8}" y="${H-2}" style="font-size:11px">favorece o controle ›</text>`;el.innerHTML=s;
+  const sig=A.ci[1]<1||A.ci[0]>1,pf=1-Math.pow(.95,k),odd=rows.filter(r=>r.flag).map(r=>r.nm);
+  $("sbT").innerHTML=tile("Resultado em todos","RR "+fmt(A.rr,2),ciTxt(A.ci),"acc")+tile(SB.ef?"Subgrupos em que o benefício some":"Subgrupos “significativos”",`${R.nf} de ${k}`,SB.ef?"RR igual ou maior que 1":"IC 95% não inclui 1",R.nf?"bad":"")+tile("Em 400 ensaios refeitos",pct(SB.rep,0),SB.ef?"têm ao menos um subgrupo sem benefício":"têm ao menos um subgrupo “significativo”",SB.rep>.3?"bad":"");
+  const e2=$("sbC"),H2=150,W2=box(e2,H2),L2=38,T2=10,ih=H2-T2-30,iw2=W2-L2-12,X2=v=>L2+(v-1)/19*iw2,Y2=v=>T2+ih-v*ih;let d="",c=yGrid(Y2,[0,.25,.5,.75],L2,W2-12,v=>pct(v,0))+xAxis(X2,[1,5,10,15,20],T2+ih,v=>v,L2,W2-12);
+  for(let x=1;x<=20;x++)d+=(d?"L":"M")+X2(x)+","+Y2(1-Math.pow(.95,x));c+=`<path d="${d}" fill="none" stroke="var(--accent)" stroke-width="2.2"/><circle cx="${X2(k)}" cy="${Y2(pf)}" r="6" fill="var(--accent)"/><text x="${clamp(X2(k)-10,L2+40,W2-20)}" y="${Y2(pf)-10}" text-anchor="end" class="lbl" style="fill:var(--accent);font-size:12px">${pct(pf,0)}</text><text x="${W2-12}" y="${H2-1}" text-anchor="end" style="font-size:11px">número de subgrupos testados</text>`;e2.innerHTML=c;
+  const list=odd.length>3?odd.slice(0,3).join(", ")+" e outros":odd.length>1?odd.slice(0,-1).join(", ")+" e "+odd[odd.length-1]:odd.join("");
+  $("sbI").className="insight"+(R.nf?" warn":"");
+  $("sbI").innerHTML=(SB.ef?(R.nf?`O tratamento funciona igualmente em todos, mas neste ensaio ele “não funcionou” em: <b>${list}</b>. Nada distingue ${odd.length>1?"esses subgrupos":"esse subgrupo"}: é o acaso em amostras pequenas. Refaça o ensaio e os subgrupos “sem benefício” serão outros. Foi o que os autores do ISIS-2 mostraram de propósito, ao relatar que o ácido acetilsalicílico reduzia a mortalidade depois do infarto, exceto em quem nasceu sob Gêmeos ou Libra.`:`Neste ensaio, todos os subgrupos apontaram para o mesmo lado. Com ${k} fatias isso ${k<=4?"é o mais comum":"é sorte"}: refaça algumas vezes ou fatie mais fino.`)
+   :(R.nf?`O tratamento não faz nada, e ainda assim ${R.nf>1?"apareceram subgrupos “significativos”":"apareceu um subgrupo “significativo”"}: <b>${list}</b>. Com ${k} comparações, a probabilidade de pelo menos um achado desses é de ${pct(pf,0)}.`:`Nenhum subgrupo “significativo” desta vez. Com ${k} comparações, isso acontece em ${pct(1-pf,0)} dos ensaios; nos outros ${pct(pf,0)}, o acaso entrega pelo menos um.`))
+   +" Subgrupos geram hipóteses, não confirmam. Para merecer crédito, precisam ser pré-especificados, poucos, com teste de interação, plausíveis e replicados."+(sig?"":" Repare que, desta vez, nem o resultado geral excluiu o 1.");}
+
 /* ===================== METANÁLISE: forest plot ===================== */
 /* cada estudo: n por grupo, RR, incluído?, alto risco de viés? Risco no controle fixo em 30%. */
 const MT_PRE=[
@@ -1226,8 +1853,8 @@ function mtCalc(){const rows=MT.st.map(s=>{const c=Math.round(s.n*.3),a=Math.max
   const sw=U.reduce((t,r)=>t+1/r.v,0),yf=U.reduce((t,r)=>t+r.y/r.v,0)/sw,Q=U.reduce((t,r)=>t+(r.y-yf)**2/r.v,0),C=sw-U.reduce((t,r)=>t+1/r.v**2,0)/sw,tau2=k>1&&C>0?Math.max(0,(Q-(k-1))/C):0,I2=k>1&&Q>0?Math.max(0,(Q-(k-1))/Q):0;
   const w=r=>1/(r.v+(MT.model==="re"?tau2:0)),W=U.reduce((t,r)=>t+w(r),0),yp=U.reduce((t,r)=>t+w(r)*r.y,0)/W,sp=Math.sqrt(1/W);rows.forEach(r=>r.w=r.use?w(r)/W:0);
   return{rows,k,pool:Math.exp(yp),lo:Math.exp(yp-1.96*sp),hi:Math.exp(yp+1.96*sp),I2,wmax:Math.max(...rows.map(r=>r.w))};}
-LAB("meta","Experimentais","Metanálise",`
-<div class="intro"><span class="eyebrow">Experimentais · revisões</span><h2>A metanálise combina estudos, e herda os problemas deles</h2><p>A revisão sistemática é uma pesquisa sobre pesquisas. Quando os estudos são combináveis, a metanálise junta os resultados em uma estimativa só. Monte a sua e leia o forest plot.</p></div>
+LAB("meta","Resultados","Metanálise",`
+<div class="intro"><span class="eyebrow">Resultados · revisões</span><h2>A metanálise combina estudos, e herda os problemas deles</h2><p>A revisão sistemática é uma pesquisa sobre pesquisas. Quando os estudos são combináveis, a metanálise junta os resultados em uma estimativa só. Monte a sua e leia o forest plot.</p></div>
 <div class="grid"><div class="card"><div class="card-h"><h3>Forest plot</h3><button class="more-btn" data-learn="forest">Saiba mais</button></div>
  <div class="chips" id="mtP"></div>
  <svg class="ch" id="mtS" style="margin-top:12px" role="img" aria-label="Forest plot dos estudos e estimativa combinada"></svg>
@@ -1352,8 +1979,64 @@ forest:["Revisão sistemática e metanálise",`<h4>Como ler um forest plot</h4><
 <h4>Tipos de revisão</h4><ul><li><b>Narrativa:</b> panorama e discussão conceitual; as fontes são escolhidas pelo autor.</li><li><b>Integrativa:</b> integra evidências de naturezas diferentes.</li><li><b>De escopo:</b> mapeia o que existe e identifica lacunas.</li><li><b>Sistemática:</b> responde a uma pergunta específica (PICO), com protocolo registrado, busca reprodutível em várias bases, dois revisores independentes, avaliação do risco de viés e certeza graduada pelo GRADE.</li></ul>
 <div class="trap"><h4>Importante</h4><p>Compilar estudos duvidosos gera uma metanálise igualmente duvidosa.</p></div>`]};
 
+/* ===================== SAIBA MAIS das telas da versão 0.2 ===================== */
+Object.assign(LEARN,{
+rand:["Formas de randomizar",`<p>Um bom sorteio tem três propriedades:</p><ol><li><b>Imprevisível:</b> ninguém consegue antecipar a próxima alocação.</li><li><b>Equilibra em média</b> os fatores prognósticos conhecidos e desconhecidos.</li><li><b>É a base para a inferência:</b> as diferenças que sobram entre os grupos são acaso.</li></ol>
+<h4>As formas</h4><ul><li><b>Simples:</b> como jogar uma moeda. Imprevisível, mas pode desbalancear estudos pequenos.</li><li><b>Em blocos:</b> garante tamanhos semelhantes ao longo do recrutamento (em blocos de 4: AABB, ABAB, ABBA…). Use blocos de tamanho variável e oculto.</li><li><b>Estratificada:</b> sorteio separado dentro de estratos prognósticos (idade de 65 anos ou mais, centro).</li><li><b>Minimização:</b> aloca para minimizar desequilíbrios em vários fatores; recomenda-se um componente aleatório.</li><li><b>Adaptativa por resposta:</b> as probabilidades mudam conforme resultados interinos. Exige pré-especificação e simulação.</li><li><b>Por conglomerados:</b> sorteia grupos (escolas, UBS) quando a intervenção é coletiva.</li></ul>
+<div class="trap"><h4>Equilibrar em média não é igualar</h4><p>Em um ensaio pequeno, o sorteio simples pode deixar os grupos diferentes só por acaso. Isso não é viés, mas tira precisão e convence menos. Blocos, estratos e minimização existem para reduzir esse risco sem abrir mão do acaso.</p></div>`],
+sigilo:["Sigilo de alocação × mascaramento",`<p>São duas proteções diferentes, separadas pelo momento da alocação.</p>
+<h4>Sigilo de alocação</h4><ul><li>Atua <b>até</b> a designação: quem recruta não sabe qual será o próximo grupo.</li><li>Previne <b>viés de seleção</b>.</li><li>É sempre possível: central telefônica, sistema web, envelopes opacos, selados e numerados.</li></ul>
+<h4>Mascaramento (cegamento)</h4><ul><li>Atua <b>depois</b> da designação: esconde qual tratamento cada um recebe.</li><li>Previne <b>vieses de performance e de aferição</b>.</li><li>Nem sempre é possível, mas o avaliador do desfecho quase sempre pode ser cegado.</li></ul>
+<div class="trap"><h4>Um não substitui o outro</h4><p>Um ensaio duplo-cego com a sequência à vista de quem recruta continua sujeito a viés de seleção. E um ensaio aberto pode, e deve, ter sigilo de alocação.</p></div>`],
+cego:["Quem está mascarado?",`<div class="tw"><table class="t"><tr><th>Tipo</th><th>Quem está mascarado</th><th>Em inglês</th></tr><tr><td>Aberto</td><td>Ninguém</td><td>Open-label</td></tr><tr><td>Simples-cego</td><td>Em geral, o participante (às vezes o avaliador)</td><td>Single-blind</td></tr><tr><td>Duplo-cego</td><td>Participante e equipe que trata e/ou avalia</td><td>Double-blind</td></tr><tr><td>Triplo-cego</td><td>Os anteriores e também o analista de dados ou o comitê</td><td>Triple-blind</td></tr></table></div>
+<h4>O que cada um pode introduzir, se souber o grupo</h4><ul><li><b>Participante:</b> expectativa (efeito placebo), relato diferente dos sintomas, busca de outros tratamentos, abandono.</li><li><b>Equipe que trata:</b> atenção, ajustes e cuidados adicionais diferentes entre os grupos (viés de performance).</li><li><b>Avaliador do desfecho:</b> medida ou interpretação a favor do que espera (viés de aferição).</li><li><b>Analista:</b> escolhas de análise feitas já sabendo qual grupo é qual.</li></ul>
+<h4>Mascaramento × objetividade do desfecho</h4><p>Um ensaio pode medir a intensidade da ansiedade ou o óbito. O mascaramento é mais crucial no primeiro caso.</p><ul><li>Aberto, desfecho subjetivo: <b>inaceitável</b>.</li><li>Aberto, desfecho objetivo: possível.</li><li>Cego, desfecho subjetivo: possível.</li><li>Cego, desfecho objetivo: <b>ideal</b>.</li></ul>
+<div class="trap"><h4>Leia além do rótulo</h4><p>“Duplo-cego” não diz quais duas pessoas. O que importa é saber, para cada um (participante, equipe, avaliador, analista), se conhecia ou não o grupo.</p></div>`],
+desfecho:["Desfecho substituto × clinicamente relevante",`<p>A doença tem uma via causal, que leva à progressão e, no fim, ao desfecho clínico. O tratamento age nessa via. O desfecho substituto é um marcador medido no meio do caminho. A sua <b>validade</b> é a capacidade de prever os eventos clínicos.</p>
+<div class="tw"><table class="t"><tr><th>Condição</th><th>Desfecho substituto</th><th>Desfecho clinicamente relevante</th></tr>
+<tr><td>Hipertensão</td><td>Pressão arterial</td><td>Infarto, AVC, morte</td></tr><tr><td>Dislipidemia</td><td>LDL-colesterol, perfil lipídico</td><td>Infarto, AVC, morte</td></tr><tr><td>Diabetes tipo 2</td><td>Glicemia, hemoglobina glicada</td><td>Infarto, AVC, amputação, morte</td></tr><tr><td>Câncer</td><td>Resposta tumoral, sobrevida livre de progressão</td><td>Sobrevida global, qualidade de vida</td></tr><tr><td>Doença de Alzheimer</td><td>Placa amiloide no PET</td><td>Cognição, funcionalidade, institucionalização</td></tr><tr><td>Vacinas</td><td>Resposta de anticorpos</td><td>Doença, hospitalização, morte</td></tr><tr><td>Doença renal crônica</td><td>Creatinina, TFG, albuminúria</td><td>Diálise, transplante, morte</td></tr><tr><td>Osteoporose</td><td>Densidade mineral óssea</td><td>Fratura</td></tr></table></div>
+<h4>Quando o marcador enganou</h4><ul><li><b>Clofibrato</b> (hipercolesterolemia): reduziu o colesterol; no ensaio clínico, aumentou a mortalidade.</li><li><b>Flecainida</b> (extrassístoles ventriculares após infarto): reduziu as extrassístoles; aumentou a mortalidade.</li><li><b>Rosiglitazona</b> (diabetes tipo 2): reduziu a hemoglobina glicada; aumentou o infarto.</li></ul>
+<div class="trap"><h4>Regra prática</h4><p>Desconfie de benefícios demonstrados apenas em marcadores.</p></div>`],
+medidas:["RR, RRR, RAR e NNT",`<p><b>Risco relativo:</b> razão entre o risco do desfecho no grupo intervenção e o risco no grupo controle. RR = [a ÷ (a + b)] ÷ [c ÷ (c + d)].</p>
+<ul><li><b>RR &lt; 1:</b> menor risco no grupo intervenção (efeito protetor, se o desfecho é ruim).</li><li><b>RR = 1:</b> sem diferença entre os grupos.</li><li><b>RR &gt; 1:</b> maior risco no grupo intervenção.</li></ul>
+<h4>As três medidas derivadas</h4><ul><li><b>RRR</b> (redução relativa do risco) = 1 − RR: quanto do risco basal a intervenção remove, em proporção.</li><li><b>RAR</b> (redução absoluta do risco) = risco no controle − risco na intervenção, em pontos percentuais.</li><li><b>NNT</b> (número necessário tratar) = 1 ÷ RAR: quantos precisam ser tratados, por um período, para evitar um desfecho.</li></ul>
+<h4>Exemplo</h4><p>Risco de óbito de 12% no controle e de 8% na intervenção: RR = 0,67; RRR = 33%; RAR = 4 pontos percentuais; NNT = 25.</p>
+<h4>Impacto do tratamento</h4><div class="tw"><table class="t"><tr><th>NNT</th><th>Óbito</th><th>Eventos não fatais</th></tr><tr><td>Menor que 25</td><td>Muito grande</td><td>Grande</td></tr><tr><td>25 a 50</td><td>Grande</td><td>Moderado</td></tr><tr><td>50 a 100</td><td>Moderado</td><td>Pequeno</td></tr></table></div>
+<div class="trap"><h4>Sempre com o intervalo de confiança</h4><p>Se o IC 95% inclui 1, os dados são compatíveis com ausência de efeito e, muitas vezes, também com efeitos relevantes. Ausência de evidência não é evidência de ausência. E o NNT é sempre para um tempo definido.</p></div>`],
+hr:["Lendo um HR",`<ol><li><b>Interpretação igual à do RR:</b> HR menor que 1 favorece a intervenção; HR igual a 1, sem diferença. Olhe o IC.</li><li><b>Riscos proporcionais:</b> o HR supõe que a razão entre os hazards é constante no tempo. Se as curvas se cruzam, um único número resume mal.</li><li><b>Não é probabilidade:</b> HR de 0,5 não significa “metade das pessoas morre”. Significa metade da velocidade de ocorrência.</li><li><b>Olhe as curvas e os números em risco:</b> as curvas de Kaplan-Meier mostram quando o efeito aparece e quantos restam em seguimento.</li></ol>
+<p>Os números em risco, abaixo das curvas, dizem quanta gente sustenta cada trecho. No fim do seguimento costumam restar poucos, e a curva fica instável.</p>`],
+subgrupos:["Desfechos secundários e análises de subgrupo",`<ol><li><b>Geram hipóteses, não confirmam.</b> O desfecho primário é o que o estudo foi dimensionado para responder.</li><li><b>Multiplicidade.</b> Quanto mais comparações, mais achados “significativos” pelo acaso.</li><li><b>Subgrupos críveis</b> são pré-especificados, poucos, com teste de interação, plausíveis e replicados.</li></ol>
+<h4>ISIS-2, 1988</h4><p>O ácido acetilsalicílico reduziu a mortalidade depois do infarto, exceto, aparentemente, em quem nasceu sob Gêmeos ou Libra. Os autores fizeram essa análise de propósito, para mostrar como subgrupos produzem achados espúrios.</p>
+<div class="trap"><h4>A conta da multiplicidade</h4><p>Se nada funciona e cada teste tem 5% de probabilidade de dar “significativo”, com 12 subgrupos a probabilidade de pelo menos um falso positivo é 1 − 0,95¹² = 46%. O teste certo para subgrupos é o de interação (o efeito difere entre os subgrupos?), e não um teste dentro de cada fatia.</p></div>`],
+hipotese:["Como classificar um ensaio clínico",`<h4>Pela hipótese</h4><ul><li><b>Superioridade:</b> o novo é melhor?</li><li><b>Não inferioridade:</b> o novo não é pior além de uma margem?</li><li><b>Equivalência:</b> é igual, dentro de uma margem?</li></ul>
+<p>A margem é a maior diferença que ainda se aceitaria como clinicamente irrelevante. Ela precisa ser definida antes do estudo.</p>
+<h4>Pelo objetivo</h4><ul><li><b>Terapêutico:</b> trata quem já tem a doença.</li><li><b>Preventivo:</b> vacinas, quimioprofilaxia, mudanças de estilo de vida.</li><li><b>Diagnóstico ou rastreamento:</b> estratégias de detecção.</li></ul>
+<h4>Pela abordagem</h4><ul><li><b>Explanatório:</b> condições ideais (pacientes selecionados, adesão monitorada, equipes treinadas). Mede eficácia.</li><li><b>Pragmático:</b> prática real (adesão, acesso, comorbidades, sistema de saúde). Mede efetividade.</li></ul>
+<div class="trap"><h4>“Sem diferença significativa” não é equivalência</h4><p>Um estudo pequeno quase sempre deixa de encontrar diferença. Equivalência e não inferioridade exigem que o intervalo de confiança inteiro fique dentro da margem.</p></div>`],
+desenhos:["Ensaios pelo desenho",`<ul><li><b>Paralelo:</b> cada grupo recebe um tratamento durante todo o estudo.</li><li><b>Cruzado (crossover):</b> cada participante recebe os tratamentos em sequência, em ordem sorteada.</li><li><b>Fatorial:</b> dois ou mais tratamentos avaliados ao mesmo tempo, em combinações.</li><li><b>Por conglomerados:</b> sorteia escolas, UBS, hospitais.</li><li><b>Plataforma e adaptativo:</b> braços entram e saem do estudo conforme os resultados se acumulam.</li></ul>
+<p>O desenho paralelo é o ponto de partida. Os outros existem para ganhar eficiência (cruzado, fatorial), viabilizar intervenções coletivas (conglomerados) ou testar muitos tratamentos em sequência sem recomeçar do zero (plataforma).</p>`],
+fases:["As fases do desenvolvimento clínico",`<ul><li><b>Fase I, segurança:</b> 20 a 100 participantes, em geral voluntários saudáveis. Tolerabilidade, farmacocinética, dose máxima tolerada. Escalonamento de dose a partir de dados pré-clínicos.</li><li><b>Fase II, prova de conceito:</b> dezenas a algumas centenas de pacientes. Eficácia preliminar e relação dose-resposta. Frequentemente randomizada e controlada (fase IIb).</li><li><b>Fase III, confirmação:</b> centenas a milhares, em geral multicêntrica. Eficácia e segurança contra placebo ou padrão. É o ensaio confirmatório que embasa o registro.</li><li><b>Fase IV, pós-comercialização:</b> população real, muito ampla. Eventos adversos raros e de longo prazo; efetividade. Farmacovigilância, estudos observacionais e também ensaios randomizados.</li></ul>
+<div class="trap"><h4>A regra de três</h4><p>Se um evento não apareceu em n pessoas, o máximo que se pode dizer, com 95% de confiança, é que ele ocorre em menos de 3 a cada n. Um ensaio de fase III com 3.000 pessoas tem só 26% de probabilidade de ver ao menos um caso de um evento que ocorre em 1 a cada 10.000.</p></div>`],
+quase:["Estudos quase-experimentais",`<p>Há intervenção controlada pelo pesquisador, mas a alocação não é aleatória. Compara-se com grupos não equivalentes ou com os mesmos participantes antes da intervenção.</p>
+<h4>Sem grupo controle</h4><ul><li><b>Antes e depois:</b> mede o desfecho antes e após a intervenção.</li><li><b>Séries temporais interrompidas:</b> muitas medidas antes e depois; avalia mudança de nível e de tendência.</li></ul>
+<h4>Com grupo controle, sem sorteio</h4><ul><li><b>Controle não equivalente:</b> grupos comparados antes e depois.</li><li><b>Controles históricos:</b> compara com pacientes de outra época.</li></ul>
+<h4>Vantagens</h4><ul><li>Viáveis quando randomizar é impraticável.</li><li>Permitem abordagem experimental quando o sorteio seria antiético ou logisticamente inviável.</li><li>Adequados para avaliar intervenções comunitárias e políticas de saúde.</li></ul>
+<h4>Desvantagens</h4><ul><li>Sem sorteio, os grupos podem diferir em prognóstico.</li><li>Alguns desenhos nem têm grupo de comparação.</li><li>Inferência causal mais frágil: regressão à média, tendências seculares e eventos concomitantes.</li></ul>`],
+ra:["Risco atribuível (RA) e risco atribuível populacional (RAP)",`<h4>Risco atribuível (RA)</h4><p>Diferença <b>absoluta</b> de incidência entre expostos e não expostos. Representa os casos nos expostos que podem ser atribuídos à exposição.</p><p><b>RA = incidência nos expostos − incidência nos não expostos</b></p>
+<h4>Risco atribuível populacional (RAP)</h4><p>Casos na população total atribuíveis à exposição. Considera a força da associação <b>e</b> a prevalência da exposição.</p><p><b>RAP = incidência na população − incidência nos não expostos = proporção de expostos × RA</b></p>
+<p>A fração atribuível na população (FAP) é o RAP dividido pela incidência na população: a proporção de todos os casos que deixaria de ocorrer sem a exposição.</p>
+<h4>Exemplo ilustrativo: tabagismo e câncer de pulmão</h4><p>Incidência de 20 por 1.000 em fumantes e de 2 por 1.000 em não fumantes; 30% da população fuma.</p><ul><li>RR = 10: risco dez vezes maior.</li><li>RA = 18 por 1.000 fumantes: dos 20 casos, 18 são pelo tabagismo e 2 ocorreriam mesmo sem fumar.</li><li>RAP = 5,4 por 1.000 habitantes.</li><li>FAP = 73%: na população (7,4 casos por 1.000), cerca de 3 em cada 4 casos seriam evitados se ninguém fumasse.</li></ul>
+<div class="trap"><h4>A diferença fundamental</h4><p>Ambos são “atribuíveis”, mas o RA é específico dos expostos, enquanto o RAP é da população total.</p></div>`],
+relatos:["Relatos e séries de casos",`<p>Descrevem, em detalhe, pacientes com uma condição incomum, uma apresentação atípica, uma resposta inesperada a tratamento ou um evento adverso novo.</p>
+<ul><li><b>Relato de caso:</b> um paciente (ou muito poucos). Profundidade clínica: história, achados, raciocínio diagnóstico, tratamento, evolução.</li><li><b>Série de casos:</b> vários pacientes com a mesma condição ou exposição, reunidos para revelar padrões comuns. Ainda sem grupo de comparação.</li></ul>
+<h4>Para que servem</h4><ul><li>Identificar novas doenças ou condições.</li><li>Alertar sobre efeitos adversos raros.</li><li>Gerar hipóteses testáveis: não testam hipóteses, formulam hipóteses.</li><li>Dar pistas sobre a individualização do tratamento.</li></ul>
+<h4>Relatos que mudaram a medicina</h4><ul><li><b>1961, talidomida:</b> cartas de McBride (Lancet) e de Lenz associam o fármaco a malformações de membros. Retirada do mercado; nasce a farmacovigilância moderna.</li><li><b>1981, AIDS:</b> o MMWR descreve pneumocistose em 5 homens jovens previamente saudáveis, uma série de casos. Levou à síndrome, ao HIV e aos antirretrovirais.</li><li><b>2015–16, Zika e microcefalia:</b> clínicos do Nordeste notam o excesso de microcefalia; relatos documentam o vírus no cérebro fetal.</li><li><b>2020, MIS-C:</b> série de 8 crianças no Reino Unido descreve a síndrome inflamatória multissistêmica associada ao SARS-CoV-2.</li><li><b>2021, VITT:</b> série de 11 pacientes caracteriza trombose com trombocitopenia após vacina ChAdOx1; mudou recomendações de uso.</li></ul>
+<h4>Diretrizes CARE</h4><p>Estabelecem os itens mínimos de um relato rigoroso: título, resumo estruturado, informações do paciente, achados clínicos, linha do tempo, diagnóstico, intervenções, seguimento e desfechos, discussão e consentimento do paciente.</p>
+<h4>Limitações</h4><ul><li>Sem grupo controle: não permitem inferência causal.</li><li>Alta suscetibilidade a vieses de seleção e de relato.</li><li>Amostra não representativa; achados não generalizáveis.</li></ul>
+<p class="src">MMWR. 1981;30:250-2. Mlakar J et al. NEJM. 2016;374:951-8. Riphagen S et al. Lancet. 2020;395:1607-8. Greinacher A et al. NEJM. 2021;384:2092-101. Gagnier et al. J Clin Epidemiol 2014.</p>`]});
+
 /* ===================== navegação e início ===================== */
-const GRP_L={Reconhecer:"Reconhecer",Observacionais:"Observacionais",Experimentais:"Experimentais"};
+const GRP_L={Reconhecer:"Reconhecer",Observacionais:"Observacionais",Experimentais:"Experimentais",Resultados:"Resultados"};
 function renderNav(){const L=LABS.find(l=>l.id===cur);document.querySelectorAll(".blk").forEach(b=>b.classList.toggle("on",b.dataset.grp===L.grp));
   $("subs").innerHTML=LABS.filter(l=>l.grp===L.grp).map((l,i)=>`<button class="sb ${l.id===cur?"on":""}" data-lab="${l.id}"><i>${i+1}</i>${l.name}</button>`).join("");
   const i=LABS.indexOf(L),p=LABS[i-1],n=LABS[i+1];
@@ -1364,10 +2047,10 @@ $("subs").addEventListener("click",e=>{const b=e.target.closest("[data-lab]");if
 $("labFoot").addEventListener("click",e=>{const b=e.target.closest("[data-lab]");if(b)navGo(b.dataset.lab);});
 $("blocks").addEventListener("click",e=>{const b=e.target.closest("[data-grp]");if(!b)return;const L=LABS.find(l=>l.id===cur);if(L.grp===b.dataset.grp)return;navGo(LABS.find(l=>l.grp===b.dataset.grp).id);});
 document.querySelectorAll(".more-btn").forEach(b=>b.insertAdjacentHTML("afterbegin",`<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8" cy="8" r="6.3"/><path d="M8 7.2v4M8 4.9v.1" stroke-linecap="round"/></svg>`));
-document.addEventListener("click",e=>{const b=e.target.closest("[data-learn]");if(b){const L=LEARN[b.dataset.learn];if(L)openSheet(L[0],L[1]);}});
+document.addEventListener("click",e=>{const g=e.target.closest("[data-go-lab]");if(g){navGo(g.dataset.goLab);return;}const b=e.target.closest("[data-learn]");if(b){const L=LEARN[b.dataset.learn];if(L)openSheet(L[0],L[1]);}});
 $("howBtn").onclick=()=>openSheet("Como usar o STUDY LAB",`<p>O STUDY LAB é um laboratório para entender os tipos de estudos epidemiológicos mexendo neles. No topo, escolha o bloco e depois a tela. No fim de cada tela há atalhos para a anterior e a próxima.</p>
-<h4>Como ler as pessoas</h4><ul><li><b>A cor</b> mostra a exposição: laranja para expostos (ou tratados), azul para não expostos (ou controles).</li><li><b>Bolinha cheia</b> é quem teve o desfecho; <b>vazada</b>, quem não teve.</li><li><b>Cinza</b> é o que o estudo ainda não mediu.</li><li><b>Quadrado</b>, quando aparece, é um paciente grave.</li></ul>
-<h4>As telas</h4><p><b>Reconhecer:</b> ${LABS.filter(l=>l.grp==="Reconhecer").map(l=>l.name).join(", ")}.</p><p><b>Observacionais:</b> ${LABS.filter(l=>l.grp==="Observacionais").map(l=>l.name).join(", ")}.</p><p><b>Experimentais:</b> ${LABS.filter(l=>l.grp==="Experimentais").map(l=>l.name).join(", ")}.</p>
+<h4>Como ler as pessoas</h4><ul><li><b>A cor</b> mostra a exposição: laranja para expostos (ou tratados), azul para não expostos (ou controles).</li><li><b>Bolinha cheia</b> é quem teve o desfecho; <b>vazada</b>, quem não teve.</li><li><b>Cinza</b> é o que o estudo ainda não mediu.</li><li><b>Quadrado</b>, quando aparece, é um paciente grave.</li><li><b>Bolinha de cor clara</b> é um evento que foi evitado ou que ocorreria de qualquer modo, conforme a legenda de cada tela.</li></ul>
+<h4>As telas</h4><p><b>Reconhecer:</b> ${LABS.filter(l=>l.grp==="Reconhecer").map(l=>l.name).join(", ")}.</p><p><b>Observacionais:</b> ${LABS.filter(l=>l.grp==="Observacionais").map(l=>l.name).join(", ")}.</p><p><b>Experimentais:</b> ${LABS.filter(l=>l.grp==="Experimentais").map(l=>l.name).join(", ")}.</p><p><b>Resultados:</b> ${LABS.filter(l=>l.grp==="Resultados").map(l=>l.name).join(", ")}.</p>
 <h4>Ligação com o 2×2 LAB</h4><p>Na Linha do tempo, cada desenho termina em uma tabela 2×2. O botão “Abrir esta tabela no 2×2 LAB” leva os mesmos números para lá, onde dá para explorar a tabela a fundo.</p>
 <h4>Sugestão para aula</h4><ol><li>Antes de mexer em um controle, peça para a turma prever o que vai acontecer.</li><li>Mostre no laboratório.</li><li>Discuta a diferença entre a previsão e o resultado.</li></ol>
 <p class="src">As populações são simuladas e os exemplos são fictícios. Cada painel tem um “Saiba mais” com o conteúdo das aulas.</p>`);

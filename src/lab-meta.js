@@ -13,8 +13,8 @@ function mtCalc(){const rows=MT.st.map(s=>{const c=Math.round(s.n*.3),a=Math.max
   const sw=U.reduce((t,r)=>t+1/r.v,0),yf=U.reduce((t,r)=>t+r.y/r.v,0)/sw,Q=U.reduce((t,r)=>t+(r.y-yf)**2/r.v,0),C=sw-U.reduce((t,r)=>t+1/r.v**2,0)/sw,tau2=k>1&&C>0?Math.max(0,(Q-(k-1))/C):0,I2=k>1&&Q>0?Math.max(0,(Q-(k-1))/Q):0;
   const w=r=>1/(r.v+(MT.model==="re"?tau2:0)),W=U.reduce((t,r)=>t+w(r),0),yp=U.reduce((t,r)=>t+w(r)*r.y,0)/W,sp=Math.sqrt(1/W);rows.forEach(r=>r.w=r.use?w(r)/W:0);
   return{rows,k,pool:Math.exp(yp),lo:Math.exp(yp-1.96*sp),hi:Math.exp(yp+1.96*sp),I2,wmax:Math.max(...rows.map(r=>r.w))};}
-LAB("meta","Experimentais","Metanálise",`
-<div class="intro"><span class="eyebrow">Experimentais · revisões</span><h2>A metanálise combina estudos, e herda os problemas deles</h2><p>A revisão sistemática é uma pesquisa sobre pesquisas. Quando os estudos são combináveis, a metanálise junta os resultados em uma estimativa só. Monte a sua e leia o forest plot.</p></div>
+LAB("meta","Resultados","Metanálise",`
+<div class="intro"><span class="eyebrow">Resultados · revisões</span><h2>A metanálise combina estudos, e herda os problemas deles</h2><p>A revisão sistemática é uma pesquisa sobre pesquisas. Quando os estudos são combináveis, a metanálise junta os resultados em uma estimativa só. Monte a sua e leia o forest plot.</p></div>
 <div class="grid"><div class="card"><div class="card-h"><h3>Forest plot</h3><button class="more-btn" data-learn="forest">Saiba mais</button></div>
  <div class="chips" id="mtP"></div>
  <svg class="ch" id="mtS" style="margin-top:12px" role="img" aria-label="Forest plot dos estudos e estimativa combinada"></svg>

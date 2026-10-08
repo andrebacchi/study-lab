@@ -1,7 +1,18 @@
 /* ===================== ECOLÓGICO ===================== */
 /* cinco municípios de 40 pessoas: expostos e casos de cada um. As taxas nunca mudam; o que muda é QUEM adoece dentro do município. */
-const EC={th:1,open:false,E:[4,10,16,22,28],C:[4,6,8,10,12]};
+const EC={srt:{},th:1,open:false,E:[4,10,16,22,28],C:[4,6,8,10,12]};
 function ecK(g){const c=EC.C[g],k0=c*EC.E[g]/40;return Math.round(EC.th>=0?k0+EC.th*(c-k0):k0*(1+EC.th));}
+const EC_IT=[
+ ["Taxa de mortalidade infantil de cada município","agr","Resume em um número do grupo o que aconteceu com os indivíduos (os óbitos)."],
+ ["Proporção de fumantes em cada estado","agr","É obtida a partir de dados individuais dos membros do grupo e resumida em uma proporção."],
+ ["Incidência de sífilis congênita em cada região de saúde","agr","Casos individuais somados e divididos pela população do grupo."],
+ ["Intensidade da poluição do ar em cada cidade","amb","É uma característica física do lugar. Tem um equivalente individual (a exposição de cada pessoa), que pode variar dentro do grupo."],
+ ["Nível de flúor na água de abastecimento","amb","Característica física do local de interesse."],
+ ["Temperatura média anual de cada município","amb","Característica física do ambiente do grupo."],
+ ["Tipo de sistema de saúde de cada país","glo","É um atributo do grupo como um todo e não tem análogo individual: nenhuma pessoa “tem” um sistema de saúde."],
+ ["Existência de lei que proíbe fumar em locais fechados","glo","A legislação vale para todos os membros do grupo e não existe em nível individual."],
+ ["Densidade demográfica de cada cidade","glo","Só faz sentido para o grupo: uma pessoa não tem densidade demográfica."],
+ ["PIB per capita de cada país","glo","Descreve a economia do país como um todo. É diferente da renda de cada pessoa."]];
 const RT={oa:"84",pa:"350.000",ob:"45",pb:"250.000",per:100000};
 LAB("eco","Observacionais","Ecológico",`
 <div class="intro"><span class="eyebrow">Observacionais · ecológico</span><h2>O que vale para o grupo pode não valer para as pessoas</h2><p>No estudo ecológico, a unidade de análise é o grupo. As medidas de exposição e de desfecho chegam agregadas por município, estado ou país.</p></div>
@@ -19,6 +30,9 @@ LAB("eco","Observacionais","Ecológico",`
   <div class="grps" id="ecG" style="margin-top:14px"></div>
   <div class="key" id="ecK"></div>
   <div class="insight" id="ecTxt"></div></div>
+ <div class="card wide"><div class="card-h"><h3>Que tipo de medida é esta?</h3><button class="more-btn" data-learn="falacia">Saiba mais</button></div>
+  <p class="lede">As medidas de um estudo ecológico podem ser agregadas (resumem os indivíduos), ambientais (descrevem o lugar) ou globais (só existem para o grupo).</p>
+  <div id="ecSrt" style="max-width:760px"></div></div>
  <div class="card wide"><div class="card-h"><h3>Comparar taxas de dois lugares</h3><button class="more-btn" data-learn="taxas">Saiba mais</button></div>
   <p class="lede">A comparação mais simples entre grupos é a razão de taxas. Use o exemplo ou digite os seus números.</p>
   <div class="cols2"><div class="stack">
@@ -32,7 +46,7 @@ LAB("eco","Observacionais","Ecológico",`
   $("ecT").oninput=e=>{EC.th=+e.target.value/100;chipOn($("ecC"),[1,0,-1].indexOf(EC.th));renderEC();};$("ecO").onchange=e=>{EC.open=e.target.checked;renderEC();};
   [["rtOa","oa"],["rtPa","pa"],["rtOb","ob"],["rtPb","pb"]].forEach(([id,k])=>{$(id).value=RT[k];$(id).oninput=e=>{RT[k]=e.target.value;renderRT();};});
   segBind($("rtPer"),String(RT.per),v=>{RT.per=+v;renderRT();});
-},()=>{renderEC();renderRT();});
+},()=>{renderEC();renderRT();sorter($("ecSrt"),EC.srt,EC_IT,[["agr","Agregada"],["amb","Ambiental"],["glo","Global"]]);});
 function renderEC(){const el=$("ecS"),H=208,W=box(el,H),L=40,Rm=14,T=24,ih=H-T-34,iw=W-L-Rm,X=v=>L+v*iw,Y=v=>T+ih-v/.4*ih,nm="ABCDE";
   let s=yGrid(Y,[0,.1,.2,.3,.4],L,W-Rm,v=>fmt(v*100,0))+xAxis(X,[0,.25,.5,.75,1],T+ih,v=>pct(v,0),L,W-Rm);
   s+=`<line x1="${X(.02)}" y1="${Y(.02/3+.0667)}" x2="${X(.8)}" y2="${Y(.8/3+.0667)}" stroke="var(--alt)" stroke-width="2" stroke-dasharray="6 4"/>`;

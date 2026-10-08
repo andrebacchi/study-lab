@@ -10,7 +10,7 @@ echo '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="prec
 echo '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;1,6..72,500&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">'
 echo '<style>'; cat src/base.css src/study.css; echo '</style>'
 cat src/body.html
-echo '<script>'; for f in ui lab-tres lab-tempo lab-quiz lab-grade lab-transv lab-eco lab-coorte lab-cc lab-sorteio lab-efeito lab-itt lab-meta learn main; do cat src/$f.js; echo; done; echo '</script>'
+echo '<script>'; for f in ui lab-tres lab-tempo lab-quiz lab-grade lab-transv lab-eco lab-coorte lab-cc lab-sorteio lab-rand lab-cego lab-efeito lab-quase lab-tipos lab-desfecho lab-medidas lab-itt lab-sub lab-meta learn learn2 main; do cat src/$f.js; echo; done; echo '</script>'
 }
 if [ "$1" = "artifact" ]; then
   { echo '<title>STUDY LAB</title>'; body; } > study-lab.html; wc -c study-lab.html

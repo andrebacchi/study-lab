@@ -4,8 +4,8 @@ const IT={na:30,w:100,ef:0};
 function itCalc(){const rr=IT.ef?.5:1,n=IT.na,nG=Math.min(30,Math.round(n*(.3+.7*IT.w/100))),nL=n-nG,aG=30-nG,aL=70-nL;
   const ev={aG:Math.round(aG*.4*rr),aL:Math.round(aL*.1*rr),nG:Math.round(nG*.4),nL:Math.round(nL*.1)},evA=ev.aG+ev.aL,evN=ev.nG+ev.nL,ad=100-n;
   return{rr,n,nG,nL,aG,aL,ev,evA,evN,ad,itt:div((evA+evN)/100,.19),pp:div(div(evA,ad),.19),rI:(evA+evN)/100,rP:div(evA,ad)};}
-LAB("itt","Experimentais","Intenção de tratar",`
-<div class="intro"><span class="eyebrow">Experimentais · análise</span><h2>Quem abandona o tratamento sai da análise?</h2><p>Nem todo sorteado segue o protocolo. A análise por intenção de tratar mantém cada pessoa no grupo em que foi sorteada; a análise por protocolo fica só com quem seguiu o tratamento.</p></div>
+LAB("itt","Resultados","Intenção de tratar",`
+<div class="intro"><span class="eyebrow">Resultados · análise</span><h2>Quem abandona o tratamento sai da análise?</h2><p>Nem todo sorteado segue o protocolo. A análise por intenção de tratar mantém cada pessoa no grupo em que foi sorteada; a análise por protocolo fica só com quem seguiu o tratamento.</p></div>
 <div class="grid"><div class="card"><div class="card-h"><h3>Duas análises do mesmo ensaio</h3><button class="more-btn" data-learn="itt">Saiba mais</button></div>
  <p class="lede">Cem pessoas em cada braço, com a mesma proporção de graves, porque foram sorteadas. Depois, parte do grupo intervenção abandona o tratamento.</p>
  <div class="cols2">
