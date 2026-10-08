@@ -629,6 +629,8 @@ function tpWorld(){const r=rng(TP.seed*7919+TP.ef*13+1),P=[];
   [[1,1],[1,0],[0,1],[0,0]].forEach(([e,d])=>{const c=P.filter(p=>p.e===e&&p.d===d);shuffle(c,r).slice(0,Math.round(c.length*2/3)).forEach(p=>p.tv=true);});
   shuffle(cases.slice(),r).slice(0,8).forEach(p=>p.sr=true);
   TP.P=P;}
+/* botão que leva da linha do tempo para a tela que aprofunda o desenho */
+const deeper=(id,name)=>`<button class="btn small" data-nav="${id}">Aprofundar: ${name} ›</button>`;
 const tpIds=f=>TP.P.filter(f).map(p=>p.id).sort((x,y)=>TP.rank[x]-TP.rank[y]);
 const n1=(n,s,p)=>`${n} ${n===1?s:p}`;
 function tpSteps(){const P=TP.P,all=tpIds(()=>true),G=(label,sub,ids)=>({label,sub,ids}),cnt=f=>P.filter(f).length;
@@ -642,7 +644,7 @@ function tpSteps(){const P=TP.P,all=tpIds(()=>true),G=(label,sub,ids)=>({label,s
      {tab:"Tabela 2×2",title:"Conta os casos novos de cada grupo",text:tr?"Com a incidência nos dois braços, compara-se o risco de quem recebeu a intervenção com o do controle.":"Com a incidência em cada grupo, calcula-se o risco relativo.",
       rows:[[G(L1+", com desfecho","a = "+v.a,tpIds(p=>e(p)&&d(p))),G(L1+", sem desfecho","b = "+v.b,tpIds(p=>e(p)&&!d(p)))],[G(L0+", com desfecho","c = "+v.c,tpIds(p=>!e(p)&&d(p))),G(L0+", sem desfecho","d = "+v.d,tpIds(p=>!e(p)&&!d(p)))]],look:p=>({e:e(p),d:d(p)}),
       result:()=>{const rar=m.r0-m.r1;return `<div class="tiles">${tile(tr?"Risco na intervenção":"Incidência nos expostos",pct(m.r1,1),`${v.a} de ${v.a+v.b}`)}${tile(tr?"Risco no controle":"Incidência nos não expostos",pct(m.r0,1),`${v.c} de ${v.c+v.d}`)}${tile("Risco relativo (RR)",rat(m.rr),ciTxt(ciRR(v.a,v.b,v.c,v.d)),"acc")}${tr?tile("Redução absoluta (RAR)",fmt(rar*100,1)+" p.p.","risco no controle − na intervenção")+tile("NNT",rar>0?fmt(Math.ceil(1/rar-1e-9),0):"—",rar>0?"tratar para evitar 1 desfecho":"sem redução de risco"):tile("Risco atribuível (RA)",fmt(m.rd*100,1)+" p.p.","diferença entre as incidências")}</div>
-       <div class="insight">${tr?"Mesma direção da coorte: da exposição para o desfecho. A diferença é quem definiu a exposição.":"A coorte parte da exposição e chega ao desfecho. Por isso mede incidência e calcula o RR diretamente."}</div><div class="row" style="margin-top:10px">${lab22(v,tr?"ensaio":"coorte")}</div>`;}}];}
+       <div class="insight">${tr?"Mesma direção da coorte: da exposição para o desfecho. A diferença é quem definiu a exposição.":"A coorte parte da exposição e chega ao desfecho. Por isso mede incidência e calcula o RR diretamente."}</div><div class="row" style="margin-top:10px">${lab22(v,tr?"ensaio":"coorte")}${deeper(tr?"sorteio":"coorte",tr?"Sorteio":"Coorte")}</div>`;}}];}
   if(TP.des==="cc"){const cs=tpIds(p=>p.cc==="caso"),ct=tpIds(p=>p.cc==="ctrl"),out=tpIds(p=>!p.cc),v={a:cnt(p=>p.cc==="caso"&&p.e),b:cnt(p=>p.cc==="ctrl"&&p.e),c:cnt(p=>p.cc==="caso"&&!p.e),d:cnt(p=>p.cc==="ctrl"&&!p.e)},m=t22(v.a,v.b,v.c,v.d),O=G("Fora do estudo",out.length+" pessoas",out),lk=(p,ex)=>({e:ex&&p.cc?p.e:null,d:p.d,off:!p.cc});
     return[
      {tab:"Desfecho",title:"O desfecho já aconteceu",text:"O estudo começa depois dos fatos. Na população de origem, algumas pessoas já adoeceram.",rows:[[G("População de origem",`${cs.length} pessoas com o desfecho`,all)]],look:p=>({e:null,d:p.d})},
@@ -651,7 +653,7 @@ function tpSteps(){const P=TP.P,all=tpIds(()=>true),G=(label,sub,ids)=>({label,s
      {tab:"Tabela 2×2",title:"Compara a exposição de casos e controles",text:"As colunas da tabela foram fixadas pelo pesquisador. Por isso não há incidência nem RR: a medida é a razão de chances.",
       rows:[[G("Casos expostos","a = "+v.a,tpIds(p=>p.cc==="caso"&&p.e)),G("Controles expostos","b = "+v.b,tpIds(p=>p.cc==="ctrl"&&p.e))],[G("Casos não expostos","c = "+v.c,tpIds(p=>p.cc==="caso"&&!p.e)),G("Controles não expostos","d = "+v.d,tpIds(p=>p.cc==="ctrl"&&!p.e))],[O]],look:p=>lk(p,true),
       result:()=>`<div class="tiles">${tile("Chance de exposição nos casos",rat(v.a/v.c),`${v.a} ÷ ${v.c}`)}${tile("Chance de exposição nos controles",rat(v.b/v.d),`${v.b} ÷ ${v.d}`)}${tile("Razão de chances (OR)",rat(m.or),ciTxt(ciOR(v.a,v.b,v.c,v.d)),"acc")}${tile("Risco relativo",`<span class="strike">RR</span>`,"não se calcula aqui","muted")}</div>
-       <div class="insight">O caso-controle inverte a direção: parte do desfecho e investiga a exposição. Veja em <button class="lnk" data-nav="cc" style="border:0;background:none;padding:0">Caso-controle</button> por que o RR não funciona.</div><div class="row" style="margin-top:10px">${lab22(v,"caso_controle")}</div>`}];}
+       <div class="insight">O caso-controle inverte a direção: parte do desfecho e investiga a exposição. Por isso o RR não se aplica aqui.</div><div class="row" style="margin-top:10px">${lab22(v,"caso_controle")}${deeper("cc","Caso-controle")}</div>`}];}
   if(TP.des==="transversal"){const S=tpIds(p=>p.tv),out=tpIds(p=>!p.tv),O=G("Fora da amostra",out.length+" pessoas",out),f=(e,d)=>p=>p.tv&&p.e===e&&p.d===d,v={a:cnt(f(1,1)),b:cnt(f(1,0)),c:cnt(f(0,1)),d:cnt(f(0,0))},m=t22(v.a,v.b,v.c,v.d);
     return[
      {tab:"População",title:"Define a população",text:"Uma população delimitada: os moradores de um bairro, os alunos de uma escola.",rows:[[G("População definida","120 pessoas",all)]],look:()=>({e:null,d:null})},
@@ -660,7 +662,7 @@ function tpSteps(){const P=TP.P,all=tpIds(()=>true),G=(label,sub,ids)=>({label,s
      {tab:"Tabela 2×2",title:"Compara as prevalências",text:"A conta é a mesma do RR, mas com casos existentes: o resultado é a razão de prevalências.",
       rows:[[G("Expostos, com desfecho","a = "+v.a,tpIds(f(1,1))),G("Expostos, sem desfecho","b = "+v.b,tpIds(f(1,0)))],[G("Não expostos, com desfecho","c = "+v.c,tpIds(f(0,1))),G("Não expostos, sem desfecho","d = "+v.d,tpIds(f(0,0)))],[O]],look:p=>p.tv?{e:p.e,d:p.d}:{e:null,d:null,off:true},
       result:()=>`<div class="tiles">${tile("Prevalência nos expostos",pct(m.r1,1),`${v.a} de ${v.a+v.b}`)}${tile("Prevalência nos não expostos",pct(m.r0,1),`${v.c} de ${v.c+v.d}`)}${tile("Razão de prevalências (RP)",rat(m.rr),ciTxt(ciRR(v.a,v.b,v.c,v.d)),"acc")}</div>
-       <div class="insight warn">A foto não mostra o que veio antes. Com exposição e desfecho medidos juntos, não há como garantir que a exposição precedeu o desfecho.</div><div class="row" style="margin-top:10px">${lab22(v,"transversal")}</div>`}];}
+       <div class="insight warn">A foto não mostra o que veio antes. Com exposição e desfecho medidos juntos, não há como garantir que a exposição precedeu o desfecho.</div><div class="row" style="margin-top:10px">${lab22(v,"transversal")}${deeper("transv","Transversal")}</div>`}];}
   if(TP.des==="ecologico"){const nm="ABCDEF",gs=[0,1,2,3,4,5].map(g=>({g,ids:tpIds(p=>p.g===g),pe:EG[g]/20,rate:cnt(p=>p.g===g&&p.d)/20})),rows=s=>[0,2,4].map(i=>[gs[i],gs[i+1]].map(x=>G("Município "+nm[x.g],s?`${pct(x.pe,0)} expostos · ${fmt(x.rate*100,0)} casos por 100`:"20 pessoas",x.ids)));
     return[
      {tab:"Grupos",title:"A unidade de análise é o grupo",text:"As mesmas 120 pessoas, agora vistas como seis municípios. O estudo não vai olhar para nenhuma delas individualmente.",rows:rows(false),look:()=>({e:null,d:null})},
@@ -668,7 +670,7 @@ function tpSteps(){const P=TP.P,all=tpIds(()=>true),G=(label,sub,ids)=>({label,s
      {tab:"Comparação",title:"Compara os grupos entre si",text:"Cada município vira um ponto. Não há tabela 2×2: ninguém sabe se os casos de um município estavam entre os expostos.",rows:rows(true),look:p=>TP.reveal?{e:p.e,d:p.d}:{e:null,d:null},
       result:()=>`<svg class="ch" id="tpEco" style="max-width:640px" role="img" aria-label="Taxa do desfecho por proporção de expostos em cada município"></svg>
        <div class="insight warn">O gráfico diz o que acontece com os municípios, não com as pessoas. Concluir sobre indivíduos a partir dele é a falácia ecológica.</div>
-       <div class="row" style="margin-top:10px"><button class="btn small" id="tpRev">${TP.reveal?"Esconder as pessoas":"Revelar as pessoas (o estudo não vê isto)"}</button><button class="btn small" data-nav="eco">Ir para Ecológico ›</button></div>`,
+       <div class="row" style="margin-top:10px"><button class="btn small" id="tpRev">${TP.reveal?"Esconder as pessoas":"Revelar as pessoas (o estudo não vê isto)"}</button>${deeper("eco","Ecológico")}</div>`,
       after:()=>{const el=$("tpEco");if(!el)return;const H=200,W=box(el,H),L=40,Rm=14,T=24,ih=H-T-34,iw=W-L-Rm,X=v=>L+v*iw,ym=Math.max(.2,...gs.map(x=>x.rate))*1.25,Y=v=>T+ih-v/ym*ih;
         let s=yGrid(Y,[0,.1,.2,.3,.4,.5].filter(t=>t<=ym),L,W-Rm,v=>fmt(v*100,0))+xAxis(X,[0,.25,.5,.75,1],T+ih,v=>pct(v,0),L,W-Rm);
         gs.forEach(x=>s+=`<circle cx="${X(x.pe)}" cy="${Y(x.rate)}" r="9" fill="var(--accent)"/><text x="${X(x.pe)}" y="${Y(x.rate)+4}" text-anchor="middle" style="fill:var(--on-accent);font-size:11px;font-weight:600">${nm[x.g]}</text>`);
@@ -1370,7 +1372,8 @@ $("howBtn").onclick=()=>openSheet("Como usar o STUDY LAB",`<p>O STUDY LAB é um 
 <h4>Sugestão para aula</h4><ol><li>Antes de mexer em um controle, peça para a turma prever o que vai acontecer.</li><li>Mostre no laboratório.</li><li>Discuta a diferença entre a previsão e o resultado.</li></ol>
 <p class="src">As populações são simuladas e os exemplos são fictícios. Cada painel tem um “Saiba mais” com o conteúdo das aulas.</p>`);
 let rt;window.addEventListener("resize",()=>{clearTimeout(rt);rt=setTimeout(()=>R[cur]&&R[cur](),150);});
-function fromHash(){const h=(location.hash||"").slice(1);go(LABS.some(l=>l.id===h)?h:"tres");}
+/* #coorte abre uma tela; #tempo-coorte abre a Linha do tempo já no desenho (é o link que o 2×2 LAB usa: serie, transversal, ecologico, cc, coorte, ecr) */
+function fromHash(){const h=(location.hash||"").slice(1),[lab,des]=h.split("-");if(lab==="tempo"&&des&&TP_DES.some(d=>d[0]===des)){TP.des=des;TP.step=0;TP.reveal=false;}go(LABS.some(l=>l.id===lab)?lab:"tres");}
 fromHash();window.addEventListener("hashchange",()=>{const h=(location.hash||"").slice(1);if(h!==cur){fromHash();window.scrollTo({top:0});}});
 
 (function(){let seen=false;try{seen=localStorage.getItem("studylab.intro")==="1";}catch(e){}const w=$("welcome");if(!seen)w.hidden=false;

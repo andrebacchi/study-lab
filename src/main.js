@@ -18,7 +18,8 @@ $("howBtn").onclick=()=>openSheet("Como usar o STUDY LAB",`<p>O STUDY LAB é um 
 <h4>Sugestão para aula</h4><ol><li>Antes de mexer em um controle, peça para a turma prever o que vai acontecer.</li><li>Mostre no laboratório.</li><li>Discuta a diferença entre a previsão e o resultado.</li></ol>
 <p class="src">As populações são simuladas e os exemplos são fictícios. Cada painel tem um “Saiba mais” com o conteúdo das aulas.</p>`);
 let rt;window.addEventListener("resize",()=>{clearTimeout(rt);rt=setTimeout(()=>R[cur]&&R[cur](),150);});
-function fromHash(){const h=(location.hash||"").slice(1);go(LABS.some(l=>l.id===h)?h:"tres");}
+/* #coorte abre uma tela; #tempo-coorte abre a Linha do tempo já no desenho (é o link que o 2×2 LAB usa: serie, transversal, ecologico, cc, coorte, ecr) */
+function fromHash(){const h=(location.hash||"").slice(1),[lab,des]=h.split("-");if(lab==="tempo"&&des&&TP_DES.some(d=>d[0]===des)){TP.des=des;TP.step=0;TP.reveal=false;}go(LABS.some(l=>l.id===lab)?lab:"tres");}
 fromHash();window.addEventListener("hashchange",()=>{const h=(location.hash||"").slice(1);if(h!==cur){fromHash();window.scrollTo({top:0});}});
 
 (function(){let seen=false;try{seen=localStorage.getItem("studylab.intro")==="1";}catch(e){}const w=$("welcome");if(!seen)w.hidden=false;

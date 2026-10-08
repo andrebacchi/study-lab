@@ -32,7 +32,9 @@ Aplica e complementa as aulas de Tipos de estudos epidemiológicos (partes I, II
 
 ## Ligação com o 2×2 LAB
 
-Na Linha do tempo, o botão "Abrir esta tabela no 2×2 LAB" abre `https://andrebacchi.github.io/2-2-lab/?a=..&b=..&c=..&d=..&tipo=..` (`tipo`: `coorte`, `caso_controle`, `transversal` ou `ensaio`, as mesmas chaves de `src/lib/studyTypes.js` do 2×2 LAB). **O 2×2 LAB ainda precisa passar a ler esses parâmetros** (em `src/pages/Laboratorio.jsx`, no estado inicial de `values` e `studyType`).
+Na Linha do tempo, o botão "Abrir esta tabela no 2×2 LAB" abre `https://andrebacchi.github.io/2-2-lab/?a=..&b=..&c=..&d=..&tipo=..` (`tipo`: `coorte`, `caso_controle`, `transversal` ou `ensaio`, as mesmas chaves de `src/lib/studyTypes.js` do 2×2 LAB). O 2×2 LAB lê esses parâmetros em `src/lib/studyLab.js`.
+
+No sentido contrário, o seletor de desenho do 2×2 LAB abre `https://andrebacchi.github.io/study-lab/#tempo-<desenho>`, que cai na Linha do tempo já no desenho escolhido (`serie`, `transversal`, `ecologico`, `cc`, `coorte` ou `ecr`). No fim de cada desenho há o botão "Aprofundar", que leva à tela dele.
 
 ## Como editar
 
